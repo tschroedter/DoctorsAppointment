@@ -29,6 +29,11 @@ namespace MicroServices.DataAccess.DoctorsSlots.Contexts
             DbSetDays.Remove(instance);
         }
 
+        public new void SaveChanges()
+        {
+            base.SaveChanges();
+        }
+
         public IDay Find(int id)
         {
             return DbSetDays.Find(id);

@@ -1,18 +1,9 @@
-﻿using System.Data.Entity;
-using System.Linq;
-using JetBrains.Annotations;
+﻿using System.Linq;
 
 namespace MicroServices.DataAccess.DoctorsSlots.Interfaces
 {
-    public interface IDoctorsContext
+    public interface IDoctorsContext : IDbContext <IDoctor>
     {
         IQueryable <IDoctor> Doctors();
-        void Remove([NotNull] IDoctor doctor);
-        IDoctor Find(int id);
-        void Add([NotNull] IDoctor doctor);
-        int SaveChanges();
-
-        void SetStateForSlot([NotNull] IDoctor doctor,
-                             EntityState modified);
     }
 }

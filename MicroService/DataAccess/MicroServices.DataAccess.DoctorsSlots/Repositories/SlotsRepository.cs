@@ -1,7 +1,5 @@
-﻿using System;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Linq.Expressions;
 using JetBrains.Annotations;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
 
@@ -23,18 +21,6 @@ namespace MicroServices.DataAccess.DoctorsSlots.Repositories
             {
                 return m_Context.Slots();
             }
-        }
-
-        public IQueryable <ISlot> AllIncluding(params Expression <Func <ISlot, object>>[] includeProperties)
-        {
-            IQueryable <ISlot> query = m_Context.Slots();
-
-            foreach ( Expression <Func <ISlot, object>> includeProperty in includeProperties )
-            {
-                query = query.Include(includeProperty);
-            }
-
-            return query;
         }
 
         public ISlot FindById(int id)

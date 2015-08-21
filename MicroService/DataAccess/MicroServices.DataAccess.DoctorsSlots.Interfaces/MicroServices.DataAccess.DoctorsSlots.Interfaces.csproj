@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="IDay.cs" />
     <Compile Include="IDaysRepository.cs" />
+    <Compile Include="IDbContext.cs" />
     <Compile Include="IDoctor.cs" />
     <Compile Include="IDaysContext.cs" />
     <Compile Include="IDoctorsContext.cs" />

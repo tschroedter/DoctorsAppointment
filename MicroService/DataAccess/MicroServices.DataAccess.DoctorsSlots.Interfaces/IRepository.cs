@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq;
 
 namespace MicroServices.DataAccess.DoctorsSlots.Interfaces
 {
@@ -8,7 +6,6 @@ namespace MicroServices.DataAccess.DoctorsSlots.Interfaces
         where T : IEntity
     {
         IQueryable <T> All { get; }
-        IQueryable <T> AllIncluding(params Expression <Func <T, object>>[] includeProperties);
         T FindById(int id);
         void AddOrUpdate(T instance);
         void Remove(T entity);

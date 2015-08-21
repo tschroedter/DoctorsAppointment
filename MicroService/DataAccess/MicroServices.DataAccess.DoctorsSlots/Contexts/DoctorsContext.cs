@@ -29,6 +29,11 @@ namespace MicroServices.DataAccess.DoctorsSlots.Contexts
             DbSetDoctors.Remove(instance);
         }
 
+        public new void SaveChanges() // todo check why new???
+        {
+            base.SaveChanges();
+        }
+
         public IDoctor Find(int id)
         {
             return DbSetDoctors.Find(id);
