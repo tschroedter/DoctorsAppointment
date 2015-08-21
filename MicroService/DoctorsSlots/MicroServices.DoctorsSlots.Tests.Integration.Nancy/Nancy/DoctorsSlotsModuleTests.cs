@@ -1,55 +1,13 @@
-﻿using Nancy;
+﻿using JetBrains.Annotations;
+using Nancy;
 using Nancy.Testing;
 using Xunit;
+using Xunit.Extensions;
 
 namespace MicroServices.DoctorsSlots.Tests.Integration.Nancy.Nancy
 {
     public sealed class DoctorsSlotsModuleTests
     {
-        [Fact]
-        public void Should_return_status_OK_when_doctor_with_lastname_exists()
-        {
-            // Given
-            Browser browser = CreateBrowser();
-
-            // When
-            BrowserResponse result = browser.Get("/doctors/Miller/slots",
-                                                 with =>
-                                                 {
-                                                     with.HttpRequest();
-                                                 });
-
-            // Then
-            Assert.Equal(HttpStatusCode.OK,
-                         result.StatusCode);
-        }
-
-        private static Browser CreateBrowser()
-        {
-            var bootstrapper = new Bootstrapper();
-            var browser = new Browser(bootstrapper,
-                                      to => to.Accept("application/json"));
-            return browser;
-        }
-
-        [Fact]
-        public void Should_return_JSON_when_doctor_with_lastname_exists()
-        {
-            // Given
-            Browser browser = CreateBrowser();
-
-            // When
-            BrowserResponse result = browser.Get("/doctors/Miller/slots",
-                                                 with =>
-                                                 {
-                                                     with.HttpRequest();
-                                                 });
-
-            // Then
-            Assert.Equal("application/json",
-                         result.ContentType);
-        }
-
         [Fact]
         public void Should_return_JSON_string_when_doctor_with_lastname_exists_and_date_exists()
         {
@@ -185,6 +143,55 @@ namespace MicroServices.DoctorsSlots.Tests.Integration.Nancy.Nancy
             // Then
             Assert.Equal(expected,
                          result.Body.AsString());
+        }
+
+        [Theory]
+        [InlineData("/doctors/Miller/slots")]
+        [InlineData("/doctors/Smith/slots")]
+        public void Should_return_JSON_when_requested([NotNull] string url)
+        {
+            // Given
+            Browser browser = CreateBrowser();
+
+            // When
+            BrowserResponse result = browser.Get(url,
+                                                 with =>
+                                                 {
+                                                     with.HttpRequest();
+                                                 });
+
+            // Then
+            Assert.Equal("application/json",
+                         result.ContentType);
+        }
+
+        [Theory]
+        [InlineData("/doctors/Miller/slots", HttpStatusCode.OK)]
+        [InlineData("/doctors/Smith/slots", HttpStatusCode.OK)]
+        public void Should_return_status_OK_when_requested([NotNull] string url,
+                                                           HttpStatusCode status)
+        {
+            // Given
+            Browser browser = CreateBrowser();
+
+            // When
+            BrowserResponse result = browser.Get(url,
+                                                 with =>
+                                                 {
+                                                     with.HttpRequest();
+                                                 });
+
+            // Then
+            Assert.Equal(status,
+                         result.StatusCode);
+        }
+
+        private static Browser CreateBrowser()
+        {
+            var bootstrapper = new Bootstrapper();
+            var browser = new Browser(bootstrapper,
+                                      to => to.Accept("application/json"));
+            return browser;
         }
 
         private string CreateExpectedStringForSmithSlots()

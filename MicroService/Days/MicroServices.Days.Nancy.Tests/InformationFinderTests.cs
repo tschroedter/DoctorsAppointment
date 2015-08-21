@@ -19,7 +19,7 @@ namespace MicroServices.Days.Nancy.Tests
     public sealed class InformationFinderTests
     {
         private const string DefaultDate = "2000-01-01";
-        private const int DefaultDoctorId = 1;
+        private const string DefaultDoctorId = "1";
 
         [Theory]
         [AutoNSubstituteData]
@@ -132,7 +132,7 @@ namespace MicroServices.Days.Nancy.Tests
             // Act
             IEnumerable <IDayForResponse> actual =
                 sut.ListForDateAndDoctorId(DefaultDate,
-                                           -1);
+                                           "-1");
 
             // Assert
             Assert.Equal(0,
@@ -212,7 +212,7 @@ namespace MicroServices.Days.Nancy.Tests
             // Act
             IEnumerable <IDayForResponse> actual =
                 sut.ListForDateAndDoctorId("2000-01-01",
-                                           1);
+                                           DefaultDoctorId);
 
             // Assert
             Assert.Equal(1,
@@ -232,15 +232,15 @@ namespace MicroServices.Days.Nancy.Tests
         }
 
         private IQueryable <IDay> CreateDaysWithMatchingDateTime(string dateTime,
-                                                                 int doctorId)
+                                                                 string doctorId)
         {
             var one = Substitute.For <IDay>();
             one.Date = DateTime.Parse(dateTime);
-            one.DoctorId = doctorId;
+            one.DoctorId = Int32.Parse(doctorId);
 
             var two = Substitute.For <IDay>();
             two.Date = DateTime.Parse(dateTime);
-            two.DoctorId = doctorId;
+            two.DoctorId = Int32.Parse(doctorId);
 
             var days = new[]
                        {

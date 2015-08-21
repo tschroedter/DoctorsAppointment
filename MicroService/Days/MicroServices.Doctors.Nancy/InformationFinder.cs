@@ -63,7 +63,7 @@ namespace MicroServices.Days.Nancy
         }
 
         public IEnumerable <IDayForResponse> ListForDateAndDoctorId(string date,
-                                                                    int doctorId)
+                                                                    string doctorId)
         {
             IEnumerable <IDay> all = m_Repository.All;
 
@@ -91,13 +91,23 @@ namespace MicroServices.Days.Nancy
                     all = all.Where(x => x.Date == dateTime);
                 }
             }
+
             return all;
         }
 
         internal IEnumerable <IDay> FilterByDoctorId(IEnumerable <IDay> all,
-                                                     int doctorId)
+                                                     string doctorId)
         {
-            all = all.Where(x => x.DoctorId == doctorId);
+            if (!string.IsNullOrEmpty(doctorId))
+            {
+                int id;
+
+                if (Int32.TryParse(doctorId,
+                                       out id))
+                {
+                    all = all.Where(x => x.DoctorId == id);
+                }
+            }
 
             return all;
         }

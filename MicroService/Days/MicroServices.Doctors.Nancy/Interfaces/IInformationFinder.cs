@@ -10,6 +10,6 @@ namespace MicroServices.Days.Nancy.Interfaces
         IEnumerable <IDayForResponse> ListForDate(string date);
 
         IEnumerable <IDayForResponse> ListForDateAndDoctorId(string date,
-                                                             int doctorId);
+                                                             string doctorId);
     }
 }

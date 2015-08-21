@@ -37,7 +37,7 @@ namespace MicroServices.Days.Nancy
 
         // todo check if we have o rename find to FindForDateAndDoctor, check others
         public Response Find(string date,
-                             int doctorId)
+                             string doctorId)
         {
             IEnumerable <IDayForResponse> list = m_InformationFinder.ListForDateAndDoctorId(date,
                                                                                             doctorId);

@@ -8,7 +8,7 @@ namespace MicroServices.Days.Nancy.Interfaces
         Response FindById(int id);
 
         Response Find(string dayId,
-                      int doctorId);
+                      string doctorId);
 
         Response FindByDate(string date);
     }

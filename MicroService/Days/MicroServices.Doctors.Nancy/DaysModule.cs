@@ -16,7 +16,6 @@ namespace MicroServices.Days.Nancy
             Get [ "/{id:int}" ] =
                 parameters => handler.FindById(( int ) ( parameters.id ));
 
-            // todo testing
             Get [ "/{date:datetime(yyyy-MM-dd)}" ] =
                 parameters =>
                 {
@@ -25,11 +24,10 @@ namespace MicroServices.Days.Nancy
                     return handler.FindByDate(date);
                 };
 
-            // todo doesn't work
-            Get [ "/{date:alpha}/doctors" ] =
+            Get [ "/{date:datetime(yyyy-MM-dd)}/doctors" ] =
                 parameters =>
                 {
-                    int doctorId = Request.Query.doctorId;
+                    string doctorId = Request.Query.doctorId;
                     string date = parameters.date;
 
                     return handler.Find(date,

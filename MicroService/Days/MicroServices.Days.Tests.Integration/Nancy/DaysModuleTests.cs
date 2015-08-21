@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using JetBrains.Annotations;
 using Nancy;
 using Nancy.Testing;
 using Newtonsoft.Json;
 using Xunit;
+using Xunit.Extensions;
 
 namespace MicroServices.Days.Tests.Integration.Nancy
 {
@@ -13,24 +15,6 @@ namespace MicroServices.Days.Tests.Integration.Nancy
     //ncrunch: no coverage start
     public sealed class DaysModuleTests
     {
-        [Fact]
-        public void Should_return_status_OK_when_slot_with_id_exists()
-        {
-            // Given
-            Browser browser = CreateBrowser();
-
-            // When
-            BrowserResponse result = browser.Get("/days/1",
-                                                 with =>
-                                                 {
-                                                     with.HttpRequest();
-                                                 });
-
-            // Then
-            Assert.Equal(HttpStatusCode.OK,
-                         result.StatusCode);
-        }
-
         [Fact]
         public void Should_return_JSON_string_when_slot_with_id_exists()
         {
@@ -53,78 +37,6 @@ namespace MicroServices.Days.Tests.Integration.Nancy
         }
 
         [Fact]
-        public void Should_return_status_NotFound_when_slot_id_doesnot_exists()
-        {
-            // Given
-            Browser browser = CreateBrowser();
-
-            // When
-            BrowserResponse result = browser.Get("/days/-1",
-                                                 with =>
-                                                 {
-                                                     with.HttpRequest();
-                                                 });
-
-            // Then
-            Assert.Equal(HttpStatusCode.NotFound,
-                         result.StatusCode);
-        }
-
-        [Fact]
-        public void Should_return_JSON_when_slot_with_id_exists()
-        {
-            // Given
-            Browser browser = CreateBrowser();
-
-            // When
-            BrowserResponse result = browser.Get("/days/1",
-                                                 with =>
-                                                 {
-                                                     with.HttpRequest();
-                                                 });
-
-            // Then
-            Assert.Equal("application/json",
-                         result.ContentType);
-        }
-
-        [Fact]
-        public void Should_return_status_OK_when_list_requested()
-        {
-            // Given
-            Browser browser = CreateBrowser();
-
-            // When
-            BrowserResponse result = browser.Get("/days/",
-                                                 with =>
-                                                 {
-                                                     with.HttpRequest();
-                                                 });
-
-            // Then
-            Assert.Equal(HttpStatusCode.OK,
-                         result.StatusCode);
-        }
-
-        [Fact]
-        public void Should_return_JSON_when_list_requested()
-        {
-            // Given
-            Browser browser = CreateBrowser();
-
-            // When
-            BrowserResponse result = browser.Get("/days/",
-                                                 with =>
-                                                 {
-                                                     with.HttpRequest();
-                                                 });
-
-            // Then
-            Assert.Equal("application/json",
-                         result.ContentType);
-        }
-
-        [Fact]
         public void Should_return_JSON_string_when_list_requested()
         {
             // Given
@@ -143,6 +55,119 @@ namespace MicroServices.Days.Tests.Integration.Nancy
             // Then
             AssertDays(expected,
                        actual);
+        }
+
+        [Fact]
+        public void Should_return_JSON_string_when_list_for_day_is_requested()
+        {
+            // Given
+            dynamic expected = CreatedExpectedJsonStringForListForDay();
+            Browser browser = CreateBrowser();
+
+            // When
+            BrowserResponse result = browser.Get("/days/2015-06-30",
+                                                 with =>
+                                                 {
+                                                     with.HttpRequest();
+                                                 });
+
+            dynamic actual = ToDynamic(result.Body.AsString());
+
+            // Then
+            AssertDays(expected,
+                       actual);
+        }
+
+        [Fact]
+        public void Should_return_JSON_string_when_list_for_day_and_doctor_requested()
+        {
+            // Given
+            dynamic expected = CreatedExpectedJsonStringForListForDayAndDoctor();
+            Browser browser = CreateBrowser();
+
+            // When
+            BrowserResponse result = browser.Get("/days/2015-06-30/doctors",
+                                                 with =>
+                                                 {
+                                                     with.Query("doctorId",
+                                                                "1");
+                                                     with.HttpRequest();
+                                                 });
+
+            dynamic actual = ToDynamic(result.Body.AsString());
+
+            // Then
+            AssertDays(expected,
+                       actual);
+        }
+
+        [Theory]
+        [InlineData("/days/")]
+        [InlineData("/days/1")]
+        [InlineData("/days/2015-06-30")]
+        [InlineData("/days/2015-06-30/doctors")]
+        public void Should_return_JSON_when_requested([NotNull] string url)
+        {
+            // Given
+            Browser browser = CreateBrowser();
+
+            // When
+            BrowserResponse result = browser.Get(url,
+                                                 with =>
+                                                 {
+                                                     with.HttpRequest();
+                                                 });
+
+            // Then
+            Assert.Equal("application/json",
+                         result.ContentType);
+        }
+
+        [Theory]
+        [InlineData("/days/", HttpStatusCode.OK)]
+        [InlineData("/days/1", HttpStatusCode.OK)]
+        [InlineData("/days/-1", HttpStatusCode.NotFound)]
+        [InlineData("/days/2015-06-30", HttpStatusCode.OK)]
+        [InlineData("/days/2015-06-30/doctors", HttpStatusCode.OK)]
+        public void Should_return_status_OK_when_requested([NotNull] string url,
+                                                           HttpStatusCode status)
+        {
+            // Given
+            Browser browser = CreateBrowser();
+
+            // When
+            BrowserResponse result = browser.Get(url,
+                                                 with =>
+                                                 {
+                                                     with.HttpRequest();
+                                                 });
+
+            // Then
+            Assert.Equal(status,
+                         result.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("/days/2015-06-30/doctors", "doctorId", "1")]
+        public void Should_return_status_OK_when_requested_with_query([NotNull] string url,
+                                                                      [NotNull] string name,
+                                                                      [NotNull] string value)
+        {
+            // Given
+            Browser browser = CreateBrowser();
+
+            // When
+            BrowserResponse result = browser.Get(url,
+                                                 with =>
+                                                 {
+                                                     with.Query(name,
+                                                                value);
+                                                     with.HttpRequest();
+                                                 });
+
+            // Then
+            Assert.Equal(HttpStatusCode.OK,
+                         result.StatusCode);
         }
 
         private void AssertDays(dynamic expected,
@@ -181,11 +206,30 @@ namespace MicroServices.Days.Tests.Integration.Nancy
             return list.FirstOrDefault(slot => id == ( int ) ( slot [ "Id" ].Value ));
         }
 
+        private dynamic CreatedExpectedJsonStringForListForDayAndDoctor()
+        {
+            string json = "[" +
+                          "{\"Date\":\"2015-06-30T00:00:00\",\"DoctorId\":1,\"Id\":1}" +
+                          "]";
+
+            return ToDynamic(json);
+        }
+
         private dynamic CreatedExpectedJsonStringForList()
         {
             string json = "[" +
                           "{\"Date\":\"2015-06-30T00:00:00\",\"DoctorId\":1,\"Id\":1},{\"Date\":\"2015-07-01T00:00:00\",\"DoctorId\":1,\"Id\":2}," +
                           "{\"Date\":\"2015-07-30T00:00:00\",\"DoctorId\":2,\"Id\":3},{\"Date\":\"2015-06-30T00:00:00\",\"DoctorId\":2,\"Id\":4}" +
+                          "]";
+
+            return ToDynamic(json);
+        }
+
+        private dynamic CreatedExpectedJsonStringForListForDay()
+        {
+            string json = "[" +
+                          "{\"Date\": \"2015-06-30T00:00:00\", \"DoctorId\": 1, \"Id\": 1}," +
+                          "{\"Date\": \"2015-06-30T00:00:00\", \"DoctorId\": 2, \"Id\": 4}" +
                           "]";
 
             return ToDynamic(json);

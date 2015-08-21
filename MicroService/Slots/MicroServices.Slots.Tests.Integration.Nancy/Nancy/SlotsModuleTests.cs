@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using JetBrains.Annotations;
 using Nancy;
 using Nancy.Testing;
 using Newtonsoft.Json;
 using Xunit;
+using Xunit.Extensions;
 
 namespace MicroServices.Slots.Tests.Integration.Nancy.Nancy
 {
@@ -13,24 +15,6 @@ namespace MicroServices.Slots.Tests.Integration.Nancy.Nancy
     //ncrunch: no coverage start
     public sealed class SlotsModuleTests
     {
-        [Fact]
-        public void Should_return_status_OK_when_slot_with_id_exists()
-        {
-            // Given
-            Browser browser = CreateBrowser();
-
-            // When
-            BrowserResponse result = browser.Get("/slots/1",
-                                                 with =>
-                                                 {
-                                                     with.HttpRequest();
-                                                 });
-
-            // Then
-            Assert.Equal(HttpStatusCode.OK,
-                         result.StatusCode);
-        }
-
         [Fact]
         public void Should_return_JSON_string_when_slot_with_id_exists()
         {
@@ -53,78 +37,6 @@ namespace MicroServices.Slots.Tests.Integration.Nancy.Nancy
         }
 
         [Fact]
-        public void Should_return_status_NotFound_when_slot_id_doesnot_exists()
-        {
-            // Given
-            Browser browser = CreateBrowser();
-
-            // When
-            BrowserResponse result = browser.Get("/slots/-1",
-                                                 with =>
-                                                 {
-                                                     with.HttpRequest();
-                                                 });
-
-            // Then
-            Assert.Equal(HttpStatusCode.NotFound,
-                         result.StatusCode);
-        }
-
-        [Fact]
-        public void Should_return_JSON_when_slot_with_id_exists()
-        {
-            // Given
-            Browser browser = CreateBrowser();
-
-            // When
-            BrowserResponse result = browser.Get("/slots/1",
-                                                 with =>
-                                                 {
-                                                     with.HttpRequest();
-                                                 });
-
-            // Then
-            Assert.Equal("application/json",
-                         result.ContentType);
-        }
-
-        [Fact]
-        public void Should_return_status_OK_when_list_requested()
-        {
-            // Given
-            Browser browser = CreateBrowser();
-
-            // When
-            BrowserResponse result = browser.Get("/slots/",
-                                                 with =>
-                                                 {
-                                                     with.HttpRequest();
-                                                 });
-
-            // Then
-            Assert.Equal(HttpStatusCode.OK,
-                         result.StatusCode);
-        }
-
-        [Fact]
-        public void Should_return_JSON_when_list_requested()
-        {
-            // Given
-            Browser browser = CreateBrowser();
-
-            // When
-            BrowserResponse result = browser.Get("/slots/",
-                                                 with =>
-                                                 {
-                                                     with.HttpRequest();
-                                                 });
-
-            // Then
-            Assert.Equal("application/json",
-                         result.ContentType);
-        }
-
-        [Fact]
         public void Should_return_JSON_string_when_list_requested()
         {
             // Given
@@ -143,6 +55,48 @@ namespace MicroServices.Slots.Tests.Integration.Nancy.Nancy
             // Then
             AssertSlots(expected,
                         actual);
+        }
+
+        [Theory]
+        [InlineData("/slots/")]
+        [InlineData("/slots/1")]
+        public void Should_return_JSON_when_requested([NotNull] string url)
+        {
+            // Given
+            Browser browser = CreateBrowser();
+
+            // When
+            BrowserResponse result = browser.Get(url,
+                                                 with =>
+                                                 {
+                                                     with.HttpRequest();
+                                                 });
+
+            // Then
+            Assert.Equal("application/json",
+                         result.ContentType);
+        }
+
+        [Theory]
+        [InlineData("/slots/", HttpStatusCode.OK)]
+        [InlineData("/slots/1", HttpStatusCode.OK)]
+        [InlineData("/slots/-1", HttpStatusCode.NotFound)]
+        public void Should_return_status_OK_when_requested([NotNull] string url,
+                                                           HttpStatusCode status)
+        {
+            // Given
+            Browser browser = CreateBrowser();
+
+            // When
+            BrowserResponse result = browser.Get(url,
+                                                 with =>
+                                                 {
+                                                     with.HttpRequest();
+                                                 });
+
+            // Then
+            Assert.Equal(status,
+                         result.StatusCode);
         }
 
         private void AssertSlots(dynamic expected,

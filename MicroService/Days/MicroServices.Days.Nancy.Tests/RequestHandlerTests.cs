@@ -58,12 +58,12 @@ namespace MicroServices.Days.Nancy.Tests
             // Arrange
             var finder = Substitute.For <IInformationFinder>();
             finder.ListForDateAndDoctorId(Arg.Any <string>(),
-                                          Arg.Any <int>()).Returns(CreateList);
+                                          Arg.Any <string>()).Returns(CreateList);
             RequestHandler sut = CreateSut(finder);
 
             // Act
             Response actual = sut.Find("any date",
-                                       -1);
+                                       "-1");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK,
