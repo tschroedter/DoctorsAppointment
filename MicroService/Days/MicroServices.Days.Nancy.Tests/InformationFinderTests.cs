@@ -236,11 +236,11 @@ namespace MicroServices.Days.Nancy.Tests
         {
             var one = Substitute.For <IDay>();
             one.Date = DateTime.Parse(dateTime);
-            one.DoctorId = Int32.Parse(doctorId);
+            one.DoctorId = int.Parse(doctorId);
 
             var two = Substitute.For <IDay>();
             two.Date = DateTime.Parse(dateTime);
-            two.DoctorId = Int32.Parse(doctorId);
+            two.DoctorId = int.Parse(doctorId);
 
             var days = new[]
                        {

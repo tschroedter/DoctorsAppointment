@@ -79,7 +79,7 @@ namespace MicroServices.Days.Nancy
         }
 
         private IEnumerable <IDay> FilterByDate(IEnumerable <IDay> all,
-                                                 string date)
+                                                string date)
         {
             if ( !string.IsNullOrEmpty(date) )
             {
@@ -98,12 +98,12 @@ namespace MicroServices.Days.Nancy
         internal IEnumerable <IDay> FilterByDoctorId(IEnumerable <IDay> all,
                                                      string doctorId)
         {
-            if (!string.IsNullOrEmpty(doctorId))
+            if ( !string.IsNullOrEmpty(doctorId) )
             {
                 int id;
 
-                if (Int32.TryParse(doctorId,
-                                       out id))
+                if ( int.TryParse(doctorId,
+                                  out id) )
                 {
                     all = all.Where(x => x.DoctorId == id);
                 }
