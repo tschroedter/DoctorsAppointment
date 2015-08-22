@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using MicroServices.DataAccess.DoctorsSlots.Entities;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
 
 namespace MicroServices.DataAccess.DoctorsSlots.Contexts
 {
+    [ExcludeFromCodeCoverage]
+    //ncrunch: no coverage start
     public class DaysContext
         : DbContext,
           IDaysContext

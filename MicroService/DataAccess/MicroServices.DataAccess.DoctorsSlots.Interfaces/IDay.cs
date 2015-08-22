@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace MicroServices.DataAccess.DoctorsSlots.Interfaces
 {
@@ -6,5 +7,6 @@ namespace MicroServices.DataAccess.DoctorsSlots.Interfaces
     {
         DateTime Date { get; set; }
         int DoctorId { get; set; }
+        IEnumerable <ISlot> AppointmentSlots();
     }
 }

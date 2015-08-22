@@ -14,16 +14,16 @@ namespace MicroServices.DataAccess.DoctorsSlots.Repositories
         {
         }
 
-        protected override IQueryable<IDoctor> GetAll()
-        {
-            return Context.Doctors();
-        }
-
         public IEnumerable <IDoctor> FindByLastName(string lastName)
         {
             IQueryable <IDoctor> doctor = All.Where(x => x.LastName == lastName);
 
             return doctor;
+        }
+
+        protected override IQueryable <IDoctor> GetAll()
+        {
+            return Context.Doctors();
         }
     }
 }

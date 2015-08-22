@@ -1,11 +1,14 @@
 using System;
 using System.Data.Entity.Migrations;
+using System.Diagnostics.CodeAnalysis;
 using MicroServices.DataAccess.DoctorsSlots.Contexts;
 using MicroServices.DataAccess.DoctorsSlots.Entities;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
 
 namespace MicroServices.DataAccess.DoctorsSlots.Migrations
 {
+    [ExcludeFromCodeCoverage]
+    //ncrunch: no coverage start
     internal sealed class Configuration : DbMigrationsConfiguration <DoctorsSlotsContext>
     {
         public Configuration()

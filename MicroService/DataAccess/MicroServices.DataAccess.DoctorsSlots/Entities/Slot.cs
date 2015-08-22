@@ -1,10 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
 
 namespace MicroServices.DataAccess.DoctorsSlots.Entities
 {
+    [ExcludeFromCodeCoverage]
+    //ncrunch: no coverage start
     public class Slot : ISlot
     {
         [Required]

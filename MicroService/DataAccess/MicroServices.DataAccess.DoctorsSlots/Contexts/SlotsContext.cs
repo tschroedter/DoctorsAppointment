@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using MicroServices.DataAccess.DoctorsSlots.Entities;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
 
 namespace MicroServices.DataAccess.DoctorsSlots.Contexts
 {
+    [ExcludeFromCodeCoverage]
+    //ncrunch: no coverage start
     public class SlotsContext
         : DbContext,
           ISlotsContext
@@ -27,6 +30,11 @@ namespace MicroServices.DataAccess.DoctorsSlots.Contexts
             Slot instance = ConvertToSlot(slot);
 
             DbSetSlots.Remove(instance);
+        }
+
+        public new void SaveChanges()
+        {
+            base.SaveChanges();
         }
 
         public ISlot Find(int id)

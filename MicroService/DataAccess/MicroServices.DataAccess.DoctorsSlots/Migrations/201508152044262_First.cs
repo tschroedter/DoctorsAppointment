@@ -1,7 +1,10 @@
 using System.Data.Entity.Migrations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MicroServices.DataAccess.DoctorsSlots.Migrations
 {
+    [ExcludeFromCodeCoverage]
+    //ncrunch: no coverage start
     public partial class First : DbMigration
     {
         public override void Up()

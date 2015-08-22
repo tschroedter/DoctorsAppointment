@@ -1,9 +1,12 @@
-﻿using JetBrains.Annotations;
+﻿using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 using MicroServices.Days.Nancy.Interfaces;
 using Nancy;
 
 namespace MicroServices.Days.Nancy
 {
+    [ExcludeFromCodeCoverage]
+    //ncrunch: no coverage start
     public class DaysModule
         : NancyModule
     {

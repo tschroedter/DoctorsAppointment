@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using JetBrains.Annotations;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
 using MicroServices.DataAccess.DoctorsSlots.Repositories;
 using NSubstitute;
@@ -7,6 +10,8 @@ using Xunit;
 
 namespace MicroServices.DataAccess.DoctorsSlots.Tests.Repositories
 {
+    [ExcludeFromCodeCoverage]
+    //ncrunch: no coverage start
     public sealed class DoctorsRepositoryTests
     {
         [Fact]
@@ -15,26 +20,26 @@ namespace MicroServices.DataAccess.DoctorsSlots.Tests.Repositories
             // Arrange
             var context = Substitute.For <IDoctorsContext>();
             context.Doctors().Returns(CreateDoctors);
-            var sut = CreateSut(context);
+            DoctorsRepository sut = CreateSut(context);
 
             // Act
-            var actual = sut.FindByLastName("One");
+            IEnumerable <IDoctor> actual = sut.FindByLastName("One");
 
             // Assert
             Assert.Equal(1,
                          actual.Count());
         }
-        
+
         [Fact]
         public void FindByLastName_ReturnsDoctors_ForKnownLastName()
         {
             // Arrange
-            var context = Substitute.For<IDoctorsContext>();
+            var context = Substitute.For <IDoctorsContext>();
             context.Doctors().Returns(CreateDoctors);
-            var sut = CreateSut(context);
+            DoctorsRepository sut = CreateSut(context);
 
             // Act
-            var actual = sut.FindByLastName("One").First();
+            IDoctor actual = sut.FindByLastName("One").First();
 
             // Assert
             Assert.Equal("One",
@@ -46,7 +51,7 @@ namespace MicroServices.DataAccess.DoctorsSlots.Tests.Repositories
             var one = Substitute.For <IDoctor>();
             one.LastName = "One";
 
-            var two = Substitute.For<IDoctor>();
+            var two = Substitute.For <IDoctor>();
             two.LastName = "Two";
 
             return new[]
@@ -56,7 +61,7 @@ namespace MicroServices.DataAccess.DoctorsSlots.Tests.Repositories
                    }.AsQueryable();
         }
 
-        private DoctorsRepository CreateSut(IDoctorsContext context)
+        private DoctorsRepository CreateSut([NotNull] IDoctorsContext context)
         {
             return new DoctorsRepository(context);
         }

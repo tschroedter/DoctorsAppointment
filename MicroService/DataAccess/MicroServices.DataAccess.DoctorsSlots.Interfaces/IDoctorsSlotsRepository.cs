@@ -6,5 +6,6 @@ namespace MicroServices.DataAccess.DoctorsSlots.Interfaces
     public interface IDoctorsSlotsRepository
     {
         IEnumerable <ISlot> FindSlotsForDoctorByLastName([NotNull] string doctorLastName);
+        IEnumerable <ISlot> FindSlotsForDoctorByDoctorId(int doctorId);
     }
 }

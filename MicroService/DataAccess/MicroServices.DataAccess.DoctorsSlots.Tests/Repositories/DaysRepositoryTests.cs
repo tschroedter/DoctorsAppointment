@@ -116,7 +116,7 @@ namespace MicroServices.DataAccess.DoctorsSlots.Tests.Repositories
             return one;
         }
 
-        private DaysRepository CreateSut(IDaysContext context)
+        private DaysRepository CreateSut([NotNull] IDaysContext context)
         {
             return new DaysRepository(context);
         }

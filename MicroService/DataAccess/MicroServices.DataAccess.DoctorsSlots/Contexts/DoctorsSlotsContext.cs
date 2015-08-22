@@ -1,9 +1,12 @@
 ﻿using System.Data.Entity;
+using System.Diagnostics.CodeAnalysis;
 using MicroServices.DataAccess.DoctorsSlots.Entities;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
 
 namespace MicroServices.DataAccess.DoctorsSlots.Contexts
 {
+    [ExcludeFromCodeCoverage]
+    //ncrunch: no coverage start
     public class DoctorsSlotsContext
         : DbContext,
           IDoctorsSlotsContext

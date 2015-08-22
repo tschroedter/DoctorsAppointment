@@ -7,17 +7,12 @@ using MicroServices.DataAccess.DoctorsSlots.Interfaces;
 namespace MicroServices.DataAccess.DoctorsSlots.Repositories
 {
     public sealed class DaysRepository
-        : BaseRepository<IDay, IDaysContext>,
-        IDaysRepository
+        : BaseRepository <IDay, IDaysContext>,
+          IDaysRepository
     {
         public DaysRepository([NotNull] IDaysContext context)
             : base(context)
         {
-        }
-
-        protected override IQueryable <IDay> GetAll()
-        {
-            return Context.Days();
         }
 
         public IEnumerable <IDay> FindByDoctorId(int doctorId)
@@ -34,6 +29,11 @@ namespace MicroServices.DataAccess.DoctorsSlots.Repositories
             IEnumerable <IDay> forDateTime = days.Where(x => x.Date.Date == dateTime.Date);
 
             return forDateTime;
+        }
+
+        protected override IQueryable <IDay> GetAll()
+        {
+            return Context.Days();
         }
     }
 }

@@ -15,8 +15,6 @@ namespace MicroServices.DataAccess.DoctorsSlots.Repositories
             Context = context;
         }
 
-        protected abstract IQueryable <TType> GetAll();
-
         protected TContext Context { get; private set; }
 
         public IQueryable <TType> All
@@ -34,7 +32,7 @@ namespace MicroServices.DataAccess.DoctorsSlots.Repositories
 
         public void AddOrUpdate(TType instance)
         {
-            if (instance.Id == default(int))
+            if ( instance.Id == default ( int ) )
             {
                 Context.Add(instance);
             }
@@ -45,7 +43,6 @@ namespace MicroServices.DataAccess.DoctorsSlots.Repositories
             }
 
             Context.Add(instance);
-
         }
 
         public void Remove(TType instance)
@@ -57,5 +54,7 @@ namespace MicroServices.DataAccess.DoctorsSlots.Repositories
         {
             Context.SaveChanges();
         }
+
+        protected abstract IQueryable <TType> GetAll();
     }
 }

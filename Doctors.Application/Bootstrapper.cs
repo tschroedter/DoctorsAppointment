@@ -1,4 +1,5 @@
-﻿using Castle.MicroKernel.Registration;
+﻿using System.Diagnostics.CodeAnalysis;
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using MicroServices.DataAccess.DoctorsSlots.Contexts;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
@@ -9,6 +10,8 @@ using Nancy.Bootstrappers.Windsor;
 
 namespace Doctors.Application
 {
+    [ExcludeFromCodeCoverage]
+    //ncrunch: no coverage start
     public class Bootstrapper : WindsorNancyBootstrapper
     {
         protected override void ConfigureApplicationContainer(IWindsorContainer existingContainer)

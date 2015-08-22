@@ -1,9 +1,12 @@
-﻿using JetBrains.Annotations;
+﻿using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 using MicroServices.Doctors.Nancy.Interfaces;
 using Nancy;
 
 namespace MicroServices.Doctors.Nancy
 {
+    [ExcludeFromCodeCoverage]
+    //ncrunch: no coverage start
     public class DoctorsModule
         : NancyModule
     {
