@@ -16,7 +16,7 @@ namespace MicroServices.DoctorsSlots.Tests.Integration.Nancy.Nancy
             Browser browser = CreateBrowser();
 
             // When
-            BrowserResponse result = browser.Get("/doctors/Miller/slots",
+            BrowserResponse result = browser.Get("/doctors/1/slots",
                                                  with =>
                                                  {
                                                      with.Query("date",
@@ -37,7 +37,7 @@ namespace MicroServices.DoctorsSlots.Tests.Integration.Nancy.Nancy
             Browser browser = CreateBrowser();
 
             // When
-            BrowserResponse result = browser.Get("/doctors/Smith/slots",
+            BrowserResponse result = browser.Get("/doctors/2/slots",
                                                  with =>
                                                  {
                                                      with.Query("date",
@@ -52,17 +52,6 @@ namespace MicroServices.DoctorsSlots.Tests.Integration.Nancy.Nancy
                          result.Body.AsString());
         }
 
-        private string CreateExpectedStringForMillerSlotsWithDate()
-        {
-            return "[" +
-                   "{\"Id\":1,\"DayId\":1,\"EndDateTime\":\"2015-06-30T09:15:00\",\"StartDateTime\":\"2015-06-30T09:00:00\",\"Status\":1}" +
-                   "]";
-        }
-
-        /*
-         * [{"Status":1,"StartDateTime":"2015-06-30T09:00:00","EndDateTime":"2015-06-30T09:15:00","Id":1},{"Status":1,"StartDateTime":"2015-07-01T09:00:00","EndDateTime":"2015-07-01T09:15:00","Id":2}]
-         */
-
         [Fact]
         public void Should_return_JSON_string_when_doctor_with_lastname_exists_and_status_open()
         {
@@ -71,7 +60,7 @@ namespace MicroServices.DoctorsSlots.Tests.Integration.Nancy.Nancy
             Browser browser = CreateBrowser();
 
             // When
-            BrowserResponse result = browser.Get("/doctors/Smith/slots",
+            BrowserResponse result = browser.Get("/doctors/2/slots",
                                                  with =>
                                                  {
                                                      with.Query("status",
@@ -92,7 +81,7 @@ namespace MicroServices.DoctorsSlots.Tests.Integration.Nancy.Nancy
             Browser browser = CreateBrowser();
 
             // When
-            BrowserResponse result = browser.Get("/doctors/Smith/slots",
+            BrowserResponse result = browser.Get("/doctors/2/slots",
                                                  with =>
                                                  {
                                                      with.Query("status",
@@ -113,7 +102,7 @@ namespace MicroServices.DoctorsSlots.Tests.Integration.Nancy.Nancy
             Browser browser = CreateBrowser();
 
             // When
-            BrowserResponse result = browser.Get("/doctors/Smith/slots",
+            BrowserResponse result = browser.Get("/doctors/2/slots",
                                                  with =>
                                                  {
                                                      with.Query("status",
@@ -134,7 +123,7 @@ namespace MicroServices.DoctorsSlots.Tests.Integration.Nancy.Nancy
             Browser browser = CreateBrowser();
 
             // When
-            BrowserResponse result = browser.Get("/doctors/Smith/slots",
+            BrowserResponse result = browser.Get("/doctors/2/slots",
                                                  with =>
                                                  {
                                                      with.HttpRequest();
@@ -146,8 +135,8 @@ namespace MicroServices.DoctorsSlots.Tests.Integration.Nancy.Nancy
         }
 
         [Theory]
-        [InlineData("/doctors/Miller/slots")]
-        [InlineData("/doctors/Smith/slots")]
+        [InlineData("/doctors/1/slots")]
+        [InlineData("/doctors/2/slots")]
         public void Should_return_JSON_when_requested([NotNull] string url)
         {
             // Given
@@ -166,8 +155,9 @@ namespace MicroServices.DoctorsSlots.Tests.Integration.Nancy.Nancy
         }
 
         [Theory]
-        [InlineData("/doctors/Miller/slots", HttpStatusCode.OK)]
-        [InlineData("/doctors/Smith/slots", HttpStatusCode.OK)]
+        [InlineData("/doctors/1/slots", HttpStatusCode.OK)]
+        [InlineData("/doctors/2/slots", HttpStatusCode.OK)]
+        [InlineData("/doctors/-1/slots", HttpStatusCode.OK)]
         public void Should_return_status_OK_when_requested([NotNull] string url,
                                                            HttpStatusCode status)
         {
@@ -192,6 +182,13 @@ namespace MicroServices.DoctorsSlots.Tests.Integration.Nancy.Nancy
             var browser = new Browser(bootstrapper,
                                       to => to.Accept("application/json"));
             return browser;
+        }
+
+        private string CreateExpectedStringForMillerSlotsWithDate()
+        {
+            return "[" +
+                   "{\"Id\":1,\"DayId\":1,\"EndDateTime\":\"2015-06-30T09:15:00\",\"StartDateTime\":\"2015-06-30T09:00:00\",\"Status\":1}" +
+                   "]";
         }
 
         private string CreateExpectedStringForSmithSlots()
@@ -231,24 +228,6 @@ namespace MicroServices.DoctorsSlots.Tests.Integration.Nancy.Nancy
                    "{\"Id\":4,\"DayId\":3,\"EndDateTime\":\"2015-07-30T14:30:00\",\"StartDateTime\":\"2015-07-30T14:15:00\",\"Status\":1}," +
                    "{\"Id\":6,\"DayId\":4,\"EndDateTime\":\"2015-06-30T09:15:00\",\"StartDateTime\":\"2015-06-30T09:00:00\",\"Status\":1}" +
                    "]";
-        }
-
-        [Fact]
-        public void Should_return_status_OK_when_doctor_lastname_doesnot_exists()
-        {
-            // Given
-            Browser browser = CreateBrowser();
-
-            // When
-            BrowserResponse result = browser.Get("/doctors/Unknown/slots",
-                                                 with =>
-                                                 {
-                                                     with.HttpRequest();
-                                                 });
-
-            // Then
-            Assert.Equal(HttpStatusCode.OK,
-                         result.StatusCode);
         }
     }
 }

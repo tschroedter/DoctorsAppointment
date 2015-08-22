@@ -16,11 +16,11 @@ namespace MicroServices.DoctorsSlots.Nancy
             m_Repository = repository;
         }
 
-        public IEnumerable <ISlot> List(string doctorLastName,
+        public IEnumerable <ISlot> List(int doctorId,
                                         string date,
                                         string status)
         {
-            IEnumerable <ISlot> slots = m_Repository.FindSlotsForDoctorByLastName(doctorLastName);
+            IEnumerable <ISlot> slots = m_Repository.FindSlotsForDoctorByDoctorId(doctorId);
 
             slots = FilterSlotsByDate(slots,
                                       date);
@@ -31,8 +31,8 @@ namespace MicroServices.DoctorsSlots.Nancy
             return slots;
         }
 
-        private static IEnumerable <ISlot> FilterSlotsByDate(IEnumerable <ISlot> slots,
-                                                             string date)
+        private IEnumerable <ISlot> FilterSlotsByDate(IEnumerable <ISlot> slots,
+                                                      string date)
         {
             DateTime dateTime;
 

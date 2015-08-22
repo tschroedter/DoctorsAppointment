@@ -17,12 +17,12 @@ namespace MicroServices.DoctorsSlots.Nancy
             m_InformationFinder = informationFinder;
         }
 
-        public Response List(string doctorLastName,
+        public Response List(int doctorId,
                              string date,
                              string status)
         {
             // todo Finder should return SlorForResponse
-            IEnumerable <ISlot> list = m_InformationFinder.List(doctorLastName,
+            IEnumerable <ISlot> list = m_InformationFinder.List(doctorId,
                                                                 date,
                                                                 status);
 

@@ -13,12 +13,12 @@ namespace MicroServices.DoctorsSlots.Nancy
         public DoctorsSlotsModule([NotNull] IRequestHandler handler)
             : base("/doctors")
         {
-            Get [ "/{name:alpha}/slots" ] =
+            Get [ "/{doctorId:int}/slots" ] =
                 parameters =>
                 {
                     string date = Request.Query.date;
                     string status = Request.Query.status;
-                    string doctorLastName = parameters.name;
+                    int doctorLastName = parameters.doctorId;
 
                     return handler.List(doctorLastName,
                                         date,

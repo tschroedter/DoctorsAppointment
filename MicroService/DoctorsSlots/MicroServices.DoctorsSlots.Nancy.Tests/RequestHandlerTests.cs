@@ -16,19 +16,20 @@ namespace MicroServices.DoctorsSlots.Nancy.Tests
     {
         // todo don't know how to get content, but integration test cover this
 
+        private const int DoesNotMatter = int.MinValue;
         // Attention: InformationFinder tests cover all List() cases!!!
         [Fact]
         public void List_ReturnsResponse_WhenCalled()
         {
             // Arrange
             var finder = Substitute.For <IInformationFinder>();
-            finder.List(Arg.Any <string>(),
+            finder.List(Arg.Any <int>(),
                         Arg.Any <string>(),
                         Arg.Any <string>()).Returns(CreateList);
             RequestHandler sut = CreateSut(finder);
 
             // Act
-            Response actual = sut.List("doesn't matter",
+            Response actual = sut.List(DoesNotMatter,
                                        "doesn't matter",
                                        "doesn't matter");
 

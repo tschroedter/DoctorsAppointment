@@ -4,7 +4,7 @@ namespace MicroServices.DoctorsSlots.Nancy.Interfaces
 {
     public interface IRequestHandler
     {
-        Response List(string doctorLastName,
+        Response List(int doctorId,
                       string date,
                       string status);
     }

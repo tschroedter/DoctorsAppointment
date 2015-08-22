@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
 
@@ -13,19 +12,6 @@ namespace MicroServices.DataAccess.DoctorsSlots.Repositories
         public DoctorsSlotsRepository([NotNull] IDoctorsRepository repository)
         {
             m_Repository = repository;
-        }
-
-        public IEnumerable <ISlot> FindSlotsForDoctorByLastName(string doctorLastName)
-        {
-            IDoctor[] doctors = m_Repository.FindByLastName(doctorLastName).ToArray();
-
-            if ( !doctors.Any() ||
-                 doctors.Count() > 1 )
-            {
-                return new ISlot[0];
-            }
-
-            return FindSlotsForDoctor(doctors.First());
         }
 
         public IEnumerable <ISlot> FindSlotsForDoctorByDoctorId(int doctorId)

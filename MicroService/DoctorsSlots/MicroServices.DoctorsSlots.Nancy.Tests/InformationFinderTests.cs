@@ -15,6 +15,8 @@ namespace MicroServices.DoctorsSlots.Nancy.Tests
     //ncrunch: no coverage start
     public sealed class InformationFinderTests
     {
+        private const int DoesNotMatter = int.MinValue;
+
         [Theory]
         [InlineData("Unknown", 1)]
         [InlineData("Open", 1)]
@@ -24,11 +26,11 @@ namespace MicroServices.DoctorsSlots.Nancy.Tests
         {
             // Arrange
             var repository = Substitute.For <IDoctorsSlotsRepository>();
-            repository.FindSlotsForDoctorByLastName(Arg.Any <string>()).Returns(CreateList);
+            repository.FindSlotsForDoctorByDoctorId(Arg.Any <int>()).Returns(CreateList);
             InformationFinder sut = CreateSut(repository);
 
             // Act
-            IEnumerable <ISlot> actual = sut.List("doesn't matter",
+            IEnumerable <ISlot> actual = sut.List(DoesNotMatter,
                                                   null,
                                                   slotStatus);
 
@@ -46,11 +48,11 @@ namespace MicroServices.DoctorsSlots.Nancy.Tests
         {
             // Arrange
             var repository = Substitute.For <IDoctorsSlotsRepository>();
-            repository.FindSlotsForDoctorByLastName(Arg.Any <string>()).Returns(CreateList);
+            repository.FindSlotsForDoctorByDoctorId(Arg.Any <int>()).Returns(CreateList);
             InformationFinder sut = CreateSut(repository);
 
             // Act
-            ISlot actual = sut.List("doesn't matter",
+            ISlot actual = sut.List(DoesNotMatter,
                                     null,
                                     slotStatus).First();
 
@@ -68,11 +70,11 @@ namespace MicroServices.DoctorsSlots.Nancy.Tests
         {
             // Arrange
             var repository = Substitute.For <IDoctorsSlotsRepository>();
-            repository.FindSlotsForDoctorByLastName(Arg.Any <string>()).Returns(CreateList);
+            repository.FindSlotsForDoctorByDoctorId(Arg.Any <int>()).Returns(CreateList);
             InformationFinder sut = CreateSut(repository);
 
             // Act
-            IEnumerable <ISlot> actual = sut.List("doesn't matter",
+            IEnumerable <ISlot> actual = sut.List(DoesNotMatter,
                                                   date,
                                                   null);
 
@@ -90,11 +92,11 @@ namespace MicroServices.DoctorsSlots.Nancy.Tests
         {
             // Arrange
             var repository = Substitute.For <IDoctorsSlotsRepository>();
-            repository.FindSlotsForDoctorByLastName(Arg.Any <string>()).Returns(CreateList);
+            repository.FindSlotsForDoctorByDoctorId(Arg.Any <int>()).Returns(CreateList);
             InformationFinder sut = CreateSut(repository);
 
             // Act
-            ISlot actual = sut.List("doesn't matter",
+            ISlot actual = sut.List(DoesNotMatter,
                                     date,
                                     null).First();
 
@@ -113,11 +115,11 @@ namespace MicroServices.DoctorsSlots.Nancy.Tests
         {
             // Arrange
             var repository = Substitute.For <IDoctorsSlotsRepository>();
-            repository.FindSlotsForDoctorByLastName(Arg.Any <string>()).Returns(CreateList);
+            repository.FindSlotsForDoctorByDoctorId(Arg.Any <int>()).Returns(CreateList);
             InformationFinder sut = CreateSut(repository);
 
             // Act
-            ISlot actual = sut.List("doesn't matter",
+            ISlot actual = sut.List(DoesNotMatter,
                                     date,
                                     status).First();
 
@@ -136,11 +138,11 @@ namespace MicroServices.DoctorsSlots.Nancy.Tests
             // Arrange
             IEnumerable <ISlot> list = CreateListWithSameStatus(status);
             var repository = Substitute.For <IDoctorsSlotsRepository>();
-            repository.FindSlotsForDoctorByLastName(Arg.Any <string>()).Returns(list);
+            repository.FindSlotsForDoctorByDoctorId(Arg.Any <int>()).Returns(list);
             InformationFinder sut = CreateSut(repository);
 
             // Act
-            IEnumerable <ISlot> actual = sut.List("doesn't matter",
+            IEnumerable <ISlot> actual = sut.List(DoesNotMatter,
                                                   null,
                                                   status.ToString());
 
@@ -156,11 +158,11 @@ namespace MicroServices.DoctorsSlots.Nancy.Tests
             var date = "2001-01-01";
             IEnumerable <ISlot> list = CreateListWithSameDate(date);
             var repository = Substitute.For <IDoctorsSlotsRepository>();
-            repository.FindSlotsForDoctorByLastName(Arg.Any <string>()).Returns(list);
+            repository.FindSlotsForDoctorByDoctorId(Arg.Any <int>()).Returns(list);
             InformationFinder sut = CreateSut(repository);
 
             // Act
-            IEnumerable <ISlot> actual = sut.List("doesn't matter",
+            IEnumerable <ISlot> actual = sut.List(DoesNotMatter,
                                                   date,
                                                   null);
 

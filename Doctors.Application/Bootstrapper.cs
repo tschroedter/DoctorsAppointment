@@ -18,7 +18,7 @@ namespace Doctors.Application
             // Add the Array Resolver, so we can take dependencies on T[]
             // while only registering T.
             existingContainer.Kernel.Resolver.AddSubResolver(new ArrayResolver(existingContainer.Kernel));
-                // todo use in Selkie project
+            // todo use in Selkie project
 
             existingContainer.Install(FromAssembly.Containing(typeof ( Installer )));
             existingContainer.Install(FromAssembly.Containing(typeof ( MicroServices.Days.Nancy.Installer )));
