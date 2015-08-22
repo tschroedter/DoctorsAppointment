@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Installer.cs" />
     <Compile Include="RequestHandler.cs" />
     <Compile Include="InformationFinder.cs" />
     <Compile Include="DoctorsSlotsModule.cs" />

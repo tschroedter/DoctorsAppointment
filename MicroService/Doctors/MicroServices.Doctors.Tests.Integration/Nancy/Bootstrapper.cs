@@ -1,11 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Castle.MicroKernel.Registration;
 using Castle.Windsor;
-using MicroServices.DataAccess.DoctorsSlots.Contexts;
-using MicroServices.DataAccess.DoctorsSlots.Interfaces;
-using MicroServices.DataAccess.DoctorsSlots.Repositories;
-using MicroServices.Doctors.Nancy;
-using MicroServices.Doctors.Nancy.Interfaces;
+using Castle.Windsor.Installer;
+using MicroServices.DataAccess.DoctorsSlots;
 using Nancy.Bootstrappers.Windsor;
 
 namespace MicroServices.Doctors.Tests.Integration.Nancy
@@ -18,21 +14,8 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
         {
             base.ConfigureApplicationContainer(existingContainer);
 
-            existingContainer.Register(Component.For(typeof ( IDoctorsContext ))
-                                                .ImplementedBy(typeof ( DoctorsContext ))
-                                                .LifeStyle.Transient);
-
-            existingContainer.Register(Component.For(typeof ( IInformationFinder ))
-                                                .ImplementedBy(typeof ( InformationFinder ))
-                                                .LifeStyle.Transient);
-
-            existingContainer.Register(Component.For(typeof ( IDoctorsRepository ))
-                                                .ImplementedBy(typeof ( DoctorsRepository ))
-                                                .LifeStyle.Transient);
-
-            existingContainer.Register(Component.For(typeof ( IRequestHandler ))
-                                                .ImplementedBy(typeof ( RequestHandler ))
-                                                .LifeStyle.Transient);
+            existingContainer.Install(FromAssembly.Containing(typeof ( Installer )));
+            existingContainer.Install(FromAssembly.Containing(typeof ( Doctors.Nancy.Installer )));
         }
     }
 }
