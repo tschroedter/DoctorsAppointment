@@ -4,28 +4,43 @@
     <script src="~/content/app/assets/libs/angularjs/angular.js"></script>
     <script src="~/content/app/assets/libs/angularjs/angular-resource.js"></script>
     <script src="~/content/app/mainApp.js"></script>
-    <script src="~/content/app/components/doctorSelector/doctorsController.js"></script>
+    <script src="~/content/app/doctorsController.js"></script>
 </head>
 <body ng-app="mainApp">
-    <div ng-controller="doctorsController">
-        <form name="doctorsForm" novalidate>
-            <table>
-                <tr>
-                    <td>Doctor</td>
-                    <td>
-                        <select id="doctors.selected"
-                                name="doctors.selected"
-                                ng-model="doctors.selected"
-                                ng-enabled="isAvailable()">
-                            <option ng:repeat="doctor in doctors.list"
-                                    value="{{doctor}}">
-                                {{doctor.FirstName + ' ' + doctor.LastName}}
-                            </option>
-                        </select>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </div>
+<div ng-controller="doctorsController">
+    <form name="doctorsForm" novalidate>
+        <table>
+            <tr>
+                <td>Doctor:</td>
+                <td>
+                    <select id="doctors.selected"
+                            name="doctors.selected"
+                            ng-model="doctors.selected"
+                            ng-enabled="isAvailable()">
+                        <option ng:repeat="doctor in doctors.list"
+                                value="{{doctor}}">
+                            {{doctor.FirstName + ' ' + doctor.LastName}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Get Doctor By Id</td>
+                <td><input type="number" ng-model="doctorId" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button ng-click="loadDoctor()">Load Doctor</button></td>
+            </tr>
+            <tr>
+                <td>First Name:</td>
+                <td>{{doctor.FirstName}}</td>
+            </tr>
+            <tr>
+                <td>Last Name:</td>
+                <td>{{doctor.LastName}}</td>
+            </tr>
+        </table>
+    </form>
+</div>
 </body>
 </html>

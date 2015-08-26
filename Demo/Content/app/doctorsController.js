@@ -37,4 +37,11 @@
 
             return true;
         };
+
+        $scope.loadDoctor = function () {
+            $scope.doctor = doctors.get({ id: $scope.doctorId });
+        };
+
+        $scope.doctor = loading;
+        $scope.doctorId = loading.Id;
     });
