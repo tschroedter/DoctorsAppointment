@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using MicroServices.DataAccess.DoctorsSlots.Entities;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
 
 namespace MicroServices.DataAccess.DoctorsSlots.Repositories
@@ -21,9 +22,18 @@ namespace MicroServices.DataAccess.DoctorsSlots.Repositories
             return doctor;
         }
 
-        public IDoctor Create()
+        public IDoctor Create() // todo can be removed???
         {
-            return Context.Create();
+            return Context.Create("FirstName",
+                                  "LastName");
+        }
+
+        // todo testing
+        public IDoctor Create(string firstName,
+                              string lastName)
+        {
+            return Context.Create(firstName,
+                                  lastName);
         }
 
         public IDoctor Delete(int id)

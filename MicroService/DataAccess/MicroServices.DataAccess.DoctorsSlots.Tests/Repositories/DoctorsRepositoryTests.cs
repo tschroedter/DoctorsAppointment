@@ -38,7 +38,9 @@ namespace MicroServices.DataAccess.DoctorsSlots.Tests.Repositories
         {
             // Arrange
             var context = Substitute.For <IDoctorsContext>();
-            context.Create().Returns(doctor);
+            context.Create(Arg.Any <string>(),
+                           Arg.Any <string>())
+                   .Returns(doctor);
             DoctorsRepository sut = CreateSut(context);
 
             // Act

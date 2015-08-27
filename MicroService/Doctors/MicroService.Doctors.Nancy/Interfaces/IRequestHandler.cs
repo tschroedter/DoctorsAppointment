@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Nancy;
 
 namespace MicroServices.Doctors.Nancy.Interfaces
@@ -6,8 +7,8 @@ namespace MicroServices.Doctors.Nancy.Interfaces
     {
         Response List();
         Response FindById(int id);
-        Response FindByLastName(string doctorLastName);
-        Response Create();
+        Response FindByLastName([NotNull] string doctorLastName);
+        Response Create([NotNull] IDoctorForResponse doctor);
         Response DeleteById(int id);
     }
 }

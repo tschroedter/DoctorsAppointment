@@ -87,6 +87,7 @@
   <ItemGroup>
     <Compile Include="Nancy\Bootstrapper.cs" />
     <Compile Include="Nancy\DoctorsModuleTests.cs" />
+    <Compile Include="Nancy\XUnitDoctorsHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

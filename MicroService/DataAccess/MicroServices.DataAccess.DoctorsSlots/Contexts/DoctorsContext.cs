@@ -43,23 +43,25 @@ namespace MicroServices.DataAccess.DoctorsSlots.Contexts
             return DbSetDoctors.Find(id);
         }
 
-        public IDoctor Create()
+        public IDoctor Create(string firstName,
+                              string lastName)
         {
             var instance = new Doctor
                            {
-                               LastName = "LastName",
-                               FirstName = "FirstName"
+                               LastName = firstName,
+                               FirstName = lastName
                            };
 
             Add(instance);
             SaveChanges();
+            Entry(instance).GetDatabaseValues();
 
             return instance;
 
             /* todo this code should be an aspect (AOP)
             try
             {
-                SaveChanges();
+                ....
             }
             catch (DbEntityValidationException dbEx)
             {

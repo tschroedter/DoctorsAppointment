@@ -8,6 +8,8 @@ namespace MicroServices.DataAccess.DoctorsSlots.Interfaces
     {
         IEnumerable <IDoctor> FindByLastName([NotNull] string lastName);
         IDoctor Create();
+        IDoctor Create([NotNull] string firstName,
+                       [NotNull] string lastName);
         IDoctor Delete(int id);
     }
 }

@@ -6,6 +6,13 @@ namespace MicroServices.Doctors.Nancy
 {
     public sealed class DoctorForResponse : IDoctorForResponse
     {
+        public DoctorForResponse()
+        {  //todo testing
+            Id = -1;
+            FirstName = string.Empty;
+            LastName = string.Empty;
+        }
+
         public DoctorForResponse([NotNull] IDoctor doctor)
         {
             Id = doctor.Id;

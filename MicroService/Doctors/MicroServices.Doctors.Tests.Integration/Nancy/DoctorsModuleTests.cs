@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using JetBrains.Annotations;
 using Nancy;
 using Nancy.Testing;
-using Newtonsoft.Json;
 using Xunit;
 using Xunit.Extensions;
 
@@ -26,16 +23,16 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
 
                 // When
                 BrowserResponse result = browser.Post("/doctors/",
-                                                     with =>
-                                                     {
-                                                         with.HttpRequest();
-                                                     });
+                                                      with =>
+                                                      {
+                                                          with.HttpRequest();
+                                                      });
 
-                dynamic actual = ToDynamic(result.Body.AsString());
+                dynamic actual = XUnitDoctorsHelper.ToDynamic(result.Body.AsString());
 
                 // Then
-                AssertDoctorIgnoreId(expected,
-                                     actual);
+                XUnitDoctorsHelper.AssertDoctorIgnoreId(expected,
+                                                        actual);
             }
             finally
             {
@@ -57,11 +54,11 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
                                                      with.HttpRequest();
                                                  });
 
-            dynamic actual = ToDynamic(result.Body.AsString());
+            dynamic actual = XUnitDoctorsHelper.ToDynamic(result.Body.AsString());
 
             // Then
-            AssertDoctor(expected,
-                         actual);
+            XUnitDoctorsHelper.AssertDoctor(expected,
+                                            actual);
         }
 
         [Fact]
@@ -87,12 +84,12 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
         private dynamic CreateDoctorToBeDeleted(Browser browser)
         {
             BrowserResponse result = browser.Post("/doctors/",
-                                                 with =>
-                                                 {
-                                                     with.HttpRequest();
-                                                 });
+                                                  with =>
+                                                  {
+                                                      with.HttpRequest();
+                                                  });
 
-            dynamic actual = ToDynamic(result.Body.AsString());
+            dynamic actual = XUnitDoctorsHelper.ToDynamic(result.Body.AsString());
 
             return actual;
         }
@@ -111,11 +108,11 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
                                                      with.HttpRequest();
                                                  });
 
-            dynamic actual = ToDynamic(result.Body.AsString());
+            dynamic actual = XUnitDoctorsHelper.ToDynamic(result.Body.AsString());
 
             // Then
-            AssertDoctor(expected,
-                         actual);
+            XUnitDoctorsHelper.AssertDoctor(expected,
+                                            actual);
         }
 
         [Fact]
@@ -133,11 +130,11 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
                                                      with.HttpRequest();
                                                  });
 
-            dynamic actual = ToDynamic(result.Body.AsString());
+            dynamic actual = XUnitDoctorsHelper.ToDynamic(result.Body.AsString());
 
             // Then
-            AssertDoctors(expected,
-                          actual);
+            XUnitDoctorsHelper.AssertDoctors(expected,
+                                             actual);
         }
 
         [Theory]
@@ -197,7 +194,7 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
         {
             var json = "{\"LastName\":\"Miller\",\"FirstName\":\"Mary\",\"Id\":1}";
 
-            return ToDynamic(json);
+            return XUnitDoctorsHelper.ToDynamic(json);
         }
 
         private dynamic CreateExpectedJsonStringForList()
@@ -207,85 +204,14 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
                           "{\"LastName\":\"Smith\",\"FirstName\":\"Will\",\"Id\":2}" +
                           "]";
 
-            return ToDynamic(json);
+            return XUnitDoctorsHelper.ToDynamic(json);
         }
 
         private dynamic CreateExpectedResponseForCreate()
         {
             var json = "{\"LastName\":\"LastName\",\"FirstName\":\"FirstName\",\"Id\":3}";
 
-            return ToDynamic(json);
-        }
-
-        private static dynamic ToDynamic(string json)
-        {
-            dynamic data = JsonConvert.DeserializeObject(json);
-
-            return data;
-        }
-
-        private void AssertDoctorIgnoreId(dynamic expected,
-                                          dynamic actual)
-        {
-            Console.WriteLine("Comparing doctors with id {0} and {1}...",
-                              expected [ "Id" ].Value,
-                              actual [ "Id" ].Value);
-
-            Assert.True(expected [ "LastName" ].Value == actual [ "LastName" ].Value,
-                        "LastName");
-            Assert.True(expected [ "FirstName" ].Value == actual [ "FirstName" ].Value,
-                        "FirstName");
-        }
-
-        private void AssertDoctor(dynamic expected,
-                                  dynamic actual)
-        {
-            Console.WriteLine("Comparing doctors with id {0} and {1}...",
-                              expected [ "Id" ].Value,
-                              actual [ "Id" ].Value);
-
-            Assert.True(expected [ "Id" ].Value == actual [ "Id" ].Value,
-                        "Id");
-            Assert.True(expected [ "LastName" ].Value == actual [ "LastName" ].Value,
-                        "LastName");
-            Assert.True(expected [ "FirstName" ].Value == actual [ "FirstName" ].Value,
-                        "FirstName");
-        }
-
-        private void AssertDoctors(dynamic expected,
-                                   dynamic actual)
-        {
-            var expectedList = new List <dynamic>();
-            foreach ( dynamic expectedSlot in expected )
-            {
-                expectedList.Add(expectedSlot);
-            }
-
-            var actualList = new List <dynamic>();
-            foreach ( dynamic actualSlot in actual )
-            {
-                actualList.Add(actualSlot);
-            }
-
-            Assert.True(expectedList.Count == actualList.Count,
-                        "count");
-
-            foreach ( dynamic expectedSlot in expectedList )
-            {
-                var expectedSlotId = ( int ) ( expectedSlot [ "Id" ].Value );
-
-                object compareToSlot = GetDoctorWithId(actualList,
-                                                       expectedSlotId);
-
-                AssertDoctor(expectedSlot,
-                             compareToSlot);
-            }
-        }
-
-        private object GetDoctorWithId(List <dynamic> list,
-                                       int id)
-        {
-            return list.FirstOrDefault(slot => id == ( int ) ( slot [ "Id" ].Value ));
+            return XUnitDoctorsHelper.ToDynamic(json);
         }
 
         private void DeleteDoctorToBeCreated()
@@ -303,7 +229,7 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
                 return;
             }
 
-            dynamic doctor = ToDynamic(existing.Body.AsString());
+            dynamic doctor = XUnitDoctorsHelper.ToDynamic(existing.Body.AsString());
             int doctorId = Convert.ToInt32(doctor [ "Id" ].Value);
 
             BrowserResponse result = browser.Delete("/doctors/" + doctorId,

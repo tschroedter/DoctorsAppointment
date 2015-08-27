@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 using MicroServices.Doctors.Nancy.Interfaces;
 using Nancy;
+using Nancy.ModelBinding;
 
 namespace MicroServices.Doctors.Nancy
 {
@@ -23,7 +24,7 @@ namespace MicroServices.Doctors.Nancy
                 parameters => handler.FindByLastName(parameters.name);
 
             Post [ "/" ] =
-                parameters => handler.Create();
+                parameters => handler.Create(this.Bind<DoctorForResponse>("Id"));
 
             Delete [ "/{id:int}" ] =
                 parameters => handler.DeleteById(( int ) ( parameters.id ));

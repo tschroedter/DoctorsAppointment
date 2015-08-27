@@ -17,7 +17,8 @@ namespace MicroServices.Doctors.Nancy.Tests
     //ncrunch: no coverage start
     public sealed class RequestHandlerTests
     {
-        // todo don't know how to get content, but integration test cover this
+        // todo don't know how to get content from Response object, 
+        // but integration test cover this
         private const int DoesNotMatter = -1;
 
         [Fact]
@@ -38,31 +39,52 @@ namespace MicroServices.Doctors.Nancy.Tests
 
         [Theory]
         [AutoNSubstituteData]
-        public void Create_ReturnsResponse_WhenCalled([NotNull] IDoctorForResponse doctor)
+        public void Create_ReturnsResponse_WhenCalled([NotNull] IDoctorForResponse toBeCreated,
+                                                      [NotNull] IDoctorForResponse created)
         {
             // Arrange
             var finder = Substitute.For <IInformationFinder>();
-            finder.Create().Returns(doctor);
+            finder.Create(toBeCreated).Returns(created);
             RequestHandler sut = CreateSut(finder);
 
             // Act
-            Response actual = sut.Create();
+            Response actual = sut.Create(toBeCreated);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK,
                          actual.StatusCode);
         }
 
-        [Fact]
-        public void Create_ReturnsResponse_ForAddFailed()
+        [Theory]
+        [AutoNSubstituteData]
+        public void Create_ReturnsNewDoctor_WhenCalled([NotNull] IDoctorForResponse toBeCreated,
+                                                       [NotNull] IDoctorForResponse created)
         {
             // Arrange
-            var finder = Substitute.For <IInformationFinder>();
-            finder.Create().Returns(( IDoctorForResponse ) null);
+            var finder = Substitute.For<IInformationFinder>();
+            finder.Create(toBeCreated).Returns(created);
             RequestHandler sut = CreateSut(finder);
 
             // Act
-            Response actual = sut.Create();
+            Response actual = sut.Create(toBeCreated);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK,
+                         actual.StatusCode);
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        // todo null case maybe not required to test
+        public void Create_ReturnsResponse_ForAddFailed([NotNull] IDoctorForResponse toBeCreated)
+        {
+            // Arrange
+            var finder = Substitute.For <IInformationFinder>();
+            finder.Create(toBeCreated).Returns((IDoctorForResponse)null);
+            RequestHandler sut = CreateSut(finder);
+
+            // Act
+            Response actual = sut.Create(toBeCreated);
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError,

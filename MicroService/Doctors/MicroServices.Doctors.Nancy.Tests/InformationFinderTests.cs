@@ -55,31 +55,38 @@ namespace MicroServices.Doctors.Nancy.Tests
 
         [Theory]
         [AutoNSubstituteData]
-        public void Create_ReturnsNewDoctor_WhenCalled([NotNull] IDoctor doctor)
+        public void Create_ReturnsNewDoctor_WhenCalled([NotNull] IDoctorForResponse toBeCreated,
+                                                       [NotNull] IDoctor doctor)
         {
             // Arrange
             var repository = Substitute.For <IDoctorsRepository>();
-            repository.Create().Returns(doctor);
+            repository.Create(toBeCreated.FirstName,
+                              toBeCreated.LastName)
+                      .Returns(doctor);
             InformationFinder sut = CreateSut(repository);
 
             // Act
-            IDoctorForResponse actual = sut.Create();
+            IDoctorForResponse actual = sut.Create(toBeCreated);
 
             // Assert
             Assert.Equal(doctor.Id,
                          actual.Id);
         }
 
-        [Fact]
-        public void Create_ReturnsNull_ForCanNotAdd()
+        [Theory]
+        [AutoNSubstituteData]
+        // todo null test can be removed, maybe...
+        public void Create_ReturnsNull_ForCanNotAdd([NotNull] IDoctorForResponse toBeCreated)
         {
             // Arrange
             var repository = Substitute.For <IDoctorsRepository>();
-            repository.Create().Returns(( IDoctor ) null);
+            repository.Create(Arg.Any <string>(),
+                              Arg.Any <string>())
+                      .Returns(( IDoctor ) null);
             InformationFinder sut = CreateSut(repository);
 
             // Act
-            IDoctorForResponse actual = sut.Create();
+            IDoctorForResponse actual = sut.Create(toBeCreated);
 
             // Assert
             Assert.Null(actual);

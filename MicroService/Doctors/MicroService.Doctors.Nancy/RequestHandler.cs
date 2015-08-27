@@ -54,16 +54,16 @@ namespace MicroServices.Doctors.Nancy
             return AsJson(doctors.First());
         }
 
-        public Response Create()
+        public Response Create(IDoctorForResponse doctor)
         {
-            var doctor = m_InformationFinder.Create();
+            var created = m_InformationFinder.Create(doctor);
 
-            if (doctor == null)
+            if (created == null)
             {
                 return HttpStatusCode.InternalServerError;
             }
 
-            return AsJson(doctor);
+            return AsJson(created);
         }
 
         public Response DeleteById(int id)
