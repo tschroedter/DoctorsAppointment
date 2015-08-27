@@ -21,6 +21,12 @@ namespace MicroServices.Doctors.Nancy
 
             Get [ "/{name:alpha}" ] =
                 parameters => handler.FindByLastName(parameters.name);
+
+            Post [ "/" ] =
+                parameters => handler.Create();
+
+            Delete [ "/{id:int}" ] =
+                parameters => handler.DeleteById(( int ) ( parameters.id ));
         }
     }
 }

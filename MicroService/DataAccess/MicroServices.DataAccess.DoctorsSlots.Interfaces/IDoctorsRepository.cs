@@ -7,5 +7,7 @@ namespace MicroServices.DataAccess.DoctorsSlots.Interfaces
         : IRepository <IDoctor>
     {
         IEnumerable <IDoctor> FindByLastName([NotNull] string lastName);
+        IDoctor Create();
+        IDoctor Delete(int id);
     }
 }

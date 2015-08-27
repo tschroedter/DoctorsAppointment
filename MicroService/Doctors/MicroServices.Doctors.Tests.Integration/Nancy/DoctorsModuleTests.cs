@@ -1,7 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using JetBrains.Annotations;
 using Nancy;
 using Nancy.Testing;
+using Newtonsoft.Json;
 using Xunit;
 using Xunit.Extensions;
 
@@ -12,10 +16,38 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
     public sealed class DoctorsModuleTests
     {
         [Fact]
+        public void Should_return_JSON_string_when_doctor_is_created()
+        {
+            try
+            {
+                // Given
+                dynamic expected = CreateExpectedResponseForCreate();
+                Browser browser = CreateBrowser();
+
+                // When
+                BrowserResponse result = browser.Post("/doctors/",
+                                                     with =>
+                                                     {
+                                                         with.HttpRequest();
+                                                     });
+
+                dynamic actual = ToDynamic(result.Body.AsString());
+
+                // Then
+                AssertDoctorIgnoreId(expected,
+                                     actual);
+            }
+            finally
+            {
+                DeleteDoctorToBeCreated();
+            }
+        }
+
+        [Fact]
         public void Should_return_JSON_string_when_doctor_with_lastname_exists()
         {
             // Given
-            string expected = CreateExpectedResponseForMiller();
+            dynamic expected = CreateExpectedResponseForMiller();
             Browser browser = CreateBrowser();
 
             // When
@@ -25,16 +57,51 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
                                                      with.HttpRequest();
                                                  });
 
+            dynamic actual = ToDynamic(result.Body.AsString());
+
             // Then
-            Assert.Equal(expected,
-                         result.Body.AsString());
+            AssertDoctor(expected,
+                         actual);
+        }
+
+        [Fact]
+        public void Should_return_JSON_string_when_doctor_is_deleted()
+        {
+            // Given
+            Browser browser = CreateBrowser();
+            dynamic doctor = CreateDoctorToBeDeleted(browser);
+            int doctorId = Convert.ToInt32(doctor [ "Id" ].Value);
+
+            // When
+            BrowserResponse result = browser.Delete("/doctors/" + doctorId,
+                                                    with =>
+                                                    {
+                                                        with.HttpRequest();
+                                                    });
+
+            // Then
+            Assert.Equal(HttpStatusCode.OK,
+                         result.StatusCode);
+        }
+
+        private dynamic CreateDoctorToBeDeleted(Browser browser)
+        {
+            BrowserResponse result = browser.Post("/doctors/",
+                                                 with =>
+                                                 {
+                                                     with.HttpRequest();
+                                                 });
+
+            dynamic actual = ToDynamic(result.Body.AsString());
+
+            return actual;
         }
 
         [Fact]
         public void Should_return_JSON_string_when_doctor_with_id_exists()
         {
             // Given
-            string expected = CreateExpectedResponseForMiller();
+            dynamic expected = CreateExpectedResponseForMiller();
             Browser browser = CreateBrowser();
 
             // When
@@ -44,16 +111,19 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
                                                      with.HttpRequest();
                                                  });
 
+            dynamic actual = ToDynamic(result.Body.AsString());
+
             // Then
-            Assert.Equal(expected,
-                         result.Body.AsString());
+            AssertDoctor(expected,
+                         actual);
         }
 
         [Fact]
         public void Should_return_JSON_string_when_list_requested()
         {
             // Given
-            string expected = CreateExpectedJsonStringForList();
+            // todo convert to dynamic
+            dynamic expected = CreateExpectedJsonStringForList();
             Browser browser = CreateBrowser();
 
             // When
@@ -63,9 +133,11 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
                                                      with.HttpRequest();
                                                  });
 
+            dynamic actual = ToDynamic(result.Body.AsString());
+
             // Then
-            Assert.Equal(expected,
-                         result.Body.AsString());
+            AssertDoctors(expected,
+                          actual);
         }
 
         [Theory]
@@ -121,17 +193,127 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
             return browser;
         }
 
-        private static string CreateExpectedResponseForMiller()
+        private static dynamic CreateExpectedResponseForMiller()
         {
-            return "{\"LastName\":\"Miller\",\"FirstName\":\"Mary\",\"Id\":1}";
+            var json = "{\"LastName\":\"Miller\",\"FirstName\":\"Mary\",\"Id\":1}";
+
+            return ToDynamic(json);
         }
 
-        private string CreateExpectedJsonStringForList()
+        private dynamic CreateExpectedJsonStringForList()
         {
-            return "[" +
-                   "{\"LastName\":\"Miller\",\"FirstName\":\"Mary\",\"Id\":1}," +
-                   "{\"LastName\":\"Smith\",\"FirstName\":\"Will\",\"Id\":2}" +
-                   "]";
+            string json = "[" +
+                          "{\"LastName\":\"Miller\",\"FirstName\":\"Mary\",\"Id\":1}," +
+                          "{\"LastName\":\"Smith\",\"FirstName\":\"Will\",\"Id\":2}" +
+                          "]";
+
+            return ToDynamic(json);
+        }
+
+        private dynamic CreateExpectedResponseForCreate()
+        {
+            var json = "{\"LastName\":\"LastName\",\"FirstName\":\"FirstName\",\"Id\":3}";
+
+            return ToDynamic(json);
+        }
+
+        private static dynamic ToDynamic(string json)
+        {
+            dynamic data = JsonConvert.DeserializeObject(json);
+
+            return data;
+        }
+
+        private void AssertDoctorIgnoreId(dynamic expected,
+                                          dynamic actual)
+        {
+            Console.WriteLine("Comparing doctors with id {0} and {1}...",
+                              expected [ "Id" ].Value,
+                              actual [ "Id" ].Value);
+
+            Assert.True(expected [ "LastName" ].Value == actual [ "LastName" ].Value,
+                        "LastName");
+            Assert.True(expected [ "FirstName" ].Value == actual [ "FirstName" ].Value,
+                        "FirstName");
+        }
+
+        private void AssertDoctor(dynamic expected,
+                                  dynamic actual)
+        {
+            Console.WriteLine("Comparing doctors with id {0} and {1}...",
+                              expected [ "Id" ].Value,
+                              actual [ "Id" ].Value);
+
+            Assert.True(expected [ "Id" ].Value == actual [ "Id" ].Value,
+                        "Id");
+            Assert.True(expected [ "LastName" ].Value == actual [ "LastName" ].Value,
+                        "LastName");
+            Assert.True(expected [ "FirstName" ].Value == actual [ "FirstName" ].Value,
+                        "FirstName");
+        }
+
+        private void AssertDoctors(dynamic expected,
+                                   dynamic actual)
+        {
+            var expectedList = new List <dynamic>();
+            foreach ( dynamic expectedSlot in expected )
+            {
+                expectedList.Add(expectedSlot);
+            }
+
+            var actualList = new List <dynamic>();
+            foreach ( dynamic actualSlot in actual )
+            {
+                actualList.Add(actualSlot);
+            }
+
+            Assert.True(expectedList.Count == actualList.Count,
+                        "count");
+
+            foreach ( dynamic expectedSlot in expectedList )
+            {
+                var expectedSlotId = ( int ) ( expectedSlot [ "Id" ].Value );
+
+                object compareToSlot = GetDoctorWithId(actualList,
+                                                       expectedSlotId);
+
+                AssertDoctor(expectedSlot,
+                             compareToSlot);
+            }
+        }
+
+        private object GetDoctorWithId(List <dynamic> list,
+                                       int id)
+        {
+            return list.FirstOrDefault(slot => id == ( int ) ( slot [ "Id" ].Value ));
+        }
+
+        private void DeleteDoctorToBeCreated()
+        {
+            Browser browser = CreateBrowser();
+
+            BrowserResponse existing = browser.Get("/doctors/LastName",
+                                                   with =>
+                                                   {
+                                                       with.HttpRequest();
+                                                   });
+
+            if ( existing.StatusCode == HttpStatusCode.NotFound )
+            {
+                return;
+            }
+
+            dynamic doctor = ToDynamic(existing.Body.AsString());
+            int doctorId = Convert.ToInt32(doctor [ "Id" ].Value);
+
+            BrowserResponse result = browser.Delete("/doctors/" + doctorId,
+                                                    with =>
+                                                    {
+                                                        with.HttpRequest();
+                                                    });
+
+            Assert.Equal(HttpStatusCode.OK,
+                         result.StatusCode);
         }
     }
 }

@@ -5,5 +5,7 @@ namespace MicroServices.DataAccess.DoctorsSlots.Interfaces
     public interface IDoctorsContext : IDbContext <IDoctor>
     {
         IQueryable <IDoctor> Doctors();
+        IDoctor Create();
+        IDoctor Delete(int id);
     }
 }

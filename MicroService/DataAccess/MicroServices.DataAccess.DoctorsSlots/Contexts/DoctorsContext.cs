@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using MicroServices.DataAccess.DoctorsSlots.Entities;
@@ -32,7 +33,7 @@ namespace MicroServices.DataAccess.DoctorsSlots.Contexts
             DbSetDoctors.Remove(instance);
         }
 
-        public new void SaveChanges() // todo check why new???
+        public new void SaveChanges()
         {
             base.SaveChanges();
         }
@@ -42,11 +43,59 @@ namespace MicroServices.DataAccess.DoctorsSlots.Contexts
             return DbSetDoctors.Find(id);
         }
 
+        public IDoctor Create()
+        {
+            var instance = new Doctor
+                           {
+                               LastName = "LastName",
+                               FirstName = "FirstName"
+                           };
+
+            Add(instance);
+            SaveChanges();
+
+            return instance;
+
+            /* todo this code should be an aspect (AOP)
+            try
+            {
+                SaveChanges();
+            }
+            catch (DbEntityValidationException dbEx)
+            {
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        Trace.TraceInformation("Property: {0} Error: {1}",
+                                                validationError.PropertyName,
+                                                validationError.ErrorMessage);
+                    }
+                }
+            }
+            */
+        }
+
+        public IDoctor Delete(int id)
+        {
+            Doctor instance = DbSetDoctors.Find(id);
+
+            if ( instance == null )
+            {
+                return null;
+            }
+
+            Remove(instance);
+            SaveChanges();
+
+            return instance;
+        }
+
         public void Add(IDoctor doctor)
         {
             Doctor instance = ConvertToSlot(doctor);
 
-            DbSetDoctors.Add(instance);
+            DbSetDoctors.AddOrUpdate(instance);
         }
 
         public void SetStateForSlot(IDoctor doctor,

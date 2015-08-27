@@ -2,11 +2,13 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JetBrains.Annotations;
+using MicroServices.Common.Tests;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
 using MicroServices.DataAccess.DoctorsSlots.Repositories;
 using NSubstitute;
 using NSubstitute.Core;
 using Xunit;
+using Xunit.Extensions;
 
 namespace MicroServices.DataAccess.DoctorsSlots.Tests.Repositories
 {
@@ -28,6 +30,40 @@ namespace MicroServices.DataAccess.DoctorsSlots.Tests.Repositories
             // Assert
             Assert.Equal(1,
                          actual.Count());
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void Create_ReturnsNewDoctors_WhenCalled([NotNull] IDoctor doctor)
+        {
+            // Arrange
+            var context = Substitute.For <IDoctorsContext>();
+            context.Create().Returns(doctor);
+            DoctorsRepository sut = CreateSut(context);
+
+            // Act
+            IDoctor actual = sut.Create();
+
+            // Assert
+            Assert.Equal(doctor,
+                         actual);
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void Delete_ReturnsNewDoctors_WhenCalled([NotNull] IDoctor doctor)
+        {
+            // Arrange
+            var context = Substitute.For <IDoctorsContext>();
+            context.Delete(Arg.Any <int>()).Returns(doctor);
+            DoctorsRepository sut = CreateSut(context);
+
+            // Act
+            IDoctor actual = sut.Delete(-1);
+
+            // Assert
+            Assert.Equal(doctor,
+                         actual);
         }
 
         [Fact]

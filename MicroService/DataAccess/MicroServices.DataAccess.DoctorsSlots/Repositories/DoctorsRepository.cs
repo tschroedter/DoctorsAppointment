@@ -21,6 +21,16 @@ namespace MicroServices.DataAccess.DoctorsSlots.Repositories
             return doctor;
         }
 
+        public IDoctor Create()
+        {
+            return Context.Create();
+        }
+
+        public IDoctor Delete(int id)
+        {
+            return Context.Delete(id);
+        }
+
         protected override IQueryable <IDoctor> GetAll()
         {
             return Context.Doctors();

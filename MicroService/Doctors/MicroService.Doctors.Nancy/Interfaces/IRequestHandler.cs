@@ -7,5 +7,7 @@ namespace MicroServices.Doctors.Nancy.Interfaces
         Response List();
         Response FindById(int id);
         Response FindByLastName(string doctorLastName);
+        Response Create();
+        Response DeleteById(int id);
     }
 }

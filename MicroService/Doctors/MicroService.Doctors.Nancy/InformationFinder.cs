@@ -42,5 +42,23 @@ namespace MicroServices.Doctors.Nancy
 
             return doctorsWithNoSlots;
         }
+
+        public IDoctorForResponse Create()
+        {
+            IDoctor doctor = m_Repository.Create();
+
+            return doctor == null
+                       ? null
+                       : new DoctorForResponse(doctor);
+        }
+
+        public IDoctorForResponse Delete(int id)
+        {
+            IDoctor doctor = m_Repository.Delete(id);
+
+            return doctor == null
+                       ? null
+                       : new DoctorForResponse(doctor);
+        }
     }
 }

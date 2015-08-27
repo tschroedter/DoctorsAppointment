@@ -18,6 +18,7 @@ namespace MicroServices.Doctors.Nancy.Tests
     public sealed class RequestHandlerTests
     {
         // todo don't know how to get content, but integration test cover this
+        private const int DoesNotMatter = -1;
 
         [Fact]
         public void List_ReturnsResponse_WhenCalled()
@@ -32,6 +33,72 @@ namespace MicroServices.Doctors.Nancy.Tests
 
             // Assert
             Assert.Equal(HttpStatusCode.OK,
+                         actual.StatusCode);
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void Create_ReturnsResponse_WhenCalled([NotNull] IDoctorForResponse doctor)
+        {
+            // Arrange
+            var finder = Substitute.For <IInformationFinder>();
+            finder.Create().Returns(doctor);
+            RequestHandler sut = CreateSut(finder);
+
+            // Act
+            Response actual = sut.Create();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK,
+                         actual.StatusCode);
+        }
+
+        [Fact]
+        public void Create_ReturnsResponse_ForAddFailed()
+        {
+            // Arrange
+            var finder = Substitute.For <IInformationFinder>();
+            finder.Create().Returns(( IDoctorForResponse ) null);
+            RequestHandler sut = CreateSut(finder);
+
+            // Act
+            Response actual = sut.Create();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError,
+                         actual.StatusCode);
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void DeleteById_ReturnsResponse_WhenCalled([NotNull] IDoctorForResponse doctor)
+        {
+            // Arrange
+            var finder = Substitute.For <IInformationFinder>();
+            finder.Delete(doctor.Id).Returns(doctor);
+            RequestHandler sut = CreateSut(finder);
+
+            // Act
+            Response actual = sut.DeleteById(doctor.Id);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK,
+                         actual.StatusCode);
+        }
+
+        [Fact]
+        public void DeleteById_ReturnsResponse_ForAddFailed()
+        {
+            // Arrange
+            var finder = Substitute.For <IInformationFinder>();
+            finder.Delete(DoesNotMatter).Returns(( IDoctorForResponse ) null);
+            RequestHandler sut = CreateSut(finder);
+
+            // Act
+            Response actual = sut.DeleteById(DoesNotMatter);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound,
                          actual.StatusCode);
         }
 
@@ -58,11 +125,11 @@ namespace MicroServices.Doctors.Nancy.Tests
         {
             // Arrange
             var finder = Substitute.For <IInformationFinder>();
-            finder.FindById(-1).Returns(( IDoctorForResponse ) null);
+            finder.FindById(DoesNotMatter).Returns(( IDoctorForResponse ) null);
             RequestHandler sut = CreateSut(finder);
 
             // Act
-            Response actual = sut.FindById(-1);
+            Response actual = sut.FindById(DoesNotMatter);
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound,
@@ -75,7 +142,7 @@ namespace MicroServices.Doctors.Nancy.Tests
         {
             // Arrange
             var finder = Substitute.For <IInformationFinder>();
-            finder.FindById(-1).Returns(( IDoctorForResponse ) null);
+            finder.FindById(DoesNotMatter).Returns(( IDoctorForResponse ) null);
             RequestHandler sut = CreateSut(finder);
 
             // Act

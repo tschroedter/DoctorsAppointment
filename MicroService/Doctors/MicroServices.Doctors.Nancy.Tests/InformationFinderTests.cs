@@ -17,6 +17,8 @@ namespace MicroServices.Doctors.Nancy.Tests
     //ncrunch: no coverage start
     public sealed class InformationFinderTests
     {
+        private const int DoesNotMatter = -1;
+
         [Theory]
         [AutoNSubstituteData]
         public void FindById_ReturnsDoctor_ForExistingId([NotNull] IDoctor doctor)
@@ -51,16 +53,81 @@ namespace MicroServices.Doctors.Nancy.Tests
                          actual.Count());
         }
 
+        [Theory]
+        [AutoNSubstituteData]
+        public void Create_ReturnsNewDoctor_WhenCalled([NotNull] IDoctor doctor)
+        {
+            // Arrange
+            var repository = Substitute.For <IDoctorsRepository>();
+            repository.Create().Returns(doctor);
+            InformationFinder sut = CreateSut(repository);
+
+            // Act
+            IDoctorForResponse actual = sut.Create();
+
+            // Assert
+            Assert.Equal(doctor.Id,
+                         actual.Id);
+        }
+
+        [Fact]
+        public void Create_ReturnsNull_ForCanNotAdd()
+        {
+            // Arrange
+            var repository = Substitute.For <IDoctorsRepository>();
+            repository.Create().Returns(( IDoctor ) null);
+            InformationFinder sut = CreateSut(repository);
+
+            // Act
+            IDoctorForResponse actual = sut.Create();
+
+            // Assert
+            Assert.Null(actual);
+        }
+
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void Delete_ReturnsNewDoctor_WhenCalled([NotNull] IDoctor doctor)
+        {
+            // Arrange
+            var repository = Substitute.For<IDoctorsRepository>();
+            repository.Delete(Arg.Any<int>()).Returns(doctor);
+            InformationFinder sut = CreateSut(repository);
+
+            // Act
+            IDoctorForResponse actual = sut.Delete(DoesNotMatter);
+
+            // Assert
+            Assert.Equal(doctor.Id,
+                         actual.Id);
+        }
+
+        [Fact]
+        public void Delete_ReturnsNull_ForCanNotAdd()
+        {
+            // Arrange
+            var repository = Substitute.For<IDoctorsRepository>();
+            repository.Delete(Arg.Any<int>()).Returns((IDoctor)null);
+            InformationFinder sut = CreateSut(repository);
+
+            // Act
+            IDoctorForResponse actual = sut.Delete(DoesNotMatter);
+
+            // Assert
+            Assert.Null(actual);
+        }
+
         [Fact]
         public void FindById_ReturnsNull_ForNotExistingId()
         {
             // Arrange
             var repository = Substitute.For <IDoctorsRepository>();
-            repository.FindById(-1).Returns(( IDoctor ) null);
+            repository.FindById(DoesNotMatter).Returns((IDoctor)null);
             InformationFinder sut = CreateSut(repository);
 
             // Act
-            IDoctorForResponse actual = sut.FindById(-1);
+            IDoctorForResponse actual = sut.FindById(DoesNotMatter);
 
             // Assert
             Assert.Null(actual);

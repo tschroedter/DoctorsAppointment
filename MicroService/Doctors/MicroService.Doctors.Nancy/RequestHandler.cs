@@ -25,14 +25,14 @@ namespace MicroServices.Doctors.Nancy
 
         public Response FindById(int id)
         {
-            IDoctorForResponse doctorForResponse = m_InformationFinder.FindById(id);
+            IDoctorForResponse doctor = m_InformationFinder.FindById(id);
 
-            if ( doctorForResponse == null )
+            if ( doctor == null )
             {
                 return HttpStatusCode.NotFound;
             }
 
-            return AsJson(doctorForResponse);
+            return AsJson(doctor);
         }
 
         public Response FindByLastName(string doctorLastName)
@@ -52,6 +52,30 @@ namespace MicroServices.Doctors.Nancy
             }
 
             return AsJson(doctors.First());
+        }
+
+        public Response Create()
+        {
+            var doctor = m_InformationFinder.Create();
+
+            if (doctor == null)
+            {
+                return HttpStatusCode.InternalServerError;
+            }
+
+            return AsJson(doctor);
+        }
+
+        public Response DeleteById(int id)
+        {
+            var doctor = m_InformationFinder.Delete(id);
+
+            if (doctor == null)
+            {
+                return HttpStatusCode.NotFound;
+            }
+
+            return AsJson(doctor);
         }
 
         private Response AsJson(object instance)
