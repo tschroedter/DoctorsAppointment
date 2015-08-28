@@ -56,9 +56,9 @@ namespace MicroServices.Doctors.Nancy
 
         public Response Create(IDoctorForResponse doctor)
         {
-            var created = m_InformationFinder.Create(doctor);
+            IDoctorForResponse created = m_InformationFinder.Create(doctor);
 
-            if (created == null)
+            if ( created == null )
             {
                 return HttpStatusCode.InternalServerError;
             }
@@ -68,9 +68,9 @@ namespace MicroServices.Doctors.Nancy
 
         public Response DeleteById(int id)
         {
-            var doctor = m_InformationFinder.Delete(id);
+            IDoctorForResponse doctor = m_InformationFinder.Delete(id);
 
-            if (doctor == null)
+            if ( doctor == null )
             {
                 return HttpStatusCode.NotFound;
             }

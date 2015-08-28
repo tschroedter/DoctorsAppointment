@@ -92,14 +92,13 @@ namespace MicroServices.Doctors.Nancy.Tests
             Assert.Null(actual);
         }
 
-
         [Theory]
         [AutoNSubstituteData]
         public void Delete_ReturnsNewDoctor_WhenCalled([NotNull] IDoctor doctor)
         {
             // Arrange
-            var repository = Substitute.For<IDoctorsRepository>();
-            repository.Delete(Arg.Any<int>()).Returns(doctor);
+            var repository = Substitute.For <IDoctorsRepository>();
+            repository.Delete(Arg.Any <int>()).Returns(doctor);
             InformationFinder sut = CreateSut(repository);
 
             // Act
@@ -114,8 +113,8 @@ namespace MicroServices.Doctors.Nancy.Tests
         public void Delete_ReturnsNull_ForCanNotAdd()
         {
             // Arrange
-            var repository = Substitute.For<IDoctorsRepository>();
-            repository.Delete(Arg.Any<int>()).Returns((IDoctor)null);
+            var repository = Substitute.For <IDoctorsRepository>();
+            repository.Delete(Arg.Any <int>()).Returns(( IDoctor ) null);
             InformationFinder sut = CreateSut(repository);
 
             // Act
@@ -130,7 +129,7 @@ namespace MicroServices.Doctors.Nancy.Tests
         {
             // Arrange
             var repository = Substitute.For <IDoctorsRepository>();
-            repository.FindById(DoesNotMatter).Returns((IDoctor)null);
+            repository.FindById(DoesNotMatter).Returns(( IDoctor ) null);
             InformationFinder sut = CreateSut(repository);
 
             // Act

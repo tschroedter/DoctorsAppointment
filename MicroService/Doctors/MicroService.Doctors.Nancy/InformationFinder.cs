@@ -49,8 +49,8 @@ namespace MicroServices.Doctors.Nancy
                                    ? "FirstName"
                                    : doctor.FirstName;
             string lastName = string.IsNullOrEmpty(doctor.FirstName)
-                                   ? "LastName"
-                                   : doctor.LastName;
+                                  ? "LastName"
+                                  : doctor.LastName;
 
             IDoctor created = m_Repository.Create(firstName,
                                                   lastName);

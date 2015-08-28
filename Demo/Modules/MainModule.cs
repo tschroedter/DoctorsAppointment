@@ -1,12 +1,12 @@
-﻿namespace Demo.Modules
-{
-    using Nancy;
+﻿using Nancy;
 
+namespace Demo.Modules
+{
     public class MainModule : NancyModule
     {
         public MainModule()
         {
-            Get["/main"] = _ => View["main"];
+            Get [ "/main" ] = _ => View [ "main" ];
         }
     }
 }

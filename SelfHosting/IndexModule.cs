@@ -1,12 +1,12 @@
-﻿namespace SelfHosting
-{
-    using Nancy;
+﻿using Nancy;
 
+namespace SelfHosting
+{
     public class IndexModule : NancyModule
     {
         public IndexModule()
         {
-            Get["/"] = parameters => View["index"];
+            Get [ "/" ] = parameters => View [ "index" ];
         }
     }
 }

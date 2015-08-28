@@ -11,7 +11,9 @@
     <h3>List</h3>
     <table>
         <tr>
-            <td colspan="2"><button ng-click="returnAll()">Get All</button></td>
+            <td colspan="2">
+                <button ng-click="returnAll()">Get All</button>
+            </td>
         </tr>
         <tr>
             <td colspan="2">
@@ -35,10 +37,14 @@
     <table>
         <tr>
             <td>Get By Id</td>
-            <td><input type="number" ng-model="doctorId"/></td>
+            <td>
+                <input type="number" ng-model="doctorId"/>
+            </td>
         </tr>
         <tr>
-            <td colspan="2"><button ng-click="returnSingle()">Load Doctor</button></td>
+            <td colspan="2">
+                <button ng-click="returnSingle()">Load Doctor</button>
+            </td>
         </tr>
         <tr>
             <td>First Name:</td>
@@ -57,14 +63,20 @@
         </tr>
         <tr>
             <td>First Name:</td>
-            <td><input type="text" ng-model="create.firstName"/></td>
+            <td>
+                <input type="text" ng-model="create.firstName"/>
+            </td>
         </tr>
         <tr>
             <td>Last Name:</td>
-            <td><input type="text" ng-model="create.lastName" /></td>
+            <td>
+                <input type="text" ng-model="create.lastName"/>
+            </td>
         </tr>
         <tr>
-            <td colspan="2"><button ng-click="save()">Create Doctor</button></td>
+            <td colspan="2">
+                <button ng-click="save()">Create Doctor</button>
+            </td>
         </tr>
     </table>
 </div>

@@ -1,12 +1,12 @@
-﻿namespace Demo.Modules
-{
-    using Nancy;
+﻿using Nancy;
 
+namespace Demo.Modules
+{
     public class IndexModule : NancyModule
     {
         public IndexModule()
         {
-            Get["/"] = _ => View["index"];
+            Get [ "/" ] = _ => View [ "index" ];
         }
     }
 }

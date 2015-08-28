@@ -2,6 +2,7 @@
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
+using MicroServices.DataAccess.DoctorsSlots;
 using Nancy.Bootstrappers.Windsor;
 
 namespace Demo
@@ -18,11 +19,11 @@ namespace Demo
             // while only registering T.
             existingContainer.Kernel.Resolver.AddSubResolver(new ArrayResolver(existingContainer.Kernel));
 
-            existingContainer.Install(FromAssembly.Containing(typeof(MicroServices.DataAccess.DoctorsSlots.Installer)));
-            existingContainer.Install(FromAssembly.Containing(typeof(MicroServices.Days.Nancy.Installer)));
-            existingContainer.Install(FromAssembly.Containing(typeof(MicroServices.Doctors.Nancy.Installer)));
-            existingContainer.Install(FromAssembly.Containing(typeof(MicroServices.DoctorsSlots.Nancy.Installer)));
-            existingContainer.Install(FromAssembly.Containing(typeof(MicroServices.Slots.Nancy.Installer)));
+            existingContainer.Install(FromAssembly.Containing(typeof ( Installer )));
+            existingContainer.Install(FromAssembly.Containing(typeof ( MicroServices.Days.Nancy.Installer )));
+            existingContainer.Install(FromAssembly.Containing(typeof ( MicroServices.Doctors.Nancy.Installer )));
+            existingContainer.Install(FromAssembly.Containing(typeof ( MicroServices.DoctorsSlots.Nancy.Installer )));
+            existingContainer.Install(FromAssembly.Containing(typeof ( MicroServices.Slots.Nancy.Installer )));
         }
     }
 }

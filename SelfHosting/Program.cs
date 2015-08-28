@@ -1,16 +1,16 @@
-﻿namespace SelfHosting
-{
-    using System;
-    using Nancy.Hosting.Self;
+﻿using System;
+using Nancy.Hosting.Self;
 
-    class Program
+namespace SelfHosting
+{
+    internal class Program
     {
-        static void Main()
+        private static void Main()
         {
             var uri =
                 new Uri("http://localhost:63579");
 
-            using (var host = new NancyHost(uri))
+            using ( var host = new NancyHost(uri) )
             {
                 host.Start();
 

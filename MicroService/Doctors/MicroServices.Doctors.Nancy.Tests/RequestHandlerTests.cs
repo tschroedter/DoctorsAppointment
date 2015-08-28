@@ -61,7 +61,7 @@ namespace MicroServices.Doctors.Nancy.Tests
                                                        [NotNull] IDoctorForResponse created)
         {
             // Arrange
-            var finder = Substitute.For<IInformationFinder>();
+            var finder = Substitute.For <IInformationFinder>();
             finder.Create(toBeCreated).Returns(created);
             RequestHandler sut = CreateSut(finder);
 
@@ -80,7 +80,7 @@ namespace MicroServices.Doctors.Nancy.Tests
         {
             // Arrange
             var finder = Substitute.For <IInformationFinder>();
-            finder.Create(toBeCreated).Returns((IDoctorForResponse)null);
+            finder.Create(toBeCreated).Returns(( IDoctorForResponse ) null);
             RequestHandler sut = CreateSut(finder);
 
             // Act

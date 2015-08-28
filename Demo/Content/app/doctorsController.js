@@ -1,4 +1,4 @@
-﻿mainApp.controller('doctorsController',
+﻿mainApp.controller("doctorsController",
     function($scope,
         doctors) {
 
@@ -16,7 +16,7 @@
             return 0;
         }
 
-        $scope.setSelectedDoctor = function (doctor) {
+        $scope.setSelectedDoctor = function(doctor) {
             if ($scope.doctors === null) {
                 return false;
             }
@@ -28,7 +28,7 @@
         };
 
         /* BEGIN: CRUD */ // TODO: move all this into service
-        
+
         $scope.returnAll = function() {
             doctors.query(function(data) {
                 $scope.doctors = angular.fromJson(data);
@@ -36,12 +36,12 @@
             });
         };
 
-        $scope.returnSingle = function () {
+        $scope.returnSingle = function() {
             $scope.doctor = doctors.get({ id: $scope.doctorId });
         };
 
         $scope.save = function() {
-            doctors.save($scope.create, function () {
+            doctors.save($scope.create, function() {
                 alert("Created new doctor!");
             });
         };
