@@ -103,7 +103,7 @@ namespace MicroServices.DataAccess.DoctorsSlots.Tests.Repositories
             test.Id.Returns(0);
 
             // Act
-            sut.AddOrUpdate(test);
+            sut.Save(test);
 
             // Assert
             context.Received().Add(test);
@@ -119,7 +119,7 @@ namespace MicroServices.DataAccess.DoctorsSlots.Tests.Repositories
             test.Id.Returns(1);
 
             // Act
-            sut.AddOrUpdate(test);
+            sut.Save(test);
 
             // Assert
             context.Received().SetStateForSlot(test,

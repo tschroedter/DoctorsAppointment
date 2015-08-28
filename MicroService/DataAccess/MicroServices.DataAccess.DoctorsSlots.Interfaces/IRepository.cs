@@ -7,7 +7,7 @@ namespace MicroServices.DataAccess.DoctorsSlots.Interfaces
     {
         IQueryable <T> All { get; }
         T FindById(int id);
-        void AddOrUpdate(T instance);
+        void Save(T instance);
         void Remove(T entity);
         void Save();
     }

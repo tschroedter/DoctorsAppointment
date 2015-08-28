@@ -8,7 +8,7 @@ namespace MicroServices.Doctors.Nancy.Interfaces
         IEnumerable <IDoctorForResponse> FindByLastName([NotNull] string lastName);
         IDoctorForResponse FindById(int id);
         IEnumerable <IDoctorForResponse> List();
-        IDoctorForResponse Create([NotNull] IDoctorForResponse doctor);
         IDoctorForResponse Delete(int id);
+        IDoctorForResponse Save(IDoctorForResponse doctor);
     }
 }

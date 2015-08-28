@@ -39,55 +39,19 @@ namespace MicroServices.Doctors.Nancy.Tests
 
         [Theory]
         [AutoNSubstituteData]
-        public void Create_ReturnsResponse_WhenCalled([NotNull] IDoctorForResponse toBeCreated,
-                                                      [NotNull] IDoctorForResponse created)
-        {
-            // Arrange
-            var finder = Substitute.For <IInformationFinder>();
-            finder.Create(toBeCreated).Returns(created);
-            RequestHandler sut = CreateSut(finder);
-
-            // Act
-            Response actual = sut.Create(toBeCreated);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK,
-                         actual.StatusCode);
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void Create_ReturnsNewDoctor_WhenCalled([NotNull] IDoctorForResponse toBeCreated,
+        public void Save_ReturnsStatusOK_WhenCalled([NotNull] IDoctorForResponse toBeCreated,
                                                        [NotNull] IDoctorForResponse created)
         {
             // Arrange
-            var finder = Substitute.For <IInformationFinder>();
-            finder.Create(toBeCreated).Returns(created);
+            var finder = Substitute.For<IInformationFinder>();
+            finder.Save(toBeCreated).Returns(created);
             RequestHandler sut = CreateSut(finder);
 
             // Act
-            Response actual = sut.Create(toBeCreated);
+            Response actual = sut.Save(toBeCreated);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK,
-                         actual.StatusCode);
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        // todo null case maybe not required to test
-        public void Create_ReturnsResponse_ForAddFailed([NotNull] IDoctorForResponse toBeCreated)
-        {
-            // Arrange
-            var finder = Substitute.For <IInformationFinder>();
-            finder.Create(toBeCreated).Returns(( IDoctorForResponse ) null);
-            RequestHandler sut = CreateSut(finder);
-
-            // Act
-            Response actual = sut.Create(toBeCreated);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.InternalServerError,
                          actual.StatusCode);
         }
 

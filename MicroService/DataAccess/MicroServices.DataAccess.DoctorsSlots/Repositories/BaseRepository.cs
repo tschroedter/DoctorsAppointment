@@ -30,7 +30,7 @@ namespace MicroServices.DataAccess.DoctorsSlots.Repositories
             return Context.Find(id);
         }
 
-        public void AddOrUpdate(TType instance)
+        public void Save(TType instance)
         {
             if ( instance.Id == default ( int ) )
             {
@@ -43,6 +43,7 @@ namespace MicroServices.DataAccess.DoctorsSlots.Repositories
             }
 
             Context.Add(instance);
+            Context.SaveChanges(); // todo testing
         }
 
         public void Remove(TType instance)

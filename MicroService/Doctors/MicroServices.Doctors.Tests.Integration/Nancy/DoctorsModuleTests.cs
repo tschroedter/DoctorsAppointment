@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
+using MicroServices.Doctors.Nancy.Interfaces;
 using Nancy;
 using Nancy.Testing;
 using Xunit;
@@ -12,6 +13,42 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
     //ncrunch: no coverage start
     public sealed class DoctorsModuleTests
     {
+        [Fact]
+        public void Should_return_JSON_string_when_doctor_is_created_for_put()
+        {
+            dynamic actual = null;
+
+            try
+            {
+                // Given
+                IDoctorForResponse model = CreateModelForPutTest();
+                dynamic expected = CreateExpectedResponseForPutTest();
+                Browser browser = CreateBrowser();
+
+                // When
+                BrowserResponse result = browser.Put("/doctors/",
+                                                     with =>
+                                                     {
+                                                         with.JsonBody(model);
+                                                     });
+
+                actual = XUnitDoctorsHelper.ToDynamic(result.Body.AsString());
+
+                // Then
+                XUnitDoctorsHelper.AssertDoctorIgnoreId(expected,
+                                                        actual);
+            }
+            finally
+            {
+                if (actual != null)
+                {
+                    int id = Convert.ToInt32(actual["Id"].Value);
+
+                    DeleteDoctorById(id);
+                }
+            }
+        }
+
         [Fact]
         public void Should_return_JSON_string_when_doctor_is_created()
         {
@@ -62,7 +99,7 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
         }
 
         [Fact]
-        public void Should_return_JSON_string_when_doctor_is_deleted()
+        public void Should_return_status_OK_when_doctor_is_deleted()
         {
             // Given
             Browser browser = CreateBrowser();
@@ -81,17 +118,112 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
                          result.StatusCode);
         }
 
-        private dynamic CreateDoctorToBeDeleted(Browser browser)
+        [Fact]
+        public void Should_return_JSON_string_when_doctor_is_deleted()
         {
-            BrowserResponse result = browser.Post("/doctors/",
-                                                  with =>
-                                                  {
-                                                      with.HttpRequest();
-                                                  });
+            // Given
+            Browser browser = CreateBrowser();
+            dynamic doctor = CreateDoctorToBeDeleted(browser);
+            int doctorId = Convert.ToInt32(doctor [ "Id" ].Value);
+            dynamic expected = CreatedExpectedDoctorFor(doctorId);
+
+            // When
+            BrowserResponse result = browser.Delete("/doctors/" + doctorId,
+                                                    with =>
+                                                    {
+                                                        with.HttpRequest();
+                                                    });
 
             dynamic actual = XUnitDoctorsHelper.ToDynamic(result.Body.AsString());
 
-            return actual;
+            // Then
+            XUnitDoctorsHelper.AssertDoctor(expected,
+                                            actual);
+        }
+
+        [Fact]
+        public void Should_return_JSON_string_when_doctor_is_updated()
+        {
+            IDoctorForResponse model = null;
+
+            try
+            {
+                // Given
+                Browser browser = CreateBrowser();
+                dynamic doctor = CreateDoctorToBeDeleted(browser);
+                model = CreateModelForUpdate(doctor);
+
+                dynamic expected = CreatedExpectedDoctorForUpdate(model.Id);
+
+                // When
+                BrowserResponse result = browser.Put("/doctors/",
+                                                     with =>
+                                                     {
+                                                         with.JsonBody(model);
+                                                     });
+
+                dynamic actual = XUnitDoctorsHelper.ToDynamic(result.Body.AsString());
+
+                // Then
+                XUnitDoctorsHelper.AssertDoctor(expected,
+                                                actual);
+            }
+            finally
+            {
+                if ( model != null )
+                {
+                    DeleteDoctorById(model.Id);
+                }
+            }
+        }
+
+        [Fact]
+        public void Should_update_database_when_doctor_is_updated()
+        {
+            IDoctorForResponse model = null;
+
+            try
+            {
+                // Given
+                Browser browser = CreateBrowser();
+                dynamic doctor = CreateDoctorToBeDeleted(browser);
+                model = CreateModelForUpdate(doctor);
+
+                // When
+                BrowserResponse result = browser.Put("/doctors/",
+                                                     with =>
+                                                     {
+                                                         with.JsonBody(model);
+                                                     });
+
+                // Then
+                Assert.Equal(HttpStatusCode.OK,
+                             result.StatusCode);
+
+                // *** Post-conditions ***
+                // Given
+                dynamic expected = CreatedExpectedDoctorForUpdate(model.Id);
+
+                // When
+                result = browser.Get("/doctors/" + model.Id,
+                                     with =>
+                                     {
+                                         with.HttpRequest();
+                                     });
+
+                dynamic actual = XUnitDoctorsHelper.ToDynamic(result.Body.AsString());
+
+                // Then
+                XUnitDoctorsHelper.AssertDoctor(expected,
+                                                actual);
+            }
+            finally
+            {
+                if ( model != null )
+                {
+                    DeleteDoctorById(model.Id);
+                }
+            }
         }
 
         [Fact]
@@ -119,7 +251,6 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
         public void Should_return_JSON_string_when_list_requested()
         {
             // Given
-            // todo convert to dynamic
             dynamic expected = CreateExpectedJsonStringForList();
             Browser browser = CreateBrowser();
 
@@ -240,6 +371,97 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
 
             Assert.Equal(HttpStatusCode.OK,
                          result.StatusCode);
+        }
+
+        private dynamic CreateDoctorToBeDeleted(Browser browser)
+        {
+            BrowserResponse result = browser.Post("/doctors/",
+                                                  with =>
+                                                  {
+                                                      with.HttpRequest();
+                                                  });
+
+            dynamic actual = XUnitDoctorsHelper.ToDynamic(result.Body.AsString());
+
+            return actual;
+        }
+
+        private IDoctorForResponse CreateModelForPutTest()
+        {
+            var model = new UpdateDoctorModel
+                        {
+                            FirstName = "Create",
+                            LastName = "Test"
+                        };
+
+            return model;
+        }
+
+        private dynamic CreateExpectedResponseForPutTest()
+        {
+            string json = "{" +
+                          "\"FirstName\":\"Create\"," +
+                          "\"LastName\":\"Test\"," +
+                          "\"Id\":-1" +
+                          "}";
+
+            return XUnitDoctorsHelper.ToDynamic(json);
+        }
+
+        private IDoctorForResponse CreateModelForUpdate(dynamic doctor)
+        {
+            int doctorId = Convert.ToInt32(doctor [ "Id" ].Value);
+
+            var model = new UpdateDoctorModel
+                        {
+                            Id = doctorId,
+                            FirstName = "Update",
+                            LastName = "Test"
+                        };
+
+            return model;
+        }
+
+        private dynamic CreatedExpectedDoctorForUpdate(int doctorId)
+        {
+            string json = "{" +
+                          "\"FirstName\":\"Update\"," +
+                          "\"LastName\":\"Test\"," +
+                          "\"Id\":" + doctorId +
+                          "}";
+
+            return XUnitDoctorsHelper.ToDynamic(json);
+        }
+
+        private dynamic CreatedExpectedDoctorFor(int doctorId)
+        {
+            string json = "{" +
+                          "\"FirstName\":\"FirstName\"," +
+                          "\"LastName\":\"LastName\"," +
+                          "\"Id\":" + doctorId +
+                          "}";
+
+            return XUnitDoctorsHelper.ToDynamic(json);
+        }
+
+        private void DeleteDoctorById(int doctorId)
+        {
+            Browser browser = CreateBrowser();
+            BrowserResponse result = browser.Delete("/doctors/" + doctorId,
+                                                    with =>
+                                                    {
+                                                        with.HttpRequest();
+                                                    });
+
+            Assert.Equal(HttpStatusCode.OK,
+                         result.StatusCode);
+        }
+
+        private class UpdateDoctorModel : IDoctorForResponse
+        {
+            public string LastName { get; set; }
+            public string FirstName { get; set; }
+            public int Id { get; set; }
         }
     }
 }

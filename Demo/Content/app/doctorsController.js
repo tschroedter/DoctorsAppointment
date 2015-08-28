@@ -41,8 +41,20 @@
         };
 
         $scope.save = function() {
-            doctors.save($scope.create, function() {
+            doctors.save($scope.toCreate, function () {
                 alert("Created new doctor!");
+            });
+        };
+
+        $scope.update = function () {
+            doctors.save($scope.toUpdate, function () {
+                alert("Updated doctor!");
+            });
+        };
+
+        $scope.delete = function () {
+            doctors.delete($scope.toDelete, function () {
+                alert("Deleted doctor!");
             });
         };
 
@@ -51,5 +63,7 @@
         $scope.doctors = [loading];
         $scope.doctor = loading;
         $scope.doctorId = loading.Id;
-        $scope.create = new doctors();
+        $scope.toCreate = new doctors();
+        $scope.toUpdate = new doctors();
+        $scope.toDelete = new doctors();
     });

@@ -48,8 +48,8 @@ namespace MicroServices.DataAccess.DoctorsSlots.Contexts
         {
             var instance = new Doctor
                            {
-                               LastName = firstName,
-                               FirstName = lastName
+                               FirstName = firstName,
+                               LastName = lastName
                            };
 
             Add(instance);

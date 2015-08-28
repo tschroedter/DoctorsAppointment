@@ -45,6 +45,42 @@ namespace MicroServices.Doctors.Nancy.Tests
                          sut.Id);
         }
 
+        [Fact]
+        public void DefaultConstructor_SetsId_WhenCreated()
+        {
+            // Arrange
+            // Act
+            var sut = new DoctorForResponse();
+
+            // Assert
+            Assert.Equal(-1,
+                         sut.Id);
+        }
+
+        [Fact]
+        public void DefaultConstructor_SetsFirstName_WhenCreated()
+        {
+            // Arrange
+            // Act
+            var sut = new DoctorForResponse();
+
+            // Assert
+            Assert.Equal(string.Empty,
+                         sut.FirstName);
+        }
+
+        [Fact]
+        public void DefaultConstructor_SetsLastName_WhenCreated()
+        {
+            // Arrange
+            // Act
+            var sut = new DoctorForResponse();
+
+            // Assert
+            Assert.Equal(string.Empty,
+                         sut.LastName);
+        }
+
         private DoctorForResponse CreateSut()
         {
             var doctor = Substitute.For <IDoctor>();

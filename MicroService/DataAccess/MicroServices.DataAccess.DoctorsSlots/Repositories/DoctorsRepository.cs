@@ -21,13 +21,12 @@ namespace MicroServices.DataAccess.DoctorsSlots.Repositories
             return doctor;
         }
 
-        public IDoctor Create() // todo can be removed???
+        public IDoctor Create()
         {
             return Context.Create("FirstName",
                                   "LastName");
         }
 
-        // todo testing
         public IDoctor Create(string firstName,
                               string lastName)
         {

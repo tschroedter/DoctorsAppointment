@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -77,6 +78,11 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
                                               int id)
         {
             return list.FirstOrDefault(slot => id == ( int ) ( slot [ "Id" ].Value ));
+        }
+
+        public static string ToJson([NotNull] object instance)
+        {
+            return JsonConvert.SerializeObject(instance);
         }
     }
 }

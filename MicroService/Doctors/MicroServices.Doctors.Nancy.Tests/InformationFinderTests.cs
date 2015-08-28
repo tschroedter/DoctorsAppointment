@@ -21,6 +21,41 @@ namespace MicroServices.Doctors.Nancy.Tests
 
         [Theory]
         [AutoNSubstituteData]
+        public void Save_CallsSave_WhenCalled([NotNull] IDoctorForResponse toBeUpdated,
+                                                        [NotNull] IDoctor doctor)
+        {
+            // Arrange
+            var repository = Substitute.For<IDoctorsRepository>();
+            repository.Save(Arg.Any<IDoctor>());
+            var sut = CreateSut(repository);
+
+            // Act
+            sut.Save(toBeUpdated);
+
+            // Assert
+            repository.Received().Save(Arg.Is<IDoctor>(x => x.Id == toBeUpdated.Id));
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void Save_ReturnsUpdatedDoctor_ForExisting([NotNull] IDoctorForResponse toBeUpdated,
+                                                            [NotNull] IDoctor doctor)
+        {
+            // Arrange
+            var repository = Substitute.For<IDoctorsRepository>();
+            repository.Save(Arg.Any<IDoctor>());
+            var sut = CreateSut(repository);
+
+            // Act
+            IDoctorForResponse actual = sut.Save(toBeUpdated);
+
+            // Assert
+            Assert.Equal(toBeUpdated.Id,
+                         actual.Id);
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
         public void FindById_ReturnsDoctor_ForExistingId([NotNull] IDoctor doctor)
         {
             // Arrange
@@ -51,45 +86,6 @@ namespace MicroServices.Doctors.Nancy.Tests
             // Assert
             Assert.Equal(2,
                          actual.Count());
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void Create_ReturnsNewDoctor_WhenCalled([NotNull] IDoctorForResponse toBeCreated,
-                                                       [NotNull] IDoctor doctor)
-        {
-            // Arrange
-            var repository = Substitute.For <IDoctorsRepository>();
-            repository.Create(toBeCreated.FirstName,
-                              toBeCreated.LastName)
-                      .Returns(doctor);
-            InformationFinder sut = CreateSut(repository);
-
-            // Act
-            IDoctorForResponse actual = sut.Create(toBeCreated);
-
-            // Assert
-            Assert.Equal(doctor.Id,
-                         actual.Id);
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        // todo null test can be removed, maybe...
-        public void Create_ReturnsNull_ForCanNotAdd([NotNull] IDoctorForResponse toBeCreated)
-        {
-            // Arrange
-            var repository = Substitute.For <IDoctorsRepository>();
-            repository.Create(Arg.Any <string>(),
-                              Arg.Any <string>())
-                      .Returns(( IDoctor ) null);
-            InformationFinder sut = CreateSut(repository);
-
-            // Act
-            IDoctorForResponse actual = sut.Create(toBeCreated);
-
-            // Assert
-            Assert.Null(actual);
         }
 
         [Theory]

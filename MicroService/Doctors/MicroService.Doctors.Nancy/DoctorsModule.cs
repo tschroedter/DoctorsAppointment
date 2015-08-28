@@ -24,7 +24,10 @@ namespace MicroServices.Doctors.Nancy
                 parameters => handler.FindByLastName(parameters.name);
 
             Post [ "/" ] =
-                parameters => handler.Create(this.Bind <DoctorForResponse>("Id"));
+                parameters => handler.Save(this.Bind <DoctorForResponse>());
+
+            Put [ "/" ] =
+                parameters => handler.Save(this.Bind<DoctorForResponse>());
 
             Delete [ "/{id:int}" ] =
                 parameters => handler.DeleteById(( int ) ( parameters.id ));

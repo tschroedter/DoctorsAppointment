@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using MicroServices.DataAccess.DoctorsSlots.Entities;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
 using MicroServices.Doctors.Nancy.Interfaces;
 
@@ -43,23 +44,6 @@ namespace MicroServices.Doctors.Nancy
             return doctorsWithNoSlots;
         }
 
-        public IDoctorForResponse Create(IDoctorForResponse doctor)
-        {
-            string firstName = string.IsNullOrEmpty(doctor.FirstName)
-                                   ? "FirstName"
-                                   : doctor.FirstName;
-            string lastName = string.IsNullOrEmpty(doctor.FirstName)
-                                  ? "LastName"
-                                  : doctor.LastName;
-
-            IDoctor created = m_Repository.Create(firstName,
-                                                  lastName);
-
-            return created == null
-                       ? null
-                       : new DoctorForResponse(created);
-        }
-
         public IDoctorForResponse Delete(int id)
         {
             IDoctor doctor = m_Repository.Delete(id);
@@ -67,6 +51,40 @@ namespace MicroServices.Doctors.Nancy
             return doctor == null
                        ? null
                        : new DoctorForResponse(doctor);
+        }
+
+        public IDoctorForResponse Save(IDoctorForResponse doctor)
+        {
+            IDoctor toBeUpdated = ToDoctor(doctor);
+
+            m_Repository.Save(toBeUpdated);
+
+            return new DoctorForResponse(toBeUpdated);
+        }
+
+        private static IDoctor ToDoctor(IDoctorForResponse doctor)
+        {
+            string firstName = DefaultText(doctor.FirstName,
+                                           "FirstName");
+            string lastName = DefaultText(doctor.LastName,
+                                          "LastName");
+
+            IDoctor instance = new Doctor
+                               {
+                                   Id = doctor.Id,
+                                   FirstName = firstName,
+                                   LastName = lastName
+                               };
+
+            return instance;
+        }
+
+        private static string DefaultText(string text,
+                                          string defaultText)
+        {
+            return string.IsNullOrEmpty(text)
+                       ? defaultText
+                       : text;
         }
     }
 }
