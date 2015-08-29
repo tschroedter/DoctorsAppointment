@@ -21,19 +21,6 @@ namespace MicroServices.DataAccess.DoctorsSlots.Repositories
             return doctor;
         }
 
-        public IDoctor Create()
-        {
-            return Context.Create("FirstName",
-                                  "LastName");
-        }
-
-        public IDoctor Create(string firstName,
-                              string lastName)
-        {
-            return Context.Create(firstName,
-                                  lastName);
-        }
-
         public IDoctor Delete(int id)
         {
             return Context.Delete(id);

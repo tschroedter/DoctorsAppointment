@@ -34,45 +34,6 @@ namespace MicroServices.DataAccess.DoctorsSlots.Tests.Repositories
 
         [Theory]
         [AutoNSubstituteData]
-        public void Create_ReturnsNewDoctors_WhenCalled([NotNull] IDoctor doctor)
-        {
-            // Arrange
-            var context = Substitute.For <IDoctorsContext>();
-            context.Create(Arg.Any <string>(),
-                           Arg.Any <string>())
-                   .Returns(doctor);
-            DoctorsRepository sut = CreateSut(context);
-
-            // Act
-            IDoctor actual = sut.Create();
-
-            // Assert
-            Assert.Equal(doctor,
-                         actual);
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void Create_ReturnsNewDoctors_ForFirstNameLastName([NotNull] IDoctor doctor)
-        {
-            // Arrange
-            var context = Substitute.For <IDoctorsContext>();
-            context.Create(Arg.Any <string>(),
-                           Arg.Any <string>())
-                   .Returns(doctor);
-            DoctorsRepository sut = CreateSut(context);
-
-            // Act
-            IDoctor actual = sut.Create("Joe",
-                                        "Cool");
-
-            // Assert
-            Assert.Equal(doctor,
-                         actual);
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
         public void Delete_ReturnsNewDoctors_WhenCalled([NotNull] IDoctor doctor)
         {
             // Arrange
