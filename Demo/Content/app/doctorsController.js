@@ -29,14 +29,14 @@
 
         /* BEGIN: CRUD */ // TODO: move all this into service
 
-        $scope.returnAll = function() {
+        $scope.query = function() {
             doctors.query(function(data) {
                 $scope.doctors = angular.fromJson(data);
                 $scope.doctors.sort(compareByLastName);
             });
         };
 
-        $scope.returnSingle = function() {
+        $scope.get = function() {
             $scope.doctor = doctors.get({ id: $scope.doctorId });
         };
 
@@ -62,7 +62,7 @@
 
         $scope.doctors = [loading];
         $scope.doctor = loading;
-        $scope.doctorId = loading.Id;
+        $scope.doctorId = 1;
         $scope.toCreate = new doctors();
         $scope.toUpdate = new doctors();
         $scope.toDelete = new doctors();
