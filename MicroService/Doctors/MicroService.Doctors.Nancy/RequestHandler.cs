@@ -41,17 +41,7 @@ namespace MicroServices.Doctors.Nancy
                 m_InformationFinder.FindByLastName(doctorLastName)
                                    .ToArray();
 
-            if ( !doctors.Any() )
-            {
-                return HttpStatusCode.NotFound;
-            }
-
-            if ( doctors.Count() > 1 )
-            {
-                return HttpStatusCode.Conflict;
-            }
-
-            return AsJson(doctors.First());
+            return AsJson(doctors);
         }
 
         public Response Save(IDoctorForResponse doctor)

@@ -47,7 +47,7 @@
                         <tr>
                             <td>Id:</td>
                             <td>
-                                <input type="number" ng-model="doctorId"/>
+                                <input type="number" ng-model="doctorId" />
                             </td>
                         </tr>
                         <tr>
@@ -144,6 +144,37 @@
                                         <th>Last Name</th>
                                     </tr>
                                     <tr ng-repeat="doctor in doctors">
+                                        <td>{{ doctor.Id }}</td>
+                                        <td>{{ doctor.FirstName }}</td>
+                                        <td>{{ doctor.LastName }}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><hr /></td>
+            </tr>
+            <tr>
+                <td>Search</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td colspan="2">
+                                <button ng-click="search()">Search</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                    </tr>
+                                    <tr ng-repeat="doctor in searchResult">
                                         <td>{{ doctor.Id }}</td>
                                         <td>{{ doctor.FirstName }}</td>
                                         <td>{{ doctor.LastName }}</td>

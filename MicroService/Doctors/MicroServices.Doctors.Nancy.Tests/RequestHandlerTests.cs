@@ -135,24 +135,7 @@ namespace MicroServices.Doctors.Nancy.Tests
             Response actual = sut.FindByLastName("Unknown");
 
             // Assert
-            Assert.Equal(HttpStatusCode.NotFound,
-                         actual.StatusCode);
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void FindByLastName_ReturnsResponseConflict_ForMoreThanOneDoctor([NotNull] IDoctorForResponse doctor)
-        {
-            // Arrange
-            var finder = Substitute.For <IInformationFinder>();
-            finder.FindByLastName(doctor.LastName).Returns(CreateList);
-            RequestHandler sut = CreateSut(finder);
-
-            // Act
-            Response actual = sut.FindByLastName(doctor.LastName);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.Conflict,
+            Assert.Equal(HttpStatusCode.OK,
                          actual.StatusCode);
         }
 

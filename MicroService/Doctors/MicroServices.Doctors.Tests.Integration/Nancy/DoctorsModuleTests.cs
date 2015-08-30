@@ -40,9 +40,9 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
             }
             finally
             {
-                if (actual != null)
+                if ( actual != null )
                 {
-                    int id = Convert.ToInt32(actual["Id"].Value);
+                    int id = Convert.ToInt32(actual [ "Id" ].Value);
 
                     DeleteDoctorById(id);
                 }
@@ -91,7 +91,8 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
                                                      with.HttpRequest();
                                                  });
 
-            dynamic actual = XUnitDoctorsHelper.ToDynamic(result.Body.AsString());
+            dynamic doctors = XUnitDoctorsHelper.ToDynamic(result.Body.AsString());
+            dynamic actual = doctors [ 0 ];
 
             // Then
             XUnitDoctorsHelper.AssertDoctor(expected,
@@ -268,6 +269,27 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
                                              actual);
         }
 
+        [Fact]
+        public void Should_return_JSON_string_when_search_by_last_name_returns_multiple()
+        {
+            // Given
+            dynamic expected = CreateExpectedJsonStringForSearchForSmith();
+            Browser browser = CreateBrowser();
+
+            // When
+            BrowserResponse result = browser.Get("/doctors/Smith",
+                                                 with =>
+                                                 {
+                                                     with.HttpRequest();
+                                                 });
+
+            dynamic actual = XUnitDoctorsHelper.ToDynamic(result.Body.AsString());
+
+            // Then
+            XUnitDoctorsHelper.AssertDoctors(expected,
+                                             actual);
+        }
+
         [Theory]
         [InlineData("/doctors/")]
         [InlineData("/doctors/1")]
@@ -293,7 +315,7 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
         [InlineData("/doctors/", HttpStatusCode.OK)]
         [InlineData("/doctors/1", HttpStatusCode.OK)]
         [InlineData("/doctors/-1", HttpStatusCode.NotFound)]
-        [InlineData("/doctors/Unknown", HttpStatusCode.NotFound)]
+        [InlineData("/doctors/Unknown", HttpStatusCode.OK)]
         [InlineData("/doctors/Miller", HttpStatusCode.OK)]
         public void Should_return_status_OK_when_requested([NotNull] string url,
                                                            HttpStatusCode status)
@@ -332,7 +354,18 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
         {
             string json = "[" +
                           "{\"LastName\":\"Miller\",\"FirstName\":\"Mary\",\"Id\":1}," +
-                          "{\"LastName\":\"Smith\",\"FirstName\":\"Will\",\"Id\":2}" +
+                          "{\"LastName\":\"Smith\",\"FirstName\":\"Will\",\"Id\":2}," +
+                          "{\"LastName\":\"Smith\",\"FirstName\":\"Jane\",\"Id\":3}" +
+                          "]";
+
+            return XUnitDoctorsHelper.ToDynamic(json);
+        }
+
+        private dynamic CreateExpectedJsonStringForSearchForSmith()
+        {
+            string json = "[" +
+                          "{\"LastName\":\"Smith\",\"FirstName\":\"Will\",\"Id\":2}," +
+                          "{\"LastName\":\"Smith\",\"FirstName\":\"Jane\",\"Id\":3}" +
                           "]";
 
             return XUnitDoctorsHelper.ToDynamic(json);
@@ -361,7 +394,7 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
             }
 
             dynamic doctor = XUnitDoctorsHelper.ToDynamic(existing.Body.AsString());
-            int doctorId = Convert.ToInt32(doctor [ "Id" ].Value);
+            int doctorId = Convert.ToInt32(doctor [ 0 ] [ "Id" ].Value);
 
             BrowserResponse result = browser.Delete("/doctors/" + doctorId,
                                                     with =>

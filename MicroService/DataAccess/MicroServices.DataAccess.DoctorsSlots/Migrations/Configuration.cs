@@ -25,6 +25,7 @@ namespace MicroServices.DataAccess.DoctorsSlots.Migrations
         {
             CreateMaryMiller(context);
             CreateWillSmith(context);
+            CreateJaneSmith(context);
         }
 
         private static void CreateMaryMiller(DoctorsSlotsContext context)
@@ -132,6 +133,43 @@ namespace MicroServices.DataAccess.DoctorsSlots.Migrations
 
             dayTwo.Slots.Add(dayTwoSlot);
             doctor.Days.Add(dayTwo);
+
+            context.Doctors.AddOrUpdate(doctor);
+        }
+
+        private static void CreateJaneSmith(DoctorsSlotsContext context)
+        {
+            var doctor = new Doctor
+                         {
+                             FirstName = "Jane",
+                             LastName = "Smith"
+                         };
+
+            var dayOne = new Day
+                         {
+                             Date = DateTime.Parse("2015-08-03"),
+                             Doctor = doctor
+                         };
+
+            var slotOne = new Slot
+                          {
+                              StartDateTime = DateTime.Parse("2015-08-03 09:00:00"),
+                              EndDateTime = DateTime.Parse("2015-08-03 09:15:00"),
+                              Status = SlotStatus.Open,
+                              Day = dayOne
+                          };
+
+            var slotTwo = new Slot
+                          {
+                              StartDateTime = DateTime.Parse("2015-08-03 09:15:00"),
+                              EndDateTime = DateTime.Parse("2015-08-03 09:30:00"),
+                              Status = SlotStatus.Open,
+                              Day = dayOne
+                          };
+
+            dayOne.Slots.Add(slotOne);
+            dayOne.Slots.Add(slotTwo);
+            doctor.Days.Add(dayOne);
 
             context.Doctors.AddOrUpdate(doctor);
         }
