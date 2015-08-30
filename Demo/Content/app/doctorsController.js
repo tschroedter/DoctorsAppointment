@@ -27,7 +27,7 @@
             return true;
         };
 
-        /* BEGIN: CRUD */ // TODO: move all this into service
+        /* BEGIN: CRUD */
 
         $scope.query = function() {
             doctors.query(function(data) {
