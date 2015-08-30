@@ -47,7 +47,7 @@
         };
 
         $scope.update = function () {
-            doctors.save($scope.toUpdate, function () {
+            $scope.toUpdate.$update(function () {
                 alert("Updated doctor!");
             });
         };
@@ -64,6 +64,6 @@
         $scope.doctor = loading;
         $scope.doctorId = 1;
         $scope.toCreate = new doctors();
-        $scope.toUpdate = new doctors();
+        $scope.toUpdate = doctors.get({ id: 1 });
         $scope.toDelete = new doctors();
     });
