@@ -52,6 +52,8 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
         [Fact]
         public void Should_return_JSON_string_when_doctor_is_created()
         {
+            dynamic actual = null;
+
             try
             {
                 // Given
@@ -65,15 +67,20 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
                                                           with.HttpRequest();
                                                       });
 
-                dynamic actual = XUnitDoctorsHelper.ToDynamic(result.Body.AsString());
-
+                actual = XUnitDoctorsHelper.ToDynamic(result.Body.AsString());
+                
                 // Then
                 XUnitDoctorsHelper.AssertDoctorIgnoreId(expected,
                                                         actual);
             }
             finally
             {
-                DeleteDoctorToBeCreated();
+                if ( actual != null )
+                {
+                    long doctorId = (long)actual [ "Id" ].Value;
+
+                    DeleteDoctorById(doctorId);
+                }
             }
         }
 
@@ -85,7 +92,7 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
             Browser browser = CreateBrowser();
 
             // When
-            BrowserResponse result = browser.Get("/doctors/Miller",
+            BrowserResponse result = browser.Get("/doctors/byLastName/Miller",
                                                  with =>
                                                  {
                                                      with.HttpRequest();
@@ -277,7 +284,7 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
             Browser browser = CreateBrowser();
 
             // When
-            BrowserResponse result = browser.Get("/doctors/Smith",
+            BrowserResponse result = browser.Get("/doctors/byLastName/Smith",
                                                  with =>
                                                  {
                                                      with.HttpRequest();
@@ -293,7 +300,7 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
         [Theory]
         [InlineData("/doctors/")]
         [InlineData("/doctors/1")]
-        [InlineData("/doctors/Miller")]
+        [InlineData("/doctors/byLastName/Miller")]
         public void Should_return_JSON_when_requested([NotNull] string url)
         {
             // Given
@@ -315,8 +322,8 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
         [InlineData("/doctors/", HttpStatusCode.OK)]
         [InlineData("/doctors/1", HttpStatusCode.OK)]
         [InlineData("/doctors/-1", HttpStatusCode.NotFound)]
-        [InlineData("/doctors/Unknown", HttpStatusCode.OK)]
-        [InlineData("/doctors/Miller", HttpStatusCode.OK)]
+        [InlineData("/doctors/byLastName/Unknown", HttpStatusCode.OK)]
+        [InlineData("/doctors/byLastName/Miller", HttpStatusCode.OK)]
         public void Should_return_status_OK_when_requested([NotNull] string url,
                                                            HttpStatusCode status)
         {
@@ -376,34 +383,6 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
             var json = "{\"LastName\":\"LastName\",\"FirstName\":\"FirstName\",\"Id\":3}";
 
             return XUnitDoctorsHelper.ToDynamic(json);
-        }
-
-        private void DeleteDoctorToBeCreated()
-        {
-            Browser browser = CreateBrowser();
-
-            BrowserResponse existing = browser.Get("/doctors/LastName",
-                                                   with =>
-                                                   {
-                                                       with.HttpRequest();
-                                                   });
-
-            if ( existing.StatusCode == HttpStatusCode.NotFound )
-            {
-                return;
-            }
-
-            dynamic doctor = XUnitDoctorsHelper.ToDynamic(existing.Body.AsString());
-            int doctorId = Convert.ToInt32(doctor [ 0 ] [ "Id" ].Value);
-
-            BrowserResponse result = browser.Delete("/doctors/" + doctorId,
-                                                    with =>
-                                                    {
-                                                        with.HttpRequest();
-                                                    });
-
-            Assert.Equal(HttpStatusCode.OK,
-                         result.StatusCode);
         }
 
         private dynamic CreateDoctorToBeDeleted(Browser browser)
@@ -477,7 +456,7 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
             return XUnitDoctorsHelper.ToDynamic(json);
         }
 
-        private void DeleteDoctorById(int doctorId)
+        private void DeleteDoctorById(long doctorId)
         {
             Browser browser = CreateBrowser();
             BrowserResponse result = browser.Delete("/doctors/" + doctorId,

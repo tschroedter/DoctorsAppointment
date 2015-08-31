@@ -8,8 +8,8 @@ mainApp.factory('doctors', function ($resource) {
     });
 });
 
-mainApp.factory('doctorsSearch', function ($resource) {
-    return $resource('/doctors/:query', {
+mainApp.factory('doctorsSearchByLastName', function ($resource) {
+    return $resource('/doctors/byLastName/:query', {
         query: '@query'
     }, {
         search: {

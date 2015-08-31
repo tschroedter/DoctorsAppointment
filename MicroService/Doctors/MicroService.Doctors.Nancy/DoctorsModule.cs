@@ -20,7 +20,7 @@ namespace MicroServices.Doctors.Nancy
             Get [ "/{id:int}" ] =
                 parameters => handler.FindById(( int ) ( parameters.id ));
 
-            Get [ "/{name:alpha}" ] =
+            Get [ "/byLastName/{name:alpha}" ] =
                 parameters => handler.FindByLastName(parameters.name);
 
             Post [ "/" ] =
