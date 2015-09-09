@@ -36,6 +36,12 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>Day Id:</td>
+                        <td>
+                            <input type="number" ng-model="toCreate.DayId" />
+                        </td>
+                    </tr>
+                    <tr>
                         <td colspan="2">
                             <button ng-click="save()">Create Slot</button>
                         </td>
@@ -75,6 +81,10 @@
                         <td>Status:</td>
                         <td>{{slot.Status}}</td>
                     </tr>
+                    <tr>
+                        <td>Day Id:</td>
+                        <td>{{slot.DayId}}</td>
+                    </tr>
                 </table>
             </td>
         </tr>
@@ -112,8 +122,14 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>Day Id:</td>
+                        <td>
+                            <input type="number" ng-model="toUpdate.DayId" />
+                        </td>
+                    </tr>
+                    <tr>
                         <td colspan="2">
-                            <button ng-click="update()">Update Doctor</button>
+                            <button ng-click="update()">Update Slot</button>
                         </td>
                     </tr>
                 </table>
@@ -136,7 +152,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <button ng-click="delete()">Delete Doctor</button>
+                            <button ng-click="delete()">Delete Slot</button>
                         </td>
                     </tr>
                 </table>
