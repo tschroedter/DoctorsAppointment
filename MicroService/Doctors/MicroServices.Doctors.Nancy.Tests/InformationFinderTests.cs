@@ -22,29 +22,29 @@ namespace MicroServices.Doctors.Nancy.Tests
         [Theory]
         [AutoNSubstituteData]
         public void Save_CallsSave_WhenCalled([NotNull] IDoctorForResponse toBeUpdated,
-                                                        [NotNull] IDoctor doctor)
+                                              [NotNull] IDoctor doctor)
         {
             // Arrange
-            var repository = Substitute.For<IDoctorsRepository>();
-            repository.Save(Arg.Any<IDoctor>());
-            var sut = CreateSut(repository);
+            var repository = Substitute.For <IDoctorsRepository>();
+            repository.Save(Arg.Any <IDoctor>());
+            InformationFinder sut = CreateSut(repository);
 
             // Act
             sut.Save(toBeUpdated);
 
             // Assert
-            repository.Received().Save(Arg.Is<IDoctor>(x => x.Id == toBeUpdated.Id));
+            repository.Received().Save(Arg.Is <IDoctor>(x => x.Id == toBeUpdated.Id));
         }
 
         [Theory]
         [AutoNSubstituteData]
         public void Save_ReturnsUpdatedDoctor_ForExisting([NotNull] IDoctorForResponse toBeUpdated,
-                                                            [NotNull] IDoctor doctor)
+                                                          [NotNull] IDoctor doctor)
         {
             // Arrange
-            var repository = Substitute.For<IDoctorsRepository>();
-            repository.Save(Arg.Any<IDoctor>());
-            var sut = CreateSut(repository);
+            var repository = Substitute.For <IDoctorsRepository>();
+            repository.Save(Arg.Any <IDoctor>());
+            InformationFinder sut = CreateSut(repository);
 
             // Act
             IDoctorForResponse actual = sut.Save(toBeUpdated);

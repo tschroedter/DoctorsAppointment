@@ -8,7 +8,7 @@ namespace MicroServices.Doctors.Nancy
     {
         public DoctorForResponse()
         {
-            Id = -1;
+            Id = 0;
             FirstName = string.Empty;
             LastName = string.Empty;
         }

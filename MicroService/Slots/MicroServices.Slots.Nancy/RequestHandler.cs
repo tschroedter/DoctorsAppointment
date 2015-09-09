@@ -34,6 +34,25 @@ namespace MicroServices.Slots.Nancy
             return AsJson(doctor);
         }
 
+        public Response Save(ISlotForResponse slot)
+        {
+            ISlotForResponse saved = m_InformationFinder.Save(slot);
+
+            return AsJson(saved);
+        }
+
+        public Response DeleteById(int id)
+        {
+            ISlotForResponse doctor = m_InformationFinder.Delete(id);
+
+            if ( doctor == null )
+            {
+                return HttpStatusCode.NotFound;
+            }
+
+            return AsJson(doctor);
+        }
+
         private Response AsJson(object instance)
         {
             Response response = JsonConvert.SerializeObject(instance);

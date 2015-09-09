@@ -7,6 +7,7 @@ using MicroServices.DataAccess.DoctorsSlots.Interfaces;
 
 namespace MicroServices.DataAccess.DoctorsSlots.Contexts
 {
+    // todo need to catch/handle exceptions
     [ExcludeFromCodeCoverage]
     //ncrunch: no coverage start
     public class SlotsContext
@@ -19,6 +20,8 @@ namespace MicroServices.DataAccess.DoctorsSlots.Contexts
         }
 
         public DbSet <Slot> DbSetSlots { get; set; }
+
+        public DbSet <Day> DbSetDays { get; set; }
 
         public IQueryable <ISlot> Slots()
         {
@@ -57,7 +60,7 @@ namespace MicroServices.DataAccess.DoctorsSlots.Contexts
             Entry(instance).State = EntityState.Modified;
         }
 
-        private static Slot ConvertToSlot(ISlot slot)
+        private Slot ConvertToSlot(ISlot slot)
         {
             var instance = slot as Slot;
 
@@ -66,6 +69,11 @@ namespace MicroServices.DataAccess.DoctorsSlots.Contexts
                 throw new ArgumentException("Provided 'slot' instance is not a Slot!",
                                             "slot");
             }
+
+            Day day = DbSetDays.Find(slot.DayId);
+
+            instance.Day = day;
+
             return instance;
         }
     }

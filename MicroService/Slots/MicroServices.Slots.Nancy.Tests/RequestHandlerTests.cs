@@ -17,6 +17,7 @@ namespace MicroServices.Slots.Nancy.Tests
     public sealed class RequestHandlerTests
     {
         // todo don't know how to get content, but integration test cover this
+        private const int IdDoesNotMatter = -1;
 
         [Fact]
         public void List_ReturnsResponse_WhenCalled()
@@ -58,11 +59,61 @@ namespace MicroServices.Slots.Nancy.Tests
         {
             // Arrange
             var finder = Substitute.For <IInformationFinder>();
-            finder.FindById(-1).Returns(( ISlotForResponse ) null);
+            finder.FindById(IdDoesNotMatter).Returns(( ISlotForResponse ) null);
             RequestHandler sut = CreateSut(finder);
 
             // Act
-            Response actual = sut.FindById(-1);
+            Response actual = sut.FindById(IdDoesNotMatter);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound,
+                         actual.StatusCode);
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void Save_ReturnsResponse_ForSlot([NotNull] ISlotForResponse slot)
+        {
+            // Arrange
+            var finder = Substitute.For <IInformationFinder>();
+            finder.FindById(Arg.Any <int>()).Returns(slot);
+            RequestHandler sut = CreateSut(finder);
+
+            // Act
+            Response actual = sut.Save(slot);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK,
+                         actual.StatusCode);
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void DeleteById_ReturnsResponse_WhenCalled([NotNull] ISlotForResponse slot)
+        {
+            // Arrange
+            var finder = Substitute.For <IInformationFinder>();
+            finder.Delete(slot.Id).Returns(slot);
+            RequestHandler sut = CreateSut(finder);
+
+            // Act
+            Response actual = sut.DeleteById(slot.Id);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK,
+                         actual.StatusCode);
+        }
+
+        [Fact]
+        public void DeleteById_ReturnsResponse_ForAddFailed()
+        {
+            // Arrange
+            var finder = Substitute.For <IInformationFinder>();
+            finder.Delete(IdDoesNotMatter).Returns(( ISlotForResponse ) null);
+            RequestHandler sut = CreateSut(finder);
+
+            // Act
+            Response actual = sut.DeleteById(IdDoesNotMatter);
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound,

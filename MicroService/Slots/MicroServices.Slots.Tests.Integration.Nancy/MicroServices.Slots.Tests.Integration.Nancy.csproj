@@ -89,7 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Nancy\Bootstrapper.cs" />
-    <Compile Include="Nancy\SlotsModuleTests.cs" />
+    <Compile Include="Nancy\TestSlotsModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

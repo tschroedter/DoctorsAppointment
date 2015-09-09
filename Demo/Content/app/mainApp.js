@@ -1,23 +1,31 @@
-﻿var mainApp = angular.module('mainApp', ['ngResource']);
+﻿var mainApp = angular.module("mainApp", ["ngResource"]);
 
-mainApp.factory('doctors', function ($resource) {
-    return $resource('/doctors/:id', { id: '@_id' }, {
+mainApp.factory("doctors", function($resource) {
+    return $resource("/doctors/:id", { id: "@_id" }, {
         update: {
-            method: 'PUT'
+            method: "PUT"
         }
     });
 });
 
-mainApp.factory('doctorsSearchByLastName', function ($resource) {
-    return $resource('/doctors/byLastName/:query', {
-        query: '@query'
+mainApp.factory("doctorsSearchByLastName", function($resource) {
+    return $resource("/doctors/byLastName/:query", {
+        query: "@query"
     }, {
         search: {
-            method: 'GET',
+            method: "GET",
             isArray: true,
             params: {
-                query: '@query'
+                query: "@query"
             }
+        }
+    });
+});
+
+mainApp.factory("slots", function($resource) {
+    return $resource("/slots/:id", { id: "@_id" }, {
+        update: {
+            method: "PUT"
         }
     });
 });

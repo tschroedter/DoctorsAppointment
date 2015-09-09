@@ -6,6 +6,10 @@ namespace MicroServices.Slots.Nancy
 {
     public class SlotForResponse : ISlotForResponse
     {
+        public SlotForResponse()
+        {
+        }
+
         public SlotForResponse(ISlot slot)
         {
             Status = slot.Status;

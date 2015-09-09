@@ -53,7 +53,7 @@ namespace MicroServices.Doctors.Nancy.Tests
             var sut = new DoctorForResponse();
 
             // Assert
-            Assert.Equal(-1,
+            Assert.Equal(0,
                          sut.Id);
         }
 

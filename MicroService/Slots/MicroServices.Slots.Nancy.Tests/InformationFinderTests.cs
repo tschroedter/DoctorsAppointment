@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -17,6 +18,8 @@ namespace MicroServices.Slots.Nancy.Tests
     //ncrunch: no coverage start
     public sealed class InformationFinderTests
     {
+        private const int IdDoesNotMatter = -1;
+
         [Theory]
         [AutoNSubstituteData]
         public void FindById_ReturnsSlot_ForExistingId([NotNull] ISlot slot)
@@ -39,11 +42,11 @@ namespace MicroServices.Slots.Nancy.Tests
         {
             // Arrange
             var repository = Substitute.For <ISlotsRepository>();
-            repository.FindById(-1).Returns(( ISlot ) null);
+            repository.FindById(IdDoesNotMatter).Returns(( ISlot ) null);
             InformationFinder sut = CreateSut(repository);
 
             // Act
-            ISlotForResponse actual = sut.FindById(-1);
+            ISlotForResponse actual = sut.FindById(IdDoesNotMatter);
 
             // Assert
             Assert.Null(actual);
@@ -63,6 +66,104 @@ namespace MicroServices.Slots.Nancy.Tests
             // Assert
             Assert.Equal(2,
                          actual.Count());
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void Save_CallsSave_WhenCalled([NotNull] ISlotForResponse slot)
+        {
+            // Arrange
+            var repository = Substitute.For <ISlotsRepository>();
+            InformationFinder sut = CreateSut(repository);
+
+            // Act
+            sut.Save(slot);
+
+            // Assert
+            repository.Received().Save(Arg.Is <ISlot>(x => x.DayId == slot.DayId &&
+                                                           x.StartDateTime == slot.StartDateTime &&
+                                                           x.EndDateTime == slot.EndDateTime &&
+                                                           x.Status == slot.Status));
+        }
+
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void Save_ReturnsSlot_WhenCalled([NotNull] ISlotForResponse slot)
+        {
+            // Arrange
+            var repository = Substitute.For <ISlotsRepository>();
+            InformationFinder sut = CreateSut(repository);
+
+            // Act
+            ISlotForResponse actual = sut.Save(slot);
+
+            // Assert
+            AssertSlotIgnoreId(slot,
+                               actual);
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void Delete_ReturnsDeletedSlot_WhenCalled([NotNull] ISlot slot)
+        {
+            // Arrange
+            var repository = Substitute.For <ISlotsRepository>();
+            repository.FindById(Arg.Any <int>()).Returns(slot);
+            InformationFinder sut = CreateSut(repository);
+
+            // Act
+            ISlotForResponse actual = sut.Delete(IdDoesNotMatter);
+
+            // Assert
+            Assert.Equal(slot.Id,
+                         actual.Id);
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void Delete_CallsRemove_WhenCalled([NotNull] ISlot slot)
+        {
+            // Arrange
+            var repository = Substitute.For <ISlotsRepository>();
+            repository.FindById(Arg.Any <int>()).Returns(slot);
+            InformationFinder sut = CreateSut(repository);
+
+            // Act
+            sut.Delete(IdDoesNotMatter);
+
+            // Assert
+            repository.Received().Remove(slot);
+        }
+
+        [Fact]
+        public void Delete_ReturnsNull_ForUnknownId()
+        {
+            // Arrange
+            var repository = Substitute.For <ISlotsRepository>();
+            repository.FindById(Arg.Any <int>()).Returns(( ISlot ) null);
+            InformationFinder sut = CreateSut(repository);
+
+            // Act
+            ISlotForResponse actual = sut.Delete(IdDoesNotMatter);
+
+            // Assert
+            Assert.Null(actual);
+        }
+
+        private static void AssertSlotIgnoreId(ISlotForResponse expected,
+                                               ISlotForResponse actual)
+        {
+            Console.WriteLine("Comparing days with id {0} and {1}...",
+                              expected.Id,
+                              actual.Id);
+
+            Assert.True(expected.DayId == actual.DayId,
+                        "DayId");
+            Assert.True(expected.StartDateTime == actual.StartDateTime,
+                        "StartDateTime");
+            Assert.True(expected.EndDateTime == actual.EndDateTime,
+                        "EndDateTime");
         }
 
         private IQueryable <ISlot> CreateList(CallInfo arg)

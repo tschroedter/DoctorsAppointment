@@ -6,5 +6,7 @@ namespace MicroServices.Slots.Nancy.Interfaces
     {
         ISlotForResponse FindById(int id);
         IEnumerable <ISlotForResponse> List();
+        ISlotForResponse Save(ISlotForResponse slot);
+        ISlotForResponse Delete(int id);
     }
 }

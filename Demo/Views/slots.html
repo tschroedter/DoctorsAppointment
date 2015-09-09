@@ -4,10 +4,10 @@
     <script src="~/content/app/assets/libs/angularjs/angular.js"></script>
     <script src="~/content/app/assets/libs/angularjs/angular-resource.js"></script>
     <script src="~/content/app/mainApp.js"></script>
-    <script src="~/content/app/doctorsController.js"></script>
+    <script src="~/content/app/slotsController.js"></script>
 </head>
 <body ng-app="mainApp">
-<div ng-controller="doctorsController">
+<div ng-controller="slotsController">
     <table>
         <tr>
             <th>CRUD</th>
@@ -18,20 +18,26 @@
             <td>
                 <table>
                     <tr>
-                        <td>First Name:</td>
+                        <td>Start Datetime:</td>
                         <td>
-                            <input type="text" ng-model="toCreate.firstName"/>
+                            <input type="datetime" ng-model="toCreate.StartDateTime"/>
                         </td>
                     </tr>
                     <tr>
-                        <td>Last Name:</td>
+                        <td>End Datetime:</td>
                         <td>
-                            <input type="text" ng-model="toCreate.lastName"/>
+                            <input type="datetime" ng-model="toCreate.EndDateTime"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Status:</td>
+                        <td>
+                            <input type="number" ng-model="toCreate.Status"/>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <button ng-click="save()">Create Doctor</button>
+                            <button ng-click="save()">Create Slot</button>
                         </td>
                     </tr>
                 </table>
@@ -49,21 +55,25 @@
                     <tr>
                         <td>Id:</td>
                         <td>
-                            <input type="number" ng-model="doctorId"/>
+                            <input type="number" ng-model="slotId"/>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <button ng-click="get()">Load Doctor</button>
+                            <button ng-click="get()">Load Slot</button>
                         </td>
                     </tr>
                     <tr>
-                        <td>First Name:</td>
-                        <td>{{doctor.FirstName}}</td>
+                        <td>Start Datetime:</td>
+                        <td>{{slot.StartDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
                     </tr>
                     <tr>
-                        <td>Last Name:</td>
-                        <td>{{doctor.LastName}}</td>
+                        <td>End Datetime:</td>
+                        <td>{{slot.EndDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
+                    </tr>
+                    <tr>
+                        <td>Status:</td>
+                        <td>{{slot.Status}}</td>
                     </tr>
                 </table>
             </td>
@@ -84,15 +94,21 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>First Name:</td>
+                        <td>Start Datetime:</td>
                         <td>
-                            <input type="text" ng-model="toUpdate.firstName"/>
+                            <input type="datetime" ng-model="toUpdate.StartDateTime"/>
                         </td>
                     </tr>
                     <tr>
-                        <td>Last Name:</td>
+                        <td>End Datetime:</td>
                         <td>
-                            <input type="text" ng-model="toUpdate.lastName"/>
+                            <input type="datetime" ng-model="toUpdate.EndDateTime"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Status:</td>
+                        <td>
+                            <input type="number" ng-model="toUpdate.Status"/>
                         </td>
                     </tr>
                     <tr>
@@ -150,54 +166,18 @@
                             <table>
                                 <tr>
                                     <th>Id</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
+                                    <th>StartDateTime</th>
+                                    <th>EndDateTime</th>
+                                    <th>Status</th>
                                 </tr>
-                                <tr ng-repeat="doctor in doctors">
-                                    <td>{{ doctor.Id }}</td>
-                                    <td>{{ doctor.FirstName }}</td>
-                                    <td>{{ doctor.LastName }}</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <hr/>
-            </td>
-        </tr>
-        <tr>
-            <td>Search</td>
-            <td>
-                <table>
-                    <tr>
-                        <td>By Last Name:</td>
-                        <td>
-                            <input type="text" ng-model="searchByLastName"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <button ng-click="search()">Search</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <table>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                </tr>
-                                <tr ng-repeat="doctor in searchResult">
-                                    <td>{{ doctor.Id }}</td>
-                                    <td>{{ doctor.FirstName }}</td>
-                                    <td>{{ doctor.LastName }}</td>
+                                <tr ng-repeat="slot in slots">
+                                    <td>{{ slot.Id }}</td>
+                                    <td>{{ slot.StartDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
+                                    <td>{{ slot.EndDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
+                                    <td>{{ slot.Status }}</td>
                                 </tr>
                             </table>
+
                         </td>
                     </tr>
                 </table>

@@ -68,7 +68,7 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
                                                       });
 
                 actual = XUnitDoctorsHelper.ToDynamic(result.Body.AsString());
-                
+
                 // Then
                 XUnitDoctorsHelper.AssertDoctorIgnoreId(expected,
                                                         actual);
@@ -77,7 +77,7 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
             {
                 if ( actual != null )
                 {
-                    long doctorId = (long)actual [ "Id" ].Value;
+                    var doctorId = ( long ) actual [ "Id" ].Value;
 
                     DeleteDoctorById(doctorId);
                 }

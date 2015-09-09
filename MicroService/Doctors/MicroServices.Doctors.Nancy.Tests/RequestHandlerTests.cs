@@ -40,10 +40,10 @@ namespace MicroServices.Doctors.Nancy.Tests
         [Theory]
         [AutoNSubstituteData]
         public void Save_ReturnsStatusOK_WhenCalled([NotNull] IDoctorForResponse toBeCreated,
-                                                       [NotNull] IDoctorForResponse created)
+                                                    [NotNull] IDoctorForResponse created)
         {
             // Arrange
-            var finder = Substitute.For<IInformationFinder>();
+            var finder = Substitute.For <IInformationFinder>();
             finder.Save(toBeCreated).Returns(created);
             RequestHandler sut = CreateSut(finder);
 
