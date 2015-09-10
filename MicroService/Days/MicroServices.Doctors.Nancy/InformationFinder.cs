@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
 using MicroServices.Days.Nancy.Interfaces;
+using Selkie.Windsor;
 
 namespace MicroServices.Days.Nancy
 {
+    [ProjectComponent(Lifestyle.Transient)]
     public class InformationFinder : IInformationFinder
     {
         private readonly IDaysRepository m_Repository;

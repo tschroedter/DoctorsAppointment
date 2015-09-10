@@ -4,11 +4,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using MicroServices.DataAccess.DoctorsSlots.Entities;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
+using Selkie.Windsor;
 
 namespace MicroServices.DataAccess.DoctorsSlots.Contexts
 {
     [ExcludeFromCodeCoverage]
     //ncrunch: no coverage start
+    [ProjectComponent(Lifestyle.Transient)]
     public class DaysContext
         : DbContext,
           IDaysContext

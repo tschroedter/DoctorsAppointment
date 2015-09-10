@@ -1,8 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 using MicroServices.DataAccess.DoctorsSlots;
 using Nancy.Bootstrappers.Windsor;
+using Selkie.Windsor.Installers;
 
 namespace MicroServices.Doctors.Tests.Integration.Nancy
 {
@@ -12,10 +14,25 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
     {
         protected override void ConfigureApplicationContainer(IWindsorContainer existingContainer)
         {
-            base.ConfigureApplicationContainer(existingContainer);
+            try
+            {
+                base.ConfigureApplicationContainer(existingContainer);
 
-            existingContainer.Install(FromAssembly.Containing(typeof ( Installer )));
-            existingContainer.Install(FromAssembly.Containing(typeof ( Doctors.Nancy.Installer )));
+                var loggerInstaller = new LoggerInstaller();
+                loggerInstaller.Install(existingContainer,
+                                        null);
+
+                var loaderInstaller = new ProjectComponentLoaderInstaller();
+                loaderInstaller.Install(existingContainer,
+                                        null);
+
+                existingContainer.Install(FromAssembly.Containing(typeof ( Installer )));
+                existingContainer.Install(FromAssembly.Containing(typeof ( Doctors.Nancy.Installer )));
+            }
+            catch ( Exception exception )
+            {
+                throw;
+            }
         }
     }
 }

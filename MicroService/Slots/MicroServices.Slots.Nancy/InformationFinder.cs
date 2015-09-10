@@ -4,9 +4,11 @@ using JetBrains.Annotations;
 using MicroServices.DataAccess.DoctorsSlots.Entities;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
 using MicroServices.Slots.Nancy.Interfaces;
+using Selkie.Windsor;
 
 namespace MicroServices.Slots.Nancy
 {
+    [ProjectComponent(Lifestyle.Transient)]
     public class InformationFinder : IInformationFinder
     {
         private readonly ISlotsRepository m_Repository;

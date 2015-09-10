@@ -5,9 +5,11 @@ using MicroServices.DataAccess.DoctorsSlots.Interfaces;
 using MicroServices.DoctorsSlots.Nancy.Interfaces;
 using Nancy;
 using Newtonsoft.Json;
+using Selkie.Windsor;
 
 namespace MicroServices.DoctorsSlots.Nancy
 {
+    [ProjectComponent(Lifestyle.Transient)]
     public class RequestHandler : IRequestHandler
     {
         private readonly IInformationFinder m_InformationFinder;

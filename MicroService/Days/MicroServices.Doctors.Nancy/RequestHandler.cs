@@ -4,9 +4,11 @@ using JetBrains.Annotations;
 using MicroServices.Days.Nancy.Interfaces;
 using Nancy;
 using Newtonsoft.Json;
+using Selkie.Windsor;
 
 namespace MicroServices.Days.Nancy
 {
+    [ProjectComponent(Lifestyle.Transient)]
     public class RequestHandler : IRequestHandler
     {
         private readonly IInformationFinder m_InformationFinder;

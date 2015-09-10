@@ -4,12 +4,14 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using MicroServices.DataAccess.DoctorsSlots.Entities;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
+using Selkie.Windsor;
 
 namespace MicroServices.DataAccess.DoctorsSlots.Contexts
 {
     // todo need to catch/handle exceptions
     [ExcludeFromCodeCoverage]
     //ncrunch: no coverage start
+    [ProjectComponent(Lifestyle.Transient)]
     public class SlotsContext
         : DbContext,
           ISlotsContext

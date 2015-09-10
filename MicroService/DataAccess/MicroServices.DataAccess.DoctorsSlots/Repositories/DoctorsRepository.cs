@@ -2,9 +2,11 @@
 using System.Linq;
 using JetBrains.Annotations;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
+using Selkie.Windsor;
 
 namespace MicroServices.DataAccess.DoctorsSlots.Repositories
 {
+    [ProjectComponent(Lifestyle.Transient)]
     public sealed class DoctorsRepository
         : BaseRepository <IDoctor, IDoctorsContext>,
           IDoctorsRepository

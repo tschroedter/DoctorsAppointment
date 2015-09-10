@@ -1,22 +1,12 @@
-﻿using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor;
-using MicroServices.Doctors.Nancy.Interfaces;
+﻿using Selkie.Windsor;
 
 namespace MicroServices.Doctors.Nancy
 {
-    public sealed class Installer : IWindsorInstaller
+    public sealed class Installer : BaseInstaller <Installer>
     {
-        public void Install(IWindsorContainer container,
-                            IConfigurationStore store)
+        public override string GetPrefixOfDllsToInstall()
         {
-            container.Register(Component.For(typeof ( IInformationFinder ))
-                                        .ImplementedBy(typeof ( InformationFinder ))
-                                        .LifeStyle.Transient);
-
-            container.Register(Component.For(typeof ( IRequestHandler ))
-                                        .ImplementedBy(typeof ( RequestHandler ))
-                                        .LifeStyle.Transient);
+            return "MicroServices.";
         }
     }
 }
