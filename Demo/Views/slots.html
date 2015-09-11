@@ -185,15 +185,16 @@
                                     <th>StartDateTime</th>
                                     <th>EndDateTime</th>
                                     <th>Status</th>
+                                    <th>DayId</th>
                                 </tr>
                                 <tr ng-repeat="slot in slots">
                                     <td>{{ slot.Id }}</td>
                                     <td>{{ slot.StartDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
                                     <td>{{ slot.EndDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
                                     <td>{{ slot.Status }}</td>
+                                    <td>{{ slot.DayId }}</td>
                                 </tr>
                             </table>
-
                         </td>
                     </tr>
                 </table>

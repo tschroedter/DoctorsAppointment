@@ -14,25 +14,18 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
     {
         protected override void ConfigureApplicationContainer(IWindsorContainer existingContainer)
         {
-            try
-            {
-                base.ConfigureApplicationContainer(existingContainer);
+            base.ConfigureApplicationContainer(existingContainer);
 
-                var loggerInstaller = new LoggerInstaller();
-                loggerInstaller.Install(existingContainer,
-                                        null);
+            var loggerInstaller = new LoggerInstaller();
+            loggerInstaller.Install(existingContainer,
+                                    null);
 
-                var loaderInstaller = new ProjectComponentLoaderInstaller();
-                loaderInstaller.Install(existingContainer,
-                                        null);
+            var loaderInstaller = new ProjectComponentLoaderInstaller();
+            loaderInstaller.Install(existingContainer,
+                                    null);
 
-                existingContainer.Install(FromAssembly.Containing(typeof ( Installer )));
-                existingContainer.Install(FromAssembly.Containing(typeof ( Doctors.Nancy.Installer )));
-            }
-            catch ( Exception exception )
-            {
-                throw;
-            }
+            existingContainer.Install(FromAssembly.Containing(typeof ( Installer )));
+            existingContainer.Install(FromAssembly.Containing(typeof ( Doctors.Nancy.Installer )));
         }
     }
 }
