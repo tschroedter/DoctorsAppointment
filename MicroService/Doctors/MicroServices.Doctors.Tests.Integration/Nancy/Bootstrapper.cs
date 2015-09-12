@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 using MicroServices.DataAccess.DoctorsSlots;

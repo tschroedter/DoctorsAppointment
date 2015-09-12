@@ -16,6 +16,7 @@ namespace Demo
         {
             base.ConfigureApplicationContainer(existingContainer);
 
+
             // Add the Array Resolver, so we can take dependencies on T[]
             // while only registering T.
             existingContainer.Kernel.Resolver.AddSubResolver(new ArrayResolver(existingContainer.Kernel));
