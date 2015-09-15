@@ -22,6 +22,8 @@ namespace MicroServices.DataAccess.DoctorsSlots.Contexts
 
         public DbSet <Day> DbSetDays { get; set; }
 
+        public DbSet <Doctor> DbSetDoctors { get; set; }
+
         public IQueryable <IDay> Days()
         {
             return DbSetDays;
@@ -59,7 +61,7 @@ namespace MicroServices.DataAccess.DoctorsSlots.Contexts
             Entry(instance).State = EntityState.Modified;
         }
 
-        private static Day ConvertToDay(IDay day)
+        private Day ConvertToDay(IDay day)
         {
             var instance = day as Day;
 
@@ -68,6 +70,11 @@ namespace MicroServices.DataAccess.DoctorsSlots.Contexts
                 throw new ArgumentException("Provided 'day' instance is not a Day!",
                                             "day");
             }
+
+            Doctor doctor = DbSetDoctors.Find(day.DoctorId);
+
+            instance.Doctor = doctor;
+
             return instance;
         }
     }

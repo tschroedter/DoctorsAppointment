@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MicroServices.DataAccess.DoctorsSlots.Entities;
 using MicroServices.DataAccess.DoctorsSlots.Interfaces;
 using MicroServices.Days.Nancy.Interfaces;
 using Selkie.Windsor;
@@ -78,6 +79,38 @@ namespace MicroServices.Days.Nancy
             DayForResponse[] days = ToDayForResponses(all);
 
             return days;
+        }
+
+        // todo do the delete below for all other finders
+        public IDayForResponse Delete(int id)
+        {
+            IDay day = m_Repository.FindById(id);
+
+            m_Repository.Remove(day);
+
+            return day == null
+                       ? null
+                       : new DayForResponse(day);
+        }
+
+        public IDayForResponse Save(IDayForResponse day)
+        {
+            IDay toBeUpdated = ToDay(day);
+
+            m_Repository.Save(toBeUpdated);
+
+            return new DayForResponse(toBeUpdated);
+        }
+
+        private IDay ToDay(IDayForResponse dayResponse)
+        {
+            var day = new Day();
+
+            day.Id = dayResponse.Id;
+            day.Date = dayResponse.Date;
+            day.DoctorId = dayResponse.DoctorId;
+
+            return day;
         }
 
         private IEnumerable <IDay> FilterByDate(IEnumerable <IDay> all,

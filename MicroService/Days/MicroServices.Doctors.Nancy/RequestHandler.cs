@@ -54,6 +54,25 @@ namespace MicroServices.Days.Nancy
             return AsJson(doctors);
         }
 
+        public Response Save(IDayForResponse doctor)
+        {
+            IDayForResponse saved = m_InformationFinder.Save(doctor);
+
+            return AsJson(saved);
+        }
+
+        public Response DeleteById(int id)
+        {
+            IDayForResponse doctor = m_InformationFinder.Delete(id);
+
+            if ( doctor == null )
+            {
+                return HttpStatusCode.NotFound;
+            }
+
+            return AsJson(doctor);
+        }
+
         public Response FindByDoctorId(int doctorId)
         {
             IEnumerable <IDayForResponse> days = m_InformationFinder.FindByDoctorId(doctorId)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JetBrains.Annotations;
+using MicroServices.Days.Nancy.Interfaces;
 using Nancy;
 using Nancy.Testing;
 using Newtonsoft.Json;
@@ -15,6 +16,77 @@ namespace MicroServices.Days.Tests.Integration.Nancy
     //ncrunch: no coverage start
     public sealed class DaysModuleTests
     {
+        private const string DateTimeFormat = "yyyy-MM-ddTHH:mm:ss.FFF";
+
+        private dynamic CreateDayToBeDeleted(Browser browser)
+        {
+            IDayForResponse model = CreateModelForPutTest();
+
+            BrowserResponse result = browser.Post("/days/",
+                                                  with =>
+                                                  {
+                                                      with.JsonBody(model);
+                                                  });
+
+            dynamic actual = ToDynamic(result.Body.AsString());
+
+            return actual;
+        }
+
+        private IDayForResponse CreateModelForPutTest()
+        {
+            var model = new UpdateDayModel
+                        {
+                            Date = DateTime.Now,
+                            DoctorId = 1
+                        };
+
+            return model;
+        }
+
+        [Fact]
+        public void Should_return_status_OK_when_slot_is_deleted()
+        {
+            // Given
+            Browser browser = CreateBrowser();
+            dynamic slot = CreateDayToBeDeleted(browser);
+            int slotId = Convert.ToInt32(slot [ "Id" ].Value);
+
+            // When
+            BrowserResponse result = browser.Delete("/days/" + slotId,
+                                                    with =>
+                                                    {
+                                                        with.HttpRequest();
+                                                    });
+
+            // Then
+            Assert.Equal(HttpStatusCode.OK,
+                         result.StatusCode);
+        }
+
+        [Fact]
+        public void Should_return_JSON_string_when_slot_is_deleted()
+        {
+            // Given
+            Browser browser = CreateBrowser();
+            dynamic day = CreateDayToBeDeleted(browser);
+            int dayId = Convert.ToInt32(day [ "Id" ].Value);
+            dynamic expected = CreatedExpectedDayFor(day);
+
+            // When
+            BrowserResponse result = browser.Delete("/days/" + dayId,
+                                                    with =>
+                                                    {
+                                                        with.HttpRequest();
+                                                    });
+
+            dynamic actual = ToDynamic(result.Body.AsString());
+
+            // Then
+            AssertDay(expected,
+                      actual);
+        }
+
         [Fact]
         public void Should_return_JSON_string_when_slot_with_id_exists()
         {
@@ -32,8 +104,8 @@ namespace MicroServices.Days.Tests.Integration.Nancy
             dynamic actual = ToDynamic(result.Body.AsString());
 
             // Then
-            AssertSlot(expected,
-                       actual);
+            AssertDay(expected,
+                      actual);
         }
 
         [Fact]
@@ -44,6 +116,7 @@ namespace MicroServices.Days.Tests.Integration.Nancy
             Browser browser = CreateBrowser();
 
             // When
+
             BrowserResponse result = browser.Get("/days/",
                                                  with =>
                                                  {
@@ -170,6 +243,109 @@ namespace MicroServices.Days.Tests.Integration.Nancy
                          result.StatusCode);
         }
 
+        [Fact]
+        public void Should_update_database_when_days_is_updated()
+        {
+            IDayForResponse model = null;
+            dynamic actual;
+            dynamic expected;
+
+            try
+            {
+                // Given
+                Browser browser = CreateBrowser();
+                dynamic slot = CreateDayToBeDeleted(browser);
+                model = CreateModelForUpdateTest(slot);
+                expected = CreatedExpectedDoctorForUpdate(model);
+
+                // When
+                BrowserResponse result = browser.Put("/days/",
+                                                     with =>
+                                                     {
+                                                         with.JsonBody(model);
+                                                     });
+
+                // Then
+                actual = ToDynamic(result.Body.AsString());
+            }
+            finally
+            {
+                if ( model != null )
+                {
+                    DeleteDayById(model.Id);
+                }
+            }
+
+            // Then
+            Assert.NotNull(expected);
+            Assert.NotNull(actual);
+
+            AssertDay(expected,
+                      actual);
+        }
+
+        private void AssertDay(dynamic expected,
+                               dynamic actual)
+        {
+            Console.WriteLine("Comparing days with id {0} and {1} (ignoring ids)...",
+                              expected [ "Id" ].Value,
+                              actual [ "Id" ].Value);
+
+            var expectedId = ( int ) ( expected [ "Id" ].Value );
+            var actualId = ( int ) ( actual [ "Id" ].Value );
+            Assert.Equal(expectedId,
+                         actualId);
+
+            var expectedEndDateTime = ( DateTime ) ( expected [ "Date" ].Value );
+            var actualEndDateTime = ( DateTime ) ( actual [ "Date" ].Value );
+            Assert.True(expectedEndDateTime.Date == actualEndDateTime.Date,
+                        "EndDateTime.Date");
+
+            var expectedDoctorId = ( int ) expected [ "DoctorId" ].Value;
+            var actualDoctorId = ( int ) actual [ "DoctorId" ].Value;
+            Assert.Equal(expectedDoctorId,
+                         actualDoctorId);
+        }
+
+        private void DeleteDayById(int dayId)
+        {
+            Browser browser = CreateBrowser();
+
+            BrowserResponse result = browser.Delete("/days/" + dayId,
+                                                    with =>
+                                                    {
+                                                        with.HttpRequest();
+                                                    });
+
+            Assert.Equal(HttpStatusCode.OK,
+                         result.StatusCode);
+        }
+
+        private IDayForResponse CreateModelForUpdateTest(dynamic day)
+        {
+            var model = new UpdateDayModel
+                        {
+                            Id = ( int ) ( day [ "Id" ].Value ), // todo change to long
+                            Date = DateTime.Now.AddDays(1),
+                            DoctorId = 2
+                        };
+
+            return model;
+        }
+
+        private dynamic CreatedExpectedDoctorForUpdate(IDayForResponse day)
+        {
+            DateTime date = day.Date;
+
+            string json = "{" +
+                          "\"Id\":" + day.Id + "," +
+                          "\"Date\":\"" + date.ToString(DateTimeFormat) + "\"," +
+                          "\"DoctorId\":" + day.DoctorId +
+                          "}";
+
+            return ToDynamic(json);
+        }
+
         private void AssertDays(dynamic expected,
                                 dynamic actual)
         {
@@ -195,8 +371,8 @@ namespace MicroServices.Days.Tests.Integration.Nancy
                 object compareToSlot = GetDayWithId(actualList,
                                                     expectedSlotId);
 
-                AssertSlot(expectedSlot,
-                           compareToSlot);
+                AssertDay(expectedSlot,
+                          compareToSlot);
             }
         }
 
@@ -252,27 +428,34 @@ namespace MicroServices.Days.Tests.Integration.Nancy
             return ToDynamic(json);
         }
 
-        private static void AssertSlot(dynamic expected,
-                                       dynamic actual)
-        {
-            Console.WriteLine("Comparing days with id {0} and {1}...",
-                              expected [ "Id" ].Value,
-                              actual [ "Id" ].Value);
-
-            Assert.True(expected [ "Id" ].Value == actual [ "Id" ].Value,
-                        "Id");
-            Assert.True(expected [ "Date" ].Value == actual [ "Date" ].Value,
-                        "DayId");
-            Assert.True(expected [ "DoctorId" ].Value == actual [ "DoctorId" ].Value,
-                        "DoctorId");
-        }
-
         private static Browser CreateBrowser()
         {
             var bootstrapper = new Bootstrapper();
             var browser = new Browser(bootstrapper,
                                       to => to.Accept("application/json"));
             return browser;
+        }
+
+        private dynamic CreatedExpectedDayFor(dynamic day)
+        {
+            var id = ( int ) day [ "Id" ].Value;
+            var date = ( DateTime ) ( day [ "Date" ].Value );
+            var doctorId = ( int ) ( day [ "DoctorId" ].Value );
+
+            string json = "{" +
+                          "\"Id\": " + id + "," +
+                          "\"Date\": \"" + date.ToString(DateTimeFormat) + "\"," +
+                          "\"DoctorId\": " + doctorId +
+                          "}";
+
+            return ToDynamic(json);
+        }
+
+        private class UpdateDayModel : IDayForResponse
+        {
+            public int Id { get; set; }
+            public DateTime Date { get; set; }
+            public int DoctorId { get; set; }
         }
     }
 }

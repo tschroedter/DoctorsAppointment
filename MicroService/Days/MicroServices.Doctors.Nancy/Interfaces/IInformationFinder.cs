@@ -11,5 +11,8 @@ namespace MicroServices.Days.Nancy.Interfaces
 
         IEnumerable <IDayForResponse> ListForDateAndDoctorId(string date,
                                                              string doctorId);
+
+        IDayForResponse Save(IDayForResponse day);
+        IDayForResponse Delete(int id);
     }
 }

@@ -20,6 +20,90 @@ namespace MicroServices.Days.Nancy.Tests
     {
         private const string DefaultDate = "2000-01-01";
         private const string DefaultDoctorId = "1";
+        private const int DoesNotMatter = -1;
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void Save_CallsSave_WhenCalled([NotNull] IDayForResponse toBeUpdated,
+                                              [NotNull] IDay day)
+        {
+            // Arrange
+            var repository = Substitute.For <IDaysRepository>();
+            repository.Save(Arg.Any <IDay>());
+            InformationFinder sut = CreateSut(repository);
+
+            // Act
+            sut.Save(toBeUpdated);
+
+            // Assert
+            repository.Received().Save(Arg.Is <IDay>(x => x.Id == toBeUpdated.Id));
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void Save_ReturnsUpdatedDoctor_ForExisting([NotNull] IDayForResponse toBeUpdated,
+                                                          [NotNull] IDay day)
+        {
+            // Arrange
+            var repository = Substitute.For <IDaysRepository>();
+            repository.Save(Arg.Any <IDay>());
+            InformationFinder sut = CreateSut(repository);
+
+            // Act
+            IDayForResponse actual = sut.Save(toBeUpdated);
+
+            // Assert
+            Assert.Equal(toBeUpdated.Id,
+                         actual.Id);
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void Delete_ReturnsDeletedDoctor_WhenCalled([NotNull] IDay day)
+        {
+            // Arrange
+            var repository = Substitute.For <IDaysRepository>();
+            repository.FindById(-1).ReturnsForAnyArgs(day);
+            InformationFinder sut = CreateSut(repository);
+
+            // Act
+            IDayForResponse actual = sut.Delete(DoesNotMatter);
+
+            // Assert
+            Assert.Equal(day.Id,
+                         actual.Id);
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void Delete_CallsRemove_WhenCalled([NotNull] IDay day)
+        {
+            // Arrange
+            var repository = Substitute.For <IDaysRepository>();
+            repository.FindById(-1).ReturnsForAnyArgs(day);
+            InformationFinder sut = CreateSut(repository);
+
+            // Act
+            sut.Delete(DoesNotMatter);
+
+            // Assert
+            repository.Received().Remove(day);
+        }
+
+        [Fact]
+        public void Delete_ReturnsNull_ForCanNotAdd()
+        {
+            // Arrange
+            var repository = Substitute.For <IDaysRepository>();
+            repository.FindById(-1).ReturnsForAnyArgs(( IDay ) null);
+            InformationFinder sut = CreateSut(repository);
+
+            // Act
+            IDayForResponse actual = sut.Delete(DoesNotMatter);
+
+            // Assert
+            Assert.Null(actual);
+        }
 
         [Theory]
         [AutoNSubstituteData]

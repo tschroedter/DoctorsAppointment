@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 using MicroServices.Days.Nancy.Interfaces;
 using Nancy;
+using Nancy.ModelBinding;
 
 namespace MicroServices.Days.Nancy
 {
@@ -36,6 +37,16 @@ namespace MicroServices.Days.Nancy
                     return handler.Find(date,
                                         doctorId);
                 };
+
+            // todo testing for all below
+            Post [ "/" ] =
+                parameters => handler.Save(this.Bind <DayForResponse>());
+
+            Put [ "/" ] =
+                parameters => handler.Save(this.Bind <DayForResponse>());
+
+            Delete [ "/{id:int}" ] =
+                parameters => handler.DeleteById(( int ) ( parameters.id ));
         }
     }
 }

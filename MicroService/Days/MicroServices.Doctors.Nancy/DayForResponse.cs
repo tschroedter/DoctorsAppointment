@@ -7,6 +7,10 @@ namespace MicroServices.Days.Nancy
 {
     public class DayForResponse : IDayForResponse
     {
+        public DayForResponse()
+        {
+        }
+
         public DayForResponse([NotNull] IDay day)
         {
             Id = day.Id;

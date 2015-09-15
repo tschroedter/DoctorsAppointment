@@ -30,7 +30,7 @@ mainApp.factory("slots", function($resource) {
     });
 });
 
-mainApp.factory("days", function ($resource) {
+mainApp.factory("days", function($resource) {
     return $resource("/days/:id", { id: "@_id" }, {
         update: {
             method: "PUT"

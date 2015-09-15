@@ -17,6 +17,58 @@ namespace MicroServices.Days.Nancy.Tests
     public sealed class RequestHandlerTests
     {
         // todo don't know how to get content, but integration test cover this
+        private const int DoesNotMatter = -1;
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void Save_ReturnsStatusOK_WhenCalled([NotNull] IDayForResponse toBeCreated,
+                                                    [NotNull] IDayForResponse created)
+        {
+            // Arrange
+            var finder = Substitute.For <IInformationFinder>();
+            finder.Save(toBeCreated).Returns(created);
+            RequestHandler sut = CreateSut(finder);
+
+            // Act
+            Response actual = sut.Save(toBeCreated);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK,
+                         actual.StatusCode);
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void DeleteById_ReturnsResponse_WhenCalled([NotNull] IDayForResponse doctor)
+        {
+            // Arrange
+            var finder = Substitute.For <IInformationFinder>();
+            finder.Delete(doctor.Id).Returns(doctor);
+            RequestHandler sut = CreateSut(finder);
+
+            // Act
+            Response actual = sut.DeleteById(doctor.Id);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK,
+                         actual.StatusCode);
+        }
+
+        [Fact]
+        public void DeleteById_ReturnsResponse_ForAddFailed()
+        {
+            // Arrange
+            var finder = Substitute.For <IInformationFinder>();
+            finder.Delete(DoesNotMatter).Returns(( IDayForResponse ) null);
+            RequestHandler sut = CreateSut(finder);
+
+            // Act
+            Response actual = sut.DeleteById(DoesNotMatter);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound,
+                         actual.StatusCode);
+        }
 
         [Fact]
         public void List_ReturnsResponse_WhenCalled()
