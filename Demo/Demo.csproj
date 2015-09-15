@@ -105,6 +105,7 @@
   <ItemGroup>
     <Content Include="Content\app\assets\libs\angularjs\angular-resource.js" />
     <Content Include="Content\app\assets\libs\angularjs\angular.js" />
+    <Content Include="Content\app\daysController.js" />
     <Content Include="Content\app\slotsController.js" />
     <Content Include="Content\app\doctorsController.js" />
     <Content Include="Content\app\mainApp.js" />
@@ -127,6 +128,7 @@
     <Content Include="Content\scripts\bootstrap.js" />
     <Content Include="Content\scripts\highlight.min.js" />
     <Content Include="Content\scripts\jquery.min.js" />
+    <Content Include="Views\days.html" />
     <Content Include="Views\slots.html" />
     <Content Include="Views\index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -139,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Modules\TestDaysModule.cs" />
     <Compile Include="Modules\TestSlotsModule.cs" />
     <Compile Include="Modules\TestDoctorsModule.cs" />
     <Compile Include="Modules\IndexModule.cs" />

@@ -1,0 +1,175 @@
+﻿<!doctype html>
+<html>
+<head>
+    <script src="~/content/app/assets/libs/angularjs/angular.js"></script>
+    <script src="~/content/app/assets/libs/angularjs/angular-resource.js"></script>
+    <script src="~/content/app/mainApp.js"></script>
+    <script src="~/content/app/daysController.js"></script>
+</head>
+<body ng-app="mainApp">
+<div ng-controller="daysController">
+    <table>
+        <tr>
+            <th>CRUD</th>
+            <th>TEST</th>
+        </tr>
+        <tr>
+            <td><b>C</b>reate</td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Date:</td>
+                        <td>
+                            <input type="text" ng-model="toCreate.Date"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Doctor Id:</td>
+                        <td>
+                            <input type="text" ng-model="toCreate.DoctorId"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button ng-click="save()">Create Doctor</button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr/>
+            </td>
+        </tr>
+        <tr>
+            <td><b>R</b>ead</td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Id:</td>
+                        <td>
+                            <input type="number" ng-model="dayId"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button ng-click="get()">Load Day</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Date:</td>
+                        <td>{{day.Date}}</td>
+                    </tr>
+                    <tr>
+                        <td>Doctor Id:</td>
+                        <td>{{day.DoctorId}}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr/>
+            </td>
+        </tr>
+        <tr>
+            <td><b>U</b>pdate</td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Id:</td>
+                        <td>
+                            <input type="number" ng-model="toUpdate.id"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Date:</td>
+                        <td>
+                            <input type="text" ng-model="toUpdate.Date"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Doctor Id:</td>
+                        <td>
+                            <input type="text" ng-model="toUpdate.DoctorId"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button ng-click="update()">Update Doctor</button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr/>
+            </td>
+        </tr>
+        <tr>
+            <td><b>D</b>elete</td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Id:</td>
+                        <td>
+                            <input type="number" ng-model="toDelete.id"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button ng-click="delete()">Delete Day</button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr/>
+            </td>
+        </tr>
+        <tr>
+            <td>All</td>
+            <td>
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <button ng-click="query()">Get All</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Date</th>
+                                    <th>DoctorId</th>
+                                </tr>
+                                <tr ng-repeat="day in days">
+                                    <td>{{ day.Id }}</td>
+                                    <td>{{ day.Date }}</td>
+                                    <td>{{ day.DoctorId }}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr/>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
