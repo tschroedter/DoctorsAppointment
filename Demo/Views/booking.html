@@ -1,0 +1,37 @@
+﻿<!doctype html>
+<html>
+<head>
+    <script src="~/content/app/assets/libs/angularjs/angular.js"></script>
+    <script src="~/content/app/assets/libs/angularjs/angular-resource.js"></script>
+    <script src="~/content/app/mainApp.js"></script>
+    <script src="~/content/app/doctorsController.js"></script>
+    <script src="~/content/app/bookingController.js"></script>
+</head>
+<body ng-app="mainApp">
+    <div ng-controller="doctorsController">
+        <table>
+            <tr>
+                <td>Select a doctor</td>
+                <td>
+                    <select ng-model="doctorId"
+                            ng-change="updateDays()">
+                        <option ng-repeat="doctor in doctors" value="{{doctor.Id}}">{{doctor.FirstName + ' ' + doctor.LastName}}</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div ng-controller="daysController">
+        <table>
+            <tr>
+                <td>Select a day</td>
+                <td>
+                    <select ng-model="dayId">
+                        <option ng-repeat="day in days" value="{{day.Id}}">{{day.Date}}</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

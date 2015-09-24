@@ -17,6 +17,10 @@
             return 0;
         }
 
+        $scope.init = function () {
+            $scope.query();
+        };
+
         $scope.setSelectedSlot = function(doctor) {
             if ($scope.doctors === null) {
                 return false;
@@ -78,4 +82,12 @@
         $scope.toDelete = new doctors();
         $scope.searchResult = [loading];
         $scope.searchByLastName = "";
+
+        $scope.init();
+
+        // stuff below should be in separate controller
+        $scope.updateDays = function () {
+            alert("doctor.Id: " + $scope.doctorId);
+        }
+
     });
