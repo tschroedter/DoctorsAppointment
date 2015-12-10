@@ -4,11 +4,12 @@
     <script src="~/content/app/assets/libs/angularjs/angular.js"></script>
     <script src="~/content/app/assets/libs/angularjs/angular-resource.js"></script>
     <script src="~/content/app/mainApp.js"></script>
+    <script src="~/content/app/daysController.js"></script>
     <script src="~/content/app/doctorsController.js"></script>
     <script src="~/content/app/bookingController.js"></script>
 </head>
 <body ng-app="mainApp">
-    <div ng-controller="doctorsController">
+    <div ng-controller="bookingController">
         <table>
             <tr>
                 <td>Select a doctor</td>
@@ -21,13 +22,13 @@
             </tr>
         </table>
     </div>
-    <div ng-controller="daysController">
+    <div ng-controller="bookingController">
         <table>
             <tr>
                 <td>Select a day</td>
                 <td>
                     <select ng-model="dayId">
-                        <option ng-repeat="day in days" value="{{day.Id}}">{{day.Date}}</option>
+                        <option ng-repeat="day in searchResult" value="{{day.Id}}">{{day.Date}}</option>
                     </select>
                 </td>
             </tr>

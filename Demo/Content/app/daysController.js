@@ -67,6 +67,6 @@
         $scope.toCreate = new days();
         $scope.toUpdate = days.get({ id: 1 });
         $scope.toDelete = new days();
-        $scope.searchResult = [loading];
+        $scope.searchResult = [loading]; // todo ? only use $scope.days
         $scope.searchByDoctorId = "1";
     });

@@ -4,7 +4,7 @@
         daysController) {
 
         $scope.init = function () {
-            $scope.query();
+            $scope.doctorsController.query();
         };
 
         $scope.query = function () {
@@ -21,6 +21,9 @@
         $scope.doctors = doctorsController.doctors;
         $scope.doctor = doctorsController.doctor;
         $scope.doctorId = doctorsController.doctors;
+
+        $scope.dayId = daysController.dayId;
+        $scope.searchResult = daysController.searchResult;
 
         $scope.init();
    });

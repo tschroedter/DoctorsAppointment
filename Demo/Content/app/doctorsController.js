@@ -84,10 +84,4 @@
         $scope.searchByLastName = "";
 
         $scope.init();
-
-        // stuff below should be in separate controller
-        $scope.updateDays = function () {
-            alert("doctor.Id: " + $scope.doctorId);
-        }
-
     });
