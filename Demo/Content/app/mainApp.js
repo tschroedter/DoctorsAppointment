@@ -37,3 +37,17 @@ mainApp.factory("days", function($resource) {
         }
     });
 });
+
+mainApp.factory("daysSearchByDoctorId", function ($resource) {
+    return $resource("/days/doctorId/:query", {
+        query: "@query"
+    }, {
+        search: {
+            method: "GET",
+            isArray: true,
+            params: {
+                query: "@query"
+            }
+        }
+    });
+});

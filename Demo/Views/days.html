@@ -166,6 +166,46 @@
         </tr>
         <tr>
             <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td>By Doctor Id</td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Doctor Id</td>
+                        <td>
+                            <input type="number" ng-model="searchByDoctorId" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button ng-click="getByDoctorId()">Get By Doctor Id</button>
+                        </td>
+                    </tr>
+                    <tr>
+                    <tr>
+                        <td colspan="2">
+                            <table>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Date</th>
+                                    <th>DoctorId</th>
+                                </tr>
+                                <tr ng-repeat="day in searchResult">
+                                    <td>{{ day.Id }}</td>
+                                    <td>{{ day.Date }}</td>
+                                    <td>{{ day.DoctorId }}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
                 <hr/>
             </td>
         </tr>

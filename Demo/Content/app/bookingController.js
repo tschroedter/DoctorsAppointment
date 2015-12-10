@@ -13,6 +13,9 @@
 
         $scope.updateDays = function () {
             alert("doctor.Id: " + $scope.doctorId);
+            // todo get days for doctor.Id
+            daysController.searchByDoctorId = $scope.doctorId;
+            daysController.getByDoctorId();
         }
 
         $scope.doctors = doctorsController.doctors;

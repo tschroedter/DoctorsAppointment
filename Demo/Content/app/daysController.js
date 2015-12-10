@@ -1,6 +1,7 @@
 ﻿mainApp.controller("daysController",
     function($scope,
-        days) {
+        days,
+        daysSearchByDoctorId) {
 
         var loading = {
             FirstName: "Loading",
@@ -49,6 +50,15 @@
             });
         };
 
+        $scope.getByDoctorId = function () {
+            daysSearchByDoctorId.search({
+                query: $scope.searchByDoctorId
+            }, function (data) {
+                $scope.searchResult = angular.fromJson(data);
+                alert("Searched!");
+            });
+        };
+
         /* END: CRUD */
 
         $scope.days = [loading];
@@ -58,5 +68,5 @@
         $scope.toUpdate = days.get({ id: 1 });
         $scope.toDelete = new days();
         $scope.searchResult = [loading];
-        $scope.searchByLastName = "";
+        $scope.searchByDoctorId = "1";
     });

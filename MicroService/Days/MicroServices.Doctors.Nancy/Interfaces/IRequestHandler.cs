@@ -13,5 +13,6 @@ namespace MicroServices.Days.Nancy.Interfaces
         Response FindByDate(string date);
         Response Save(IDayForResponse day);
         Response DeleteById(int id);
+        Response FindByDoctorId(int doctorId);
     }
 }

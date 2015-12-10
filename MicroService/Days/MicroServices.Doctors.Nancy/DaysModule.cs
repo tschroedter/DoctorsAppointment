@@ -39,6 +39,9 @@ namespace MicroServices.Days.Nancy
                 };
 
             // todo testing for all below
+            Get [ "/doctorId/{doctorid:int}" ] =
+                parameters => handler.FindByDoctorId(( int ) ( parameters.doctorid ));
+
             Post [ "/" ] =
                 parameters => handler.Save(this.Bind <DayForResponse>());
 
