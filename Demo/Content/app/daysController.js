@@ -1,7 +1,6 @@
 ﻿mainApp.controller("daysController",
     function($scope,
-        days,
-        daysSearchByDoctorId) {
+        daysService) {
 
         var loading = {
             FirstName: "Loading",
@@ -20,43 +19,59 @@
             return true;
         };
 
+        /* BEGIN: Handlers */
+
+        var handleQueryResult = function(data) {
+            $scope.days = data;
+        };
+
+        var handleGetResult = function(data) {
+            $scope.day = data;
+        };
+
+        var handleSaveResult = function() {
+            alert("Created new day!");
+        };
+
+        var handleUpdateResult = function() {
+            alert("Updated day!");;
+        };
+
+        var handleDeleteResult = function() {
+            alert("Updated day!");;
+        };
+
+        var handleSearchResult = function(data) {
+            $scope.searchResult = angular.fromJson(data);
+            alert("Searched!");;
+        };
+
+        /* END: Handlers */
+
         /* BEGIN: CRUD */
 
         $scope.query = function() {
-            days.query(function(data) {
-                $scope.days = angular.fromJson(data);
-            });
+            daysService.query(handleQueryResult);
         };
 
         $scope.get = function() {
-            $scope.day = days.get({ id: $scope.dayId });
+            handleGetResult(daysService.get($scope.dayId));
         };
 
         $scope.save = function() {
-            days.save($scope.toCreate, function() {
-                alert("Created new day!");
-            });
+            daysService.save($scope.toCreate, handleSaveResult);
         };
 
         $scope.update = function() {
-            $scope.toUpdate.$update(function() {
-                alert("Updated day!");
-            });
+            daysService.update($scope.toUpdate, handleUpdateResult);
         };
 
         $scope.delete = function() {
-            days.delete($scope.toDelete, function() {
-                alert("Deleted day!");
-            });
+            daysService.delete($scope.toDelete, handleDeleteResult);
         };
 
-        $scope.getByDoctorId = function () {
-            daysSearchByDoctorId.search({
-                query: $scope.searchByDoctorId
-            }, function (data) {
-                $scope.searchResult = angular.fromJson(data);
-                alert("Searched!");
-            });
+        $scope.getByDoctorId = function() {
+            daysService.getByDoctorId($scope.searchByDoctorId, handleSearchResult);
         };
 
         /* END: CRUD */
@@ -64,9 +79,9 @@
         $scope.days = [loading];
         $scope.day = loading;
         $scope.dayId = 1;
-        $scope.toCreate = new days();
-        $scope.toUpdate = days.get({ id: 1 });
-        $scope.toDelete = new days();
-        $scope.searchResult = [loading]; // todo ? only use $scope.days
-        $scope.searchByDoctorId = "1";
+        $scope.toCreate = {};
+        $scope.toUpdate = {};
+        $scope.toDelete = {};
+        $scope.searchResult = [loading];
+        $scope.searchByDoctorId = 1;
     });

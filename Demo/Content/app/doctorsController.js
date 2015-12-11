@@ -38,11 +38,11 @@
         };
 
         var handleUpdateResult = function () {
-            alert("Updated doctor!");;
+            alert("Updated doctor!");
         };
 
         var handleDeleteResult = function () {
-            alert("Updated doctor!");;
+            alert("Updated doctor!");
         };
 
         var handleSearchResult = function (data) {
