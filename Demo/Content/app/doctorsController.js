@@ -1,7 +1,6 @@
 ﻿mainApp.controller("doctorsController",
     function($scope,
-        doctors,
-        doctorsSearchByLastName) {
+        doctorsService) {
 
         var loading = {
             FirstName: "Loading",
@@ -9,16 +8,8 @@
             Id: -1
         };
 
-        function compareByLastName(a, b) {
-            if (a.LastName < b.LastName)
-                return -1;
-            if (a.LastName > b.LastName)
-                return 1;
-            return 0;
-        }
-
-        $scope.init = function () {
-            $scope.query();
+        $scope.init = function() {
+            doctorsService.query();
         };
 
         $scope.setSelectedSlot = function(doctor) {
@@ -32,44 +23,59 @@
             return true;
         };
 
+        /* BEGIN: Handlers */
+
+        var handleQueryResult = function (data) {
+            $scope.doctors = angular.fromJson(data);
+        };
+
+        var handleGetResult = function (data) {
+            $scope.doctor = data;
+        };
+
+        var handleSaveResult = function () {
+            alert("Created new doctor!");
+        };
+
+        var handleUpdateResult = function () {
+            alert("Updated doctor!");;
+        };
+
+        var handleDeleteResult = function () {
+            alert("Updated doctor!");;
+        };
+
+        var handleSearchResult = function (data) {
+            $scope.searchResult = angular.fromJson(data);
+            alert("Searched!");;
+        };
+
+        /* END: Handlers */
+
         /* BEGIN: CRUD */
 
-        $scope.query = function() {
-            doctors.query(function(data) {
-                $scope.doctors = angular.fromJson(data);
-                $scope.doctors.sort(compareByLastName);
-            });
+        $scope.query = function () {
+            doctorsService.query(handleQueryResult);
         };
 
         $scope.get = function() {
-            $scope.doctor = doctors.get({ id: $scope.doctorId });
+            handleGetResult(doctorsService.get($scope.doctorId));
         };
 
         $scope.save = function() {
-            doctors.save($scope.toCreate, function() {
-                alert("Created new doctor!");
-            });
+            doctorsService.save($scope.toCreate, handleSaveResult);
         };
 
         $scope.update = function() {
-            $scope.toUpdate.$update(function() {
-                alert("Updated doctor!");
-            });
+            doctorsService.update($scope.toUpdate, handleUpdateResult);
         };
 
         $scope.delete = function() {
-            doctors.delete($scope.toDelete, function() {
-                alert("Deleted doctor!");
-            });
+            doctorsService.delete($scope.toDelete, handleDeleteResult);
         };
 
         $scope.search = function() {
-            doctorsSearchByLastName.search({
-                query: $scope.searchByLastName
-            }, function(data) {
-                $scope.searchResult = angular.fromJson(data);
-                alert("Searched!");
-            });
+            doctorsService.search($scope.searchByLastName, handleSearchResult);
         };
 
         /* END: CRUD */
@@ -77,9 +83,9 @@
         $scope.doctors = [loading];
         $scope.doctor = loading;
         $scope.doctorId = 1;
-        $scope.toCreate = new doctors();
-        $scope.toUpdate = doctors.get({ id: 1 });
-        $scope.toDelete = new doctors();
+        $scope.toCreate = {};
+        $scope.toUpdate = {};
+        $scope.toDelete = {};
         $scope.searchResult = [loading];
         $scope.searchByLastName = "";
 
