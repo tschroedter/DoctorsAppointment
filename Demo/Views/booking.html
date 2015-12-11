@@ -21,11 +21,9 @@
                 </td>
             </tr>
         </table>
-    </div>
-    <div ng-controller="bookingController">
         <table>
             <tr>
-                <td>Select a day</td>
+                <td>Select a day/time</td>
                 <td>
                     <select ng-model="dayId">
                         <option ng-repeat="day in days" value="{{day.Id}}">{{day.Date}}</option>
