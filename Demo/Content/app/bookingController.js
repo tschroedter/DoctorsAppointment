@@ -1,29 +1,42 @@
 ﻿mainApp.controller("bookingController",
     function($scope,
-        doctorsController,
-        daysController) {
+        doctorsService,
+        daysService) {
 
-        $scope.init = function () {
-            $scope.doctorsController.query();
+        var loading = {
+            FirstName: "Loading",
+            LastName: "...",
+            Id: -1
+        };
+
+        var handleQueryResult = function (data) {
+            $scope.doctors = angular.fromJson(data);
+        };
+
+        var handleGetByDoctorIdResult = function (data) {
+            $scope.days = angular.fromJson(data);
         };
 
         $scope.query = function () {
-            doctorsController.query();
+            doctorsService.query(handleQueryResult);
         };
 
         $scope.updateDays = function () {
-            alert("doctor.Id: " + $scope.doctorId);
-            // todo get days for doctor.Id
-            daysController.searchByDoctorId = $scope.doctorId;
-            daysController.getByDoctorId();
+            daysService.getByDoctorId($scope.doctorId, handleGetByDoctorIdResult);
         }
 
-        $scope.doctors = doctorsController.doctors;
-        $scope.doctor = doctorsController.doctor;
-        $scope.doctorId = doctorsController.doctors;
+        $scope.init = function () {
+            doctorsService.query(handleQueryResult);
+        };
 
-        $scope.dayId = daysController.dayId;
-        $scope.searchResult = daysController.searchResult;
+        $scope.doctors = [loading];
+        $scope.doctor = loading;
+        $scope.doctorId = -1;
+
+        $scope.days = [loading];
+        $scope.day = loading;
+        $scope.dayId = -1;
+        $scope.searchResult = [loading];
 
         $scope.init();
    });
