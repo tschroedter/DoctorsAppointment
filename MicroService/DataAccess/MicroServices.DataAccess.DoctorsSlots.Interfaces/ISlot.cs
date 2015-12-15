@@ -15,5 +15,5 @@ namespace MicroServices.DataAccess.DoctorsSlots.Interfaces
         Unknown,
         Open,
         Booked
-    };
+    }
 }

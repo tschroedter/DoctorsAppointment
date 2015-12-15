@@ -18,7 +18,7 @@ namespace MicroServices.Days.Nancy
                 parameters => handler.List();
 
             Get [ "/{id:int}" ] =
-                parameters => handler.FindById(( int ) ( parameters.id ));
+                parameters => handler.FindById(( int ) parameters.id);
 
             Get [ "/{date:datetime(yyyy-MM-dd)}" ] =
                 parameters =>
@@ -40,7 +40,7 @@ namespace MicroServices.Days.Nancy
 
             // todo testing for all below
             Get [ "/doctorId/{doctorid:int}" ] =
-                parameters => handler.FindByDoctorId(( int ) ( parameters.doctorid ));
+                parameters => handler.FindByDoctorId(( int ) parameters.doctorid);
 
             Post [ "/" ] =
                 parameters => handler.Save(this.Bind <DayForResponse>());
@@ -49,7 +49,7 @@ namespace MicroServices.Days.Nancy
                 parameters => handler.Save(this.Bind <DayForResponse>());
 
             Delete [ "/{id:int}" ] =
-                parameters => handler.DeleteById(( int ) ( parameters.id ));
+                parameters => handler.DeleteById(( int ) parameters.id);
         }
     }
 }

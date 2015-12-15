@@ -1,7 +1,8 @@
 ﻿mainApp.controller("bookingController",
     function($scope,
         doctorsService,
-        daysService) {
+        daysService,
+        slotsService) {
 
         var month = new Array();
         month[0] = "January";
@@ -71,12 +72,20 @@
 
         };
 
+        var handleGetByDayIdResult = function(data) {
+            alert("handleGetByDayIdResult - todo");
+        }
+
         $scope.query = function() {
             doctorsService.query(handleQueryResult);
         };
 
         $scope.updateDays = function() {
             daysService.getByDoctorId($scope.doctorId, handleGetByDoctorIdResult);
+        };
+
+        $scope.updateSlots = function () {
+            slotsService.getByDayId($scope.dayId, handleGetByDayIdResult);
         };
 
         $scope.isBookDisabled = function() {

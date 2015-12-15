@@ -8,5 +8,6 @@ namespace MicroServices.Slots.Nancy.Interfaces
         IEnumerable <ISlotForResponse> List();
         ISlotForResponse Save(ISlotForResponse slot);
         ISlotForResponse Delete(int id);
+        IEnumerable <ISlotForResponse> FindByDayId(int dayId);
     }
 }

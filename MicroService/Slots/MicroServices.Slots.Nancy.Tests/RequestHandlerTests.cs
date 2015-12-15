@@ -37,6 +37,27 @@ namespace MicroServices.Slots.Nancy.Tests
 
         [Theory]
         [AutoNSubstituteData]
+        public void FindByDayId_ReturnsResponse_ForKnownDayId(
+            [NotNull] ISlotForResponse slot)
+        {
+            // Arrange
+            var finder = Substitute.For <IInformationFinder>();
+            finder.FindByDayId(Arg.Any <int>()).Returns(new[]
+                                                        {
+                                                            slot
+                                                        });
+            RequestHandler sut = CreateSut(finder);
+
+            // Act
+            Response actual = sut.FindByDayId(slot.Id);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK,
+                         actual.StatusCode);
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
         public void FindById_ReturnsResponse_ForKnownId(
             [NotNull] ISlotForResponse slot)
         {

@@ -200,6 +200,53 @@
                 </table>
             </td>
         </tr>
+        <tr>
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td>Search by DayId</td>
+            <td>
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <input type="number" ng-model="searchByDayId" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button ng-click="search()">By DayId</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>StartDateTime</th>
+                                    <th>EndDateTime</th>
+                                    <th>Status</th>
+                                    <th>DayId</th>
+                                </tr>
+                                <tr ng-repeat="slot in searchResult">
+                                    <td>{{ slot.Id }}</td>
+                                    <td>{{ slot.StartDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
+                                    <td>{{ slot.EndDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
+                                    <td>{{ slot.Status }}</td>
+                                    <td>{{ slot.DayId }}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
     </table>
 </div>
 </body>

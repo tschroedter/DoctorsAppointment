@@ -18,7 +18,7 @@ namespace MicroServices.Doctors.Nancy
                 parameters => handler.List();
 
             Get [ "/{id:int}" ] =
-                parameters => handler.FindById(( int ) ( parameters.id ));
+                parameters => handler.FindById(( int ) parameters.id);
 
             Get [ "/byLastName/{name:alpha}" ] =
                 parameters => handler.FindByLastName(parameters.name);
@@ -30,7 +30,7 @@ namespace MicroServices.Doctors.Nancy
                 parameters => handler.Save(this.Bind <DoctorForResponse>());
 
             Delete [ "/{id:int}" ] =
-                parameters => handler.DeleteById(( int ) ( parameters.id ));
+                parameters => handler.DeleteById(( int ) parameters.id);
         }
     }
 }

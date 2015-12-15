@@ -63,6 +63,16 @@ namespace MicroServices.Slots.Nancy
             return new SlotForResponse(slot);
         }
 
+        public IEnumerable <ISlotForResponse> FindByDayId(int dayId)
+        {
+            IEnumerable <ISlot> all = m_Repository.FindByDayId(dayId);
+
+            SlotForResponse[] slots = all.Select(x => new SlotForResponse(x))
+                                         .ToArray();
+
+            return slots;
+        }
+
         private ISlot ToSlot(ISlotForResponse slot)
         {
             return new Slot

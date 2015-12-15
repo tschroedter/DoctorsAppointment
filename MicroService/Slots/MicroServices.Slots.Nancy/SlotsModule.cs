@@ -18,7 +18,10 @@ namespace MicroServices.Slots.Nancy
                 parameters => handler.List();
 
             Get [ "/{id:int}" ] =
-                parameters => handler.FindById(( int ) ( parameters.id ));
+                parameters => handler.FindById(( int ) parameters.id);
+
+            Get [ "/dayId/{id:int}" ] = // todo testing
+                parameters => handler.FindByDayId(parameters.id);
 
             Post [ "/" ] =
                 parameters => handler.Save(this.Bind <SlotForResponse>());
@@ -27,7 +30,7 @@ namespace MicroServices.Slots.Nancy
                 parameters => handler.Save(this.Bind <SlotForResponse>());
 
             Delete [ "/{id:int}" ] =
-                parameters => handler.DeleteById(( int ) ( parameters.id ));
+                parameters => handler.DeleteById(( int ) parameters.id);
         }
     }
 }

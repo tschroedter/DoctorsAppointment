@@ -43,6 +43,11 @@
             alert("Updated slot!");;
         };
 
+        var handleSearchResult = function (data) {
+            $scope.searchResult = angular.fromJson(data);
+            alert("Searched!");;
+        };
+
         /* END: Handlers */
 
         /* BEGIN: CRUD */
@@ -67,6 +72,10 @@
             slotsService.delete($scope.toDelete, handleDeleteResult);
         };
 
+        $scope.search = function () {
+            slotsService.search($scope.searchByDayId, handleSearchResult);
+        };
+
         /* END: CRUD */
 
         $scope.slots = [loading];
@@ -75,4 +84,6 @@
         $scope.toCreate = {};
         $scope.toUpdate = {};
         $scope.toDelete = {};
+        $scope.searchByDayId = 1;
+        $scope.searchResult = [loading];
     });

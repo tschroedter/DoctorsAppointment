@@ -291,13 +291,13 @@ namespace MicroServices.Days.Tests.Integration.Nancy
                               expected [ "Id" ].Value,
                               actual [ "Id" ].Value);
 
-            var expectedId = ( int ) ( expected [ "Id" ].Value );
-            var actualId = ( int ) ( actual [ "Id" ].Value );
+            var expectedId = ( int ) expected [ "Id" ].Value;
+            var actualId = ( int ) actual [ "Id" ].Value;
             Assert.Equal(expectedId,
                          actualId);
 
-            var expectedEndDateTime = ( DateTime ) ( expected [ "Date" ].Value );
-            var actualEndDateTime = ( DateTime ) ( actual [ "Date" ].Value );
+            var expectedEndDateTime = ( DateTime ) expected [ "Date" ].Value;
+            var actualEndDateTime = ( DateTime ) actual [ "Date" ].Value;
             Assert.True(expectedEndDateTime.Date == actualEndDateTime.Date,
                         "EndDateTime.Date");
 
@@ -325,7 +325,7 @@ namespace MicroServices.Days.Tests.Integration.Nancy
         {
             var model = new UpdateDayModel
                         {
-                            Id = ( int ) ( day [ "Id" ].Value ), // todo change to long
+                            Id = ( int ) day [ "Id" ].Value, // todo change to long
                             Date = DateTime.Now.AddDays(1),
                             DoctorId = 2
                         };
@@ -366,7 +366,7 @@ namespace MicroServices.Days.Tests.Integration.Nancy
 
             foreach ( dynamic expectedSlot in expectedList )
             {
-                var expectedSlotId = ( int ) ( expectedSlot [ "Id" ].Value );
+                var expectedSlotId = ( int ) expectedSlot [ "Id" ].Value;
 
                 object compareToSlot = GetDayWithId(actualList,
                                                     expectedSlotId);
@@ -379,7 +379,7 @@ namespace MicroServices.Days.Tests.Integration.Nancy
         private object GetDayWithId(List <dynamic> list,
                                     int id)
         {
-            return list.FirstOrDefault(slot => id == ( int ) ( slot [ "Id" ].Value ));
+            return list.FirstOrDefault(slot => id == ( int ) slot [ "Id" ].Value);
         }
 
         private dynamic CreatedExpectedJsonStringForListForDayAndDoctor()
@@ -439,8 +439,8 @@ namespace MicroServices.Days.Tests.Integration.Nancy
         private dynamic CreatedExpectedDayFor(dynamic day)
         {
             var id = ( int ) day [ "Id" ].Value;
-            var date = ( DateTime ) ( day [ "Date" ].Value );
-            var doctorId = ( int ) ( day [ "DoctorId" ].Value );
+            var date = ( DateTime ) day [ "Date" ].Value;
+            var doctorId = ( int ) day [ "DoctorId" ].Value;
 
             string json = "{" +
                           "\"Id\": " + id + "," +

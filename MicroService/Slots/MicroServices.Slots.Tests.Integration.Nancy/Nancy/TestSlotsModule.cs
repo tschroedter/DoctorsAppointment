@@ -227,8 +227,8 @@ namespace MicroServices.Slots.Tests.Integration.Nancy.Nancy
         {
             var model = new UpdateSlotModel
                         {
-                            Id = ( int ) ( slot [ "Id" ].Value ), // todo change to long
-                            DayId = ( int ) ( slot [ "DayId" ].Value ), // todo change to long
+                            Id = ( int ) slot [ "Id" ].Value, // todo change to long
+                            DayId = ( int ) slot [ "DayId" ].Value, // todo change to long
                             StartDateTime = DateTime.Now.AddDays(1),
                             EndDateTime = DateTime.Now.AddDays(1).AddMinutes(15),
                             Status = SlotStatus.Unknown
@@ -274,7 +274,7 @@ namespace MicroServices.Slots.Tests.Integration.Nancy.Nancy
 
             foreach ( dynamic expectedSlot in expectedList )
             {
-                var expectedSlotId = ( int ) ( expectedSlot [ "Id" ].Value );
+                var expectedSlotId = ( int ) expectedSlot [ "Id" ].Value;
 
                 object compareToSlot = GetSlotWithId(actualList,
                                                      expectedSlotId);
@@ -287,7 +287,7 @@ namespace MicroServices.Slots.Tests.Integration.Nancy.Nancy
         private object GetSlotWithId(List <dynamic> list,
                                      int id)
         {
-            return list.FirstOrDefault(slot => id == ( int ) ( slot [ "Id" ].Value ));
+            return list.FirstOrDefault(slot => id == ( int ) slot [ "Id" ].Value);
         }
 
         private dynamic CreatedExpectedJsonStringForList()
@@ -337,15 +337,15 @@ namespace MicroServices.Slots.Tests.Integration.Nancy.Nancy
             Assert.True(expected [ "DayId" ].Value == actual [ "DayId" ].Value,
                         "DayId");
 
-            var expectedEndDateTime = ( DateTime ) ( expected [ "EndDateTime" ].Value );
-            var actualEndDateTime = ( DateTime ) ( actual [ "EndDateTime" ].Value );
+            var expectedEndDateTime = ( DateTime ) expected [ "EndDateTime" ].Value;
+            var actualEndDateTime = ( DateTime ) actual [ "EndDateTime" ].Value;
             Assert.True(expectedEndDateTime.Date == actualEndDateTime.Date,
                         "EndDateTime.Date");
             Assert.True(expectedEndDateTime.ToShortTimeString() == actualEndDateTime.ToShortTimeString(),
                         "EndDateTime.Time");
 
-            var expectedStartDateTime = ( DateTime ) ( expected [ "StartDateTime" ].Value );
-            var actualStartDateTime = ( DateTime ) ( actual [ "StartDateTime" ].Value );
+            var expectedStartDateTime = ( DateTime ) expected [ "StartDateTime" ].Value;
+            var actualStartDateTime = ( DateTime ) actual [ "StartDateTime" ].Value;
             Assert.True(expectedStartDateTime.Date == actualStartDateTime.Date,
                         "EndDateTime.Date");
             Assert.True(expectedStartDateTime.ToShortTimeString() == actualStartDateTime.ToShortTimeString(),
@@ -380,8 +380,8 @@ namespace MicroServices.Slots.Tests.Integration.Nancy.Nancy
         private dynamic CreatedExpectedSlotFor(dynamic slot)
         {
             var id = ( int ) slot [ "Id" ].Value;
-            var start = ( DateTime ) ( slot [ "StartDateTime" ].Value );
-            var end = ( DateTime ) ( slot [ "EndDateTime" ].Value );
+            var start = ( DateTime ) slot [ "StartDateTime" ].Value;
+            var end = ( DateTime ) slot [ "EndDateTime" ].Value;
 
             string json = "{" +
                           "\"Id\": " + id + "," +

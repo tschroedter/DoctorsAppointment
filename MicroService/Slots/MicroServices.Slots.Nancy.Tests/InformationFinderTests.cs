@@ -37,6 +37,28 @@ namespace MicroServices.Slots.Nancy.Tests
                          actual.Id);
         }
 
+        [Theory]
+        [AutoNSubstituteData]
+        public void FindByDayId_ReturnsSlots_ForExistingDayId([NotNull] ISlot slot)
+        {
+            // Arrange
+            var slots = new[]
+                        {
+                            slot
+                        };
+
+            var repository = Substitute.For <ISlotsRepository>();
+            repository.FindByDayId(Arg.Any <int>()).Returns(slots);
+            InformationFinder sut = CreateSut(repository);
+
+            // Act
+            IEnumerable <ISlotForResponse> actual = sut.FindByDayId(slot.DayId);
+
+            // Assert
+            Assert.Equal(1,
+                         actual.Count());
+        }
+
         [Fact]
         public void FindById_ReturnsNull_ForNotExistingId()
         {

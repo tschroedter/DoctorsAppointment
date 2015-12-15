@@ -52,6 +52,20 @@ mainApp.factory("daysSearchByDoctorId", function($resource) {
     });
 });
 
+mainApp.factory("slotsSearchByDayId", function ($resource) {
+    return $resource("/slots/dayId/:query", {
+        query: "@query"
+    }, {
+        search: {
+            method: "GET",
+            isArray: true,
+            params: {
+                query: "@query"
+            }
+        }
+    });
+});
+
 mainApp.factory("daysService", function(days, daysSearchByDoctorId) {
     var instance = {};
 
@@ -139,10 +153,11 @@ mainApp.factory("doctorsService", function(doctors, doctorsSearchByLastName) {
 });
 
 // todo check, all services look simillar
-mainApp.factory("slotsService", function(slots) {
+mainApp.factory("slotsService", function(slots, slotsSearchByDayId) {
     var instance = {};
 
     instance.slots = slots;
+    instance.slotsSearchByDayId = slotsSearchByDayId;
 
     /* BEGIN: CRUD */
 
@@ -164,6 +179,12 @@ mainApp.factory("slotsService", function(slots) {
 
     instance.delete = function(slot, doSomething) {
         instance.slots.delete(slot, doSomething);
+    };
+
+    instance.search = function (searchByDayId, doSomething) {
+        instance.slotsSearchByDayId.search({
+            query: searchByDayId
+        }, doSomething);
     };
 
     /* END: CRUD */

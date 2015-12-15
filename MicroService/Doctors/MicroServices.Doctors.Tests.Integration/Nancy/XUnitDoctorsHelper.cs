@@ -57,7 +57,7 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
 
             foreach ( dynamic expectedSlot in expectedList )
             {
-                var expectedSlotId = ( int ) ( expectedSlot [ "Id" ].Value );
+                var expectedSlotId = ( int ) expectedSlot [ "Id" ].Value;
 
                 object compareToSlot = GetDoctorWithId(actualList,
                                                        expectedSlotId);
@@ -77,7 +77,7 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
         private static object GetDoctorWithId(List <dynamic> list,
                                               int id)
         {
-            return list.FirstOrDefault(slot => id == ( int ) ( slot [ "Id" ].Value ));
+            return list.FirstOrDefault(slot => id == ( int ) slot [ "Id" ].Value);
         }
 
         public static string ToJson([NotNull] object instance)

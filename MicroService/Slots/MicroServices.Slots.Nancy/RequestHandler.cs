@@ -55,6 +55,13 @@ namespace MicroServices.Slots.Nancy
             return AsJson(slot);
         }
 
+        public Response FindByDayId(int dayId)
+        {
+            IEnumerable <ISlotForResponse> slots = m_InformationFinder.FindByDayId(dayId);
+
+            return AsJson(slots);
+        }
+
         private Response AsJson(object instance)
         {
             Response response = JsonConvert.SerializeObject(instance);
