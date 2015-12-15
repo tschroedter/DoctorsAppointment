@@ -55,7 +55,7 @@
         };
 
         $scope.get = function() {
-            handleGetResult(daysService.get($scope.dayId));
+            daysService.get($scope.dayId, handleGetResult);
         };
 
         $scope.save = function() {

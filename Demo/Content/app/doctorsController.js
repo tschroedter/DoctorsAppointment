@@ -59,7 +59,7 @@
         };
 
         $scope.get = function() {
-            handleGetResult(doctorsService.get($scope.doctorId));
+            doctorsService.get($scope.doctorId, handleGetResult);
         };
 
         $scope.save = function() {

@@ -19,21 +19,21 @@ namespace MicroServices.Slots.Nancy
 
         public Response List()
         {
-            IEnumerable <ISlotForResponse> doctors = m_InformationFinder.List();
+            IEnumerable <ISlotForResponse> slots = m_InformationFinder.List();
 
-            return AsJson(doctors);
+            return AsJson(slots);
         }
 
         public Response FindById(int id)
         {
-            ISlotForResponse doctor = m_InformationFinder.FindById(id);
+            ISlotForResponse slot = m_InformationFinder.FindById(id);
 
-            if ( doctor == null )
+            if ( slot == null )
             {
                 return HttpStatusCode.NotFound;
             }
 
-            return AsJson(doctor);
+            return AsJson(slot);
         }
 
         public Response Save(ISlotForResponse slot)
@@ -45,14 +45,14 @@ namespace MicroServices.Slots.Nancy
 
         public Response DeleteById(int id)
         {
-            ISlotForResponse doctor = m_InformationFinder.Delete(id);
+            ISlotForResponse slot = m_InformationFinder.Delete(id);
 
-            if ( doctor == null )
+            if ( slot == null )
             {
                 return HttpStatusCode.NotFound;
             }
 
-            return AsJson(doctor);
+            return AsJson(slot);
         }
 
         private Response AsJson(object instance)

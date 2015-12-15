@@ -64,8 +64,8 @@ mainApp.factory("daysService", function(days, daysSearchByDoctorId) {
         instance.days.query(doSomething);
     };
 
-    instance.get = function(dayId) {
-        return instance.days.get({ id: dayId });
+    instance.get = function(id, doSomething) {
+        doSomething(instance.days.get({ id: id }));
     };
 
     instance.save = function(day, doSomething) {
@@ -111,8 +111,8 @@ mainApp.factory("doctorsService", function(doctors, doctorsSearchByLastName) {
         instance.doctors.query(doSomething);
     };
 
-    instance.get = function(doctorId) {
-        return instance.doctors.get({ id: doctorId });
+    instance.get = function(id, doSomething) {
+        doSomething(instance.doctors.get({ id: id }));
     };
 
     instance.save = function(doctor, doSomething) {
@@ -138,19 +138,51 @@ mainApp.factory("doctorsService", function(doctors, doctorsSearchByLastName) {
     return instance;
 });
 
-mainApp.filter("byDate", function () {
+// todo check, all services look simillar
+mainApp.factory("slotsService", function(slots) {
+    var instance = {};
 
-    return function (input, byDate) {
+    instance.slots = slots;
 
-        var stringStartsWidth = function (string, prefix) {
+    /* BEGIN: CRUD */
+
+    instance.query = function(doSomething) {
+        instance.slots.query(doSomething);
+    };
+
+    instance.get = function(id, doSomething) {
+        doSomething(instance.slots.get({ id: id }));
+    };
+
+    instance.save = function(slot, doSomething) {
+        instance.slots.save(slot, doSomething);
+    };
+
+    instance.update = function(slot, doSomething) {
+        instance.slots.update(slot, doSomething);
+    };
+
+    instance.delete = function(slot, doSomething) {
+        instance.slots.delete(slot, doSomething);
+    };
+
+    /* END: CRUD */
+
+    return instance;
+});
+
+mainApp.filter("byDate", function() {
+
+    return function(input, byDate) {
+
+        var stringStartsWidth = function(string, prefix) {
             if (typeof string === "string" &&
                 typeof prefix === "string") {
                 return string.slice(0, prefix.length) === prefix;
             }
 
             return false;
-        }
-
+        };
         var out = [];
 
         if (input === "-1" ||
@@ -166,5 +198,5 @@ mainApp.filter("byDate", function () {
         });
 
         return out;
-    }
+    };
 });

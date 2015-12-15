@@ -1,6 +1,6 @@
 ﻿mainApp.controller("slotsController",
     function($scope,
-        slots) {
+        slotsService) {
 
         var loading = {
             Id: -1,
@@ -21,34 +21,50 @@
             return true;
         };
 
+        /* BEGIN: Handlers */
+
+        var handleQueryResult = function(data) {
+            $scope.slots = angular.fromJson(data);
+        };
+
+        var handleGetResult = function(data) {
+            $scope.slot = data;
+        };
+
+        var handleSaveResult = function() {
+            alert("Created new slot!");
+        };
+
+        var handleUpdateResult = function() {
+            alert("Updated slot!");;
+        };
+
+        var handleDeleteResult = function() {
+            alert("Updated slot!");;
+        };
+
+        /* END: Handlers */
+
         /* BEGIN: CRUD */
 
         $scope.query = function() {
-            slots.query(function(data) {
-                $scope.slots = angular.fromJson(data);
-            });
+            slotsService.query(handleQueryResult);
         };
 
         $scope.get = function() {
-            $scope.slot = slots.get({ id: $scope.slotId });
+            slotsService.get($scope.slotId, handleGetResult);
         };
 
         $scope.save = function() {
-            slots.save($scope.toCreate, function() {
-                alert("Created new slot!");
-            });
+            slotsService.save($scope.toCreate, handleSaveResult);
         };
 
         $scope.update = function() {
-            $scope.toUpdate.$update(function() {
-                alert("Updated slot!");
-            });
+            slotsService.update($scope.toUpdate, handleUpdateResult);
         };
 
         $scope.delete = function() {
-            slots.delete($scope.toDelete, function() {
-                alert("Deleted slot!");
-            });
+            slotsService.delete($scope.toDelete, handleDeleteResult);
         };
 
         /* END: CRUD */
@@ -56,7 +72,7 @@
         $scope.slots = [loading];
         $scope.slot = loading;
         $scope.slotId = 1;
-        $scope.toCreate = new slots();
-        $scope.toUpdate = slots.get({ id: 1 });
-        $scope.toDelete = new slots();
+        $scope.toCreate = {};
+        $scope.toUpdate = {};
+        $scope.toDelete = {};
     });
