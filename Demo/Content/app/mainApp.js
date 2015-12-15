@@ -52,7 +52,7 @@ mainApp.factory("daysSearchByDoctorId", function($resource) {
     });
 });
 
-mainApp.factory("slotsSearchByDayId", function ($resource) {
+mainApp.factory("slotsSearchByDayId", function($resource) {
     return $resource("/slots/dayId/:query", {
         query: "@query"
     }, {
@@ -61,6 +61,22 @@ mainApp.factory("slotsSearchByDayId", function ($resource) {
             isArray: true,
             params: {
                 query: "@query"
+            }
+        }
+    });
+});
+
+mainApp.factory("doctorSlotsSearch", function($resource) {
+    return $resource("/doctors/:id/slots", {
+        query: "@query"
+    }, {
+        search: {
+            method: "GET",
+            isArray: true,
+            params: {
+                id: "@id",
+                date: "@date",
+                status: "@status"
             }
         }
     });
@@ -181,9 +197,35 @@ mainApp.factory("slotsService", function(slots, slotsSearchByDayId) {
         instance.slots.delete(slot, doSomething);
     };
 
-    instance.search = function (searchByDayId, doSomething) {
+    instance.search = function(searchByDayId, doSomething) {
         instance.slotsSearchByDayId.search({
             query: searchByDayId
+        }, doSomething);
+    };
+
+    /* END: CRUD */
+
+    return instance;
+});
+
+// todo check, all services look simillar
+mainApp.factory("doctorSlotsService", function(doctorSlotsSearch) {
+    var instance = {};
+
+    instance.doctorSlotsSearch = doctorSlotsSearch;
+
+    /* BEGIN: CRUD */
+
+    // todo how to add searchByDate
+    instance.search = function(
+        searchByDoctorId,
+        searchByDate,
+        searchStatus,
+        doSomething) {
+        instance.doctorSlotsSearch.search({
+            id: searchByDoctorId,
+            date: searchByDate,
+            status: searchStatus
         }, doSomething);
     };
 

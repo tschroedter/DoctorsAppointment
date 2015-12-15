@@ -18,9 +18,9 @@ namespace MicroServices.DoctorsSlots.Nancy
                 {
                     string date = Request.Query.date;
                     string status = Request.Query.status;
-                    int doctorLastName = parameters.doctorId;
+                    int doctorId = parameters.doctorId;
 
-                    return handler.List(doctorLastName,
+                    return handler.List(doctorId,
                                         date,
                                         status);
                 };
