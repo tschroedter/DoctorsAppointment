@@ -23,15 +23,14 @@
             Id: -1
         };
 
-        var dayToDate = function (day) {
+        var dayToDate = function(day) {
             var dateTime = new Date(day.Date);
             var dayOfMonth = dateTime.getDay();
             var monthOfYear = month[dateTime.getMonth()];
             var year = dateTime.getYear();
 
             return dayOfMonth + " " + monthOfYear + " " + year;
-        }
-
+        };
         var dayToHoursMinutes = function(day) {
             var dateTime = new Date(day.Date);
             var hours = dateTime.getHours();
@@ -42,12 +41,11 @@
             }
 
             return hours + ":" + minutes;
-        }
-
+        };
         var convertDaysToDateAndTimeArray = function(days) {
             var array = [];
 
-            angular.forEach(days, function (day) {
+            angular.forEach(days, function(day) {
                 var daysDate = dayToDate(day);
                 var daysTime = dayToHoursMinutes(day);
 
@@ -61,9 +59,8 @@
 
 
             return array;
-        }
-        
-        var handleQueryResult = function (data) {
+        };
+        var handleQueryResult = function(data) {
             $scope.doctors = angular.fromJson(data);
         };
 
@@ -74,15 +71,23 @@
 
         };
 
-        $scope.query = function () {
+        $scope.query = function() {
             doctorsService.query(handleQueryResult);
         };
 
-        $scope.updateDays = function () {
+        $scope.updateDays = function() {
             daysService.getByDoctorId($scope.doctorId, handleGetByDoctorIdResult);
         };
 
-        $scope.init = function () {
+        $scope.isBookDisabled = function() {
+            return $scope.dayId < 0;
+        }
+
+        $scope.book = function() {
+            alert("todo");
+        }
+
+        $scope.init = function() {
             doctorsService.query(handleQueryResult);
         };
 
@@ -95,4 +100,4 @@
         $scope.dayId = -1; // todo rename to selectedDayId ???
 
         $scope.init();
-   });
+    });

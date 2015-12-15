@@ -143,7 +143,12 @@ mainApp.filter("byDate", function () {
     return function (input, byDate) {
 
         var stringStartsWidth = function (string, prefix) {
-            return string.slice(0, prefix.length) === prefix;
+            if (typeof string === "string" &&
+                typeof prefix === "string") {
+                return string.slice(0, prefix.length) === prefix;
+            }
+
+            return false;
         }
 
         var out = [];
@@ -153,20 +158,12 @@ mainApp.filter("byDate", function () {
             return out;
         }
 
-        for (var i = 0; i < input.length; i++) {
-            var current = input[i];
+        angular.forEach(input, function(dateTime) {
 
-            if (stringStartsWidth(current.Date, byDate)) {
-                out.push(current);
+            if (stringStartsWidth(dateTime.Date, byDate)) {
+                out.push(dateTime);
             }
-        }
-
-//        angular.forEach(input, function(dateTime) {
-//
-//            if (stringStartsWidth(dateTime.Date, byDate)) {
-//                out.push(dateTime);
-//            }
-//        });
+        });
 
         return out;
     }

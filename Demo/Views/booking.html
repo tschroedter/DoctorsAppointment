@@ -7,39 +7,42 @@
     <script src="~/content/app/bookingController.js"></script>
 </head>
 <body ng-app="mainApp">
-    <div ng-controller="bookingController">
-        <table>
-            <tr>
-                <td>Select a doctor</td>
-                <td>
-                    <select ng-model="doctorId"
-                            ng-change="updateDays()">
-                        <option ng-repeat="doctor in doctors" value="{{doctor.Id}}">{{doctor.FirstName + ' ' + doctor.LastName}}</option>
-                    </select>
-                </td>
-            </tr>
-        </table>
-        <table>
-            <tr>
-                <td>Select a day</td>
-                <td>
-                    <select ng-model="selectedDayDate"
-                            ng-change="updateTimes()">
-                        <option ng-repeat="day in availableDateTimes" value="{{day.Date}}">{{day.Date}}</option>
-                    </select>
-                </td>
-            </tr>
-        </table>
-        <table>
-            <tr>
-                <td>Select a time</td>
-                <td>
-                    <select ng-model="dayId">
-                        <option ng-repeat="time in availableDateTimes | byDate:selectedDayDate" value="{{time.Id}}">{{time.Time}}</option>
-                    </select>
-                </td>
-            </tr>
-        </table>
-    </div>
+<div ng-controller="bookingController">
+    <table>
+        <tr>
+            <td>Select a doctor</td>
+            <td>
+                <select ng-model="doctorId"
+                        ng-change="updateDays()">
+                    <option ng-repeat="doctor in doctors" value="{{doctor.Id}}">{{doctor.FirstName + ' ' + doctor.LastName}}</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>Select a day</td>
+            <td>
+                <select ng-model="selectedDayDate"
+                        ng-change="updateTimes()">
+                    <option ng-repeat="day in availableDateTimes" value="{{day.Date}}">{{day.Date}}</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>Select a time</td>
+            <td>
+                <select ng-model="dayId">
+                    <option ng-repeat="time in availableDateTimes | byDate:selectedDayDate" value="{{time.Id}}">{{time.Time}}</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <button ng-click="book()" ng-disabled="isBookDisabled()">
+        Book
+    </button>
+</div>
 </body>
 </html>
