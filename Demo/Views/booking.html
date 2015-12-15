@@ -23,19 +23,19 @@
         <tr>
             <td>Select a day</td>
             <td>
-                <select ng-model="selectedDayDate"
-                        ng-change="updateTimes()">
-                    <option ng-repeat="day in availableDateTimes" value="{{day.Date}}">{{day.Date}}</option>
+                <select ng-model="dayId"
+                        ng-change="updateSlots()">
+                    <option ng-repeat="day in availableDates" value="{{day.Id}}">{{day.Date}}</option>
                 </select>
             </td>
         </tr>
     </table>
     <table>
         <tr>
-            <td>Select a time</td>
+            <td>Select a time slot</td>
             <td>
-                <select ng-model="dayId">
-                    <option ng-repeat="time in availableDateTimes | byDate:selectedDayDate" value="{{time.Id}}">{{time.Time}}</option>
+                <select ng-model="slotId">
+                    <option ng-repeat="slot in availableSlots" value="{{slot.Id}}">{{slot.StartTime + " - " + slot.EndTime}}</option>
                 </select>
             </td>
         </tr>
