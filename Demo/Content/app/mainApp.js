@@ -137,3 +137,23 @@ mainApp.factory("doctorsService", function(doctors, doctorsSearchByLastName) {
 
     return instance;
 });
+
+mainApp.filter("byDayId", function () {
+
+    return function (input, dayId) {
+
+        alert("byDayId");
+
+        var out = [];
+
+        angular.forEach(input, function(day) {
+
+            if (day.Id === dayId) {
+                out.push(day);
+            }
+
+        });
+
+        return out;
+    }
+});

@@ -4,8 +4,6 @@
     <script src="~/content/app/assets/libs/angularjs/angular.js"></script>
     <script src="~/content/app/assets/libs/angularjs/angular-resource.js"></script>
     <script src="~/content/app/mainApp.js"></script>
-    <script src="~/content/app/daysController.js"></script>
-    <script src="~/content/app/doctorsController.js"></script>
     <script src="~/content/app/bookingController.js"></script>
 </head>
 <body ng-app="mainApp">
@@ -23,10 +21,21 @@
         </table>
         <table>
             <tr>
-                <td>Select a day/time</td>
+                <td>Select a day</td>
                 <td>
-                    <select ng-model="dayId">
-                        <option ng-repeat="day in days" value="{{day.Id}}">{{day.Date}}</option>
+                    <select ng-model="selectedDayDate"
+                            ng-change="updateTimes()">
+                        <option ng-repeat="day in availableDays" value="{{day.Date}}">{{day.Date}}</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td>Select a time</td>
+                <td>
+                    <select ng-model="selectedDayTimeId">
+                        <option ng-repeat="time in availableTimes" value="{{time.Id}}">{{time.Time}}</option>
                     </select>
                 </td>
             </tr>
