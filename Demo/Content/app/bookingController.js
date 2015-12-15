@@ -3,18 +3,33 @@
         doctorsService,
         daysService) {
 
+        var month = new Array();
+        month[0] = "January";
+        month[1] = "February";
+        month[2] = "March";
+        month[3] = "April";
+        month[4] = "May";
+        month[5] = "June";
+        month[6] = "July";
+        month[7] = "August";
+        month[8] = "September";
+        month[9] = "October";
+        month[10] = "November";
+        month[11] = "December";
+
         var loading = {
             FirstName: "Loading",
             LastName: "...",
             Id: -1
         };
 
-        var dateTimeToAvailableDay = function(dateTime) {
-            var day = {};
-            day.Id = dateTime.Id;
-            day.Date = dateTime.toDateString();
+        var dayToDate = function (day) {
+            var dateTime = new Date(day.Date);
+            var dayOfMonth = dateTime.getDay();
+            var monthOfYear = month[dateTime.getMonth()];
+            var year = dateTime.getYear();
 
-            return day;
+            return dayOfMonth + " " + monthOfYear + " " + year;
         }
 
         var dayToHoursMinutes = function(day) {
@@ -29,25 +44,25 @@
             return hours + ":" + minutes;
         }
 
-        var dateTimeToAvailableTime = function (day) {
-            var time = {}
-            time.Id = day.Id;
-            time.Time = dayToHoursMinutes(day);
+        var convertDaysToDateAndTimeArray = function(days) {
+            var array = [];
 
-            return time;
+            angular.forEach(days, function (day) {
+                var daysDate = dayToDate(day);
+                var daysTime = dayToHoursMinutes(day);
+
+                var myDateTime = {};
+                myDateTime.Id = day.Id;
+                myDateTime.Date = daysDate;
+                myDateTime.Time = daysTime;
+
+                array.push(myDateTime);
+            });
+
+
+            return array;
         }
-
-        var addDateTimeToAvailableDays = function(dateTime) {
-            var day = dateTimeToAvailableDay(dateTime);
-
-            $scope.availableDays.push(day);        }
-
-        var addDateTimeToAvailableTimes = function (day) {
-            var time = dateTimeToAvailableTime(day);
-
-            $scope.availableTimes.push(time);
-        }
-
+        
         var handleQueryResult = function (data) {
             $scope.doctors = angular.fromJson(data);
         };
@@ -55,15 +70,8 @@
         var handleGetByDoctorIdResult = function(data) {
             $scope.days = angular.fromJson(data);
 
-            $scope.availableDays = [];
-            $scope.availableTimes = [];
+            $scope.availableDateTimes = convertDaysToDateAndTimeArray($scope.days);
 
-            for (var i = 0; i < $scope.days.length; i++) {
-                var dateTime = $scope.days[i].Date; // todo maybe rename days to DateTime
-                var currentDateTime = new Date(dateTime);
-
-                addDateTimeToAvailableDays(currentDateTime);
-            }
         };
 
         $scope.query = function () {
@@ -72,30 +80,6 @@
 
         $scope.updateDays = function () {
             daysService.getByDoctorId($scope.doctorId, handleGetByDoctorIdResult);
-        };
-
-        var stringStartsWidth = function(string, prefix) {
-            return string.slice(0, prefix.length) === prefix;
-        }
-
-        $scope.updateTimes = function () {
-            // todo replace by filter
-            //var out = [];
-
-            $scope.availableTimes = [];
-
-            angular.forEach($scope.days, function (day) {
-                var daysDateTime = new Date(day.Date);
-                var daysDate = daysDateTime.toDateString();
-
-                if (stringStartsWidth(daysDate, $scope.selectedDayDate)) {
-                    addDateTimeToAvailableTimes(day);
-                    //out.push(day);
-                }
-
-            });
-
-            //$scope.availableTimes = out;
         };
 
         $scope.init = function () {
@@ -108,15 +92,7 @@
 
         $scope.days = [loading];
         $scope.day = loading;
-        $scope.dayId = -1;
-        $scope.searchResult = [loading];
-
-        $scope.availableDays = [];
-        $scope.availableTimes = [];
-
-        $scope.selectedDayId = -1;
-        $scope.selectedDayDate = "";
-        $scope.selectedDayTimeId = -1;
+        $scope.dayId = -1; // todo rename to selectedDayId ???
 
         $scope.init();
    });

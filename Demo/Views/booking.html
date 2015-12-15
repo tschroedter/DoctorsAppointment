@@ -25,7 +25,7 @@
                 <td>
                     <select ng-model="selectedDayDate"
                             ng-change="updateTimes()">
-                        <option ng-repeat="day in availableDays" value="{{day.Date}}">{{day.Date}}</option>
+                        <option ng-repeat="day in availableDateTimes" value="{{day.Date}}">{{day.Date}}</option>
                     </select>
                 </td>
             </tr>
@@ -34,8 +34,8 @@
             <tr>
                 <td>Select a time</td>
                 <td>
-                    <select ng-model="selectedDayTimeId">
-                        <option ng-repeat="time in availableTimes" value="{{time.Id}}">{{time.Time}}</option>
+                    <select ng-model="dayId">
+                        <option ng-repeat="time in availableDateTimes | byDate:selectedDayDate" value="{{time.Id}}">{{time.Time}}</option>
                     </select>
                 </td>
             </tr>

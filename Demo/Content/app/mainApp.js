@@ -138,21 +138,35 @@ mainApp.factory("doctorsService", function(doctors, doctorsSearchByLastName) {
     return instance;
 });
 
-mainApp.filter("byDayId", function () {
+mainApp.filter("byDate", function () {
 
-    return function (input, dayId) {
+    return function (input, byDate) {
 
-        alert("byDayId");
+        var stringStartsWidth = function (string, prefix) {
+            return string.slice(0, prefix.length) === prefix;
+        }
 
         var out = [];
 
-        angular.forEach(input, function(day) {
+        if (input === "-1" ||
+            byDate === "") {
+            return out;
+        }
 
-            if (day.Id === dayId) {
-                out.push(day);
+        for (var i = 0; i < input.length; i++) {
+            var current = input[i];
+
+            if (stringStartsWidth(current.Date, byDate)) {
+                out.push(current);
             }
+        }
 
-        });
+//        angular.forEach(input, function(dateTime) {
+//
+//            if (stringStartsWidth(dateTime.Date, byDate)) {
+//                out.push(dateTime);
+//            }
+//        });
 
         return out;
     }
