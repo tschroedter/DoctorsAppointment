@@ -1,7 +1,8 @@
 ﻿var mainApp = angular.module("mainApp", ["ngResource"]);
+var nancyBaseUri = "/";   // todo adjust port number e.g. http://localhost:55881
 
 mainApp.factory("doctors", function($resource) {
-    return $resource("/doctors/:id", { id: "@_id" }, {
+    return $resource(nancyBaseUri + "doctors/:id", { id: "@_id" }, {
         update: {
             method: "PUT"
         }
@@ -9,7 +10,7 @@ mainApp.factory("doctors", function($resource) {
 });
 
 mainApp.factory("doctorsSearchByLastName", function($resource) {
-    return $resource("/doctors/byLastName/:query", {
+    return $resource(nancyBaseUri + "doctors/byLastName/:query", {
         query: "@query"
     }, {
         search: {
@@ -23,7 +24,7 @@ mainApp.factory("doctorsSearchByLastName", function($resource) {
 });
 
 mainApp.factory("slots", function($resource) {
-    return $resource("/slots/:id", { id: "@_id" }, {
+    return $resource(nancyBaseUri + "slots/:id", { id: "@_id" }, {
         update: {
             method: "PUT"
         }
@@ -31,7 +32,7 @@ mainApp.factory("slots", function($resource) {
 });
 
 mainApp.factory("days", function($resource) {
-    return $resource("/days/:id", { id: "@_id" }, {
+    return $resource(nancyBaseUri + "days/:id", { id: "@_id" }, {
         update: {
             method: "PUT"
         }
@@ -39,7 +40,7 @@ mainApp.factory("days", function($resource) {
 });
 
 mainApp.factory("daysSearchByDoctorId", function($resource) {
-    return $resource("/days/doctorId/:query", {
+    return $resource(nancyBaseUri + "days/doctorId/:query", {
         query: "@query"
     }, {
         search: {
@@ -53,7 +54,7 @@ mainApp.factory("daysSearchByDoctorId", function($resource) {
 });
 
 mainApp.factory("slotsSearchByDayId", function($resource) {
-    return $resource("/slots/dayId/:query", {
+    return $resource(nancyBaseUri + "slots/dayId/:query", {
         query: "@query"
     }, {
         search: {
@@ -67,7 +68,7 @@ mainApp.factory("slotsSearchByDayId", function($resource) {
 });
 
 mainApp.factory("doctorSlotsSearch", function($resource) {
-    return $resource("/doctors/:id/slots", {
+    return $resource(nancyBaseUri + "doctors/:id/slots", {
         query: "@query"
     }, {
         search: {
