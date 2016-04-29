@@ -19,6 +19,7 @@ namespace SelfHosting
             // while only registering T.
             existingContainer.Kernel.Resolver.AddSubResolver(new ArrayResolver(existingContainer.Kernel));
 
+            existingContainer.Install(FromAssembly.Containing(typeof ( Selkie.Windsor.Installer )));
             existingContainer.Install(FromAssembly.Containing(typeof ( Installer )));
             existingContainer.Install(FromAssembly.Containing(typeof ( MicroServices.Days.Nancy.Installer )));
             existingContainer.Install(FromAssembly.Containing(typeof ( MicroServices.Doctors.Nancy.Installer )));
