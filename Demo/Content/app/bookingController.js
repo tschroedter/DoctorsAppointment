@@ -1,157 +1,241 @@
-﻿mainApp.controller("bookingController",
-    function($scope,
-        doctorsService,
-        daysService,
-        slotsService, // todo maybe can be removed
-        doctorSlotsService) {
+﻿mainApp.controller('bookingController',
+    function ($scope,
+              doctorsService,
+              doctorSlotsService,
+              daysService,
+              notificationService) {
 
-        var month = new Array();
-        month[0] = "January";
-        month[1] = "February";
-        month[2] = "March";
-        month[3] = "April";
-        month[4] = "May";
-        month[5] = "June";
-        month[6] = "July";
-        month[7] = "August";
-        month[8] = "September";
-        month[9] = "October";
-        month[10] = "November";
-        month[11] = "December";
+        var createController =
+            function (parameters) {
+                var controller = {
+                    scope: parameters.scope,
+                    doctorsService: parameters.doctorsService,
+                    doctorSlotsService: parameters.doctorSlotsService,
+                    daysService: daysService,
+                    notificationService: parameters.notificationService,
+                    doctors: [],
+                    doctor: {},
+                    doctorId: {},
+                    days: [],
+                    day: {},
+                    dayId: {},
+                    availableSlots: [],
+                    slotId: {},
+                    doctorsLoading: {},
+                    daysLoading: {},
+                    slotsLoading: {},
 
-        var loading = {
-            FirstName: "Loading",
-            LastName: "...",
-            Id: -1
-        };
+                    init: function () {
+                        this.daysLoading = {
+                            Date: 'Loading...',
+                            Id: -1
+                        };
 
-        var lookupDay = function(days, dayId) {
-            for (var i = 0; i < days.length; i++) {
-                var current = days[i];
+                        this.slotsLoading = {
+                            StartTime: 'Loading...',
+                            EndTime: '...',
+                            Id: -1
+                        };
 
-                if (current.Id === dayId) {
-                    return current;
-                }
-            }
 
-            return {};
-        };
+                        this.doctorsLoading = {
+                            FirstName: "Loading",
+                            LastName: "...",
+                            Id: -1
+                        };
 
-        var dayToDate = function(day) {
-            var dateTime = new Date(day.Date);
-            var dayOfMonth = dateTime.getDay();
-            var monthOfYear = month[dateTime.getMonth()];
-            var year = dateTime.getFullYear();
+                        this.doctors = [this.doctorsLoading];
+                        this.doctor = this.doctorsLoading;
+                        this.doctorId = -1;
 
-            return dayOfMonth + " " + monthOfYear + " " + year;
-        };
+                        this.days = [this.doctorsLoading];
+                        this.day = this.doctorsLoading;
+                        this.dayId = -1;
 
-        var dateStringToHoursMinutes = function(dateTime) {
-            var date = new Date(dateTime);
+                        this.availableSlots = [this.doctorsLoading];
+                        this.slotId = -1;
+                    },
 
-            var hours = date.getHours();
-            var minutes = date.getMinutes();
+                    /* BEGIN: Handlers */
 
-            if (minutes < 10) {
-                minutes = "0" + minutes;
-            }
+                    handleQueryResult: function (controller,
+                                                 data) {
+                        controller.doctors = angular.fromJson(data);
+                    },
 
-            return hours + ":" + minutes;
-        };
+                    handleSearchForSlotsResult: function (controller,
+                                                          data) {
+                        var slots = [];
 
-        var convertDaysToAvailableDates = function(days) {
-            var array = [];
+                        var slotsNew = angular.fromJson(data);
 
-            angular.forEach(days, function(day) {
-                var daysDate = dayToDate(day);
+                        for (var i = 0; i < slotsNew.length; i++) {
+                            var slot = slotsNew[i];
 
-                var myDateTime = {};
-                myDateTime.Id = day.Id;
-                myDateTime.Date = daysDate;
+                            var availableSlot = {};
 
-                array.push(myDateTime);
-            });
+                            availableSlot.Id = slot.Id;
+                            availableSlot.StartTime = controller.dateStringToHoursMinutes(slot.StartDateTime);
+                            availableSlot.EndTime = controller.dateStringToHoursMinutes(slot.EndDateTime);
+                            availableSlot.Status = slot.Status;
 
-            return array;
-        };
-        var handleQueryResult = function(data) {
-            $scope.doctors = angular.fromJson(data);
-        };
+                            slots.push(availableSlot);
+                        }
 
-        var handleGetByDoctorIdResult = function(data) {
-            $scope.days = angular.fromJson(data);
+                        controller.availableSlots = slots;
+                    },
 
-            $scope.availableDates = convertDaysToAvailableDates($scope.days);
-            $scope.availableSlots = [loading];
-            $scope.slotId = -1;
-        };
+                    handleGetByDoctorIdResult: function (controller,
+                                                         data) {
+                        var days = angular.fromJson(data);
 
-        var handleSearchForSlotsResult = function(data) {
-            var out = [];
+                        if (typeof days == 'undefined' ||
+                            days === null ||
+                            days.length === 0) {
+                            return;
+                        }
 
-            angular.forEach(data, function(slot) {
-                var availabeSlot = {};
+                        controller.days = angular.fromJson(data);
+                        controller.availableDates = controller.convertDaysToAvailableDates(controller.days);
+                        controller.availableSlots = [controller.slotsLoading];
+                        controller.slotId = -1;
+                    },
 
-                availabeSlot.Id = slot.Id;
-                availabeSlot.StartTime = dateStringToHoursMinutes(slot.StartDateTime);
-                availabeSlot.EndTime = dateStringToHoursMinutes(slot.EndDateTime);
-                availabeSlot.Status = slot.Status;
+                    /* END: Handlers */
 
-                out.push(availabeSlot);
-            });
+                    /* BEGIN: CRUD */
 
-            $scope.availableSlots = out;
-        };
-        $scope.query = function() {
-            doctorsService.query(handleQueryResult);
-        };
+                    query: function () {
+                        doctorsService.query(
+                            this.scope.bookingController,
+                            this.handleQueryResult);
+                    },
 
-        $scope.updateDays = function() {
-            $scope.availableSlots = [loading];
-            $scope.slotId = -1;
+                    /* END: CRUD */
 
-            daysService.getByDoctorId($scope.doctorId, handleGetByDoctorIdResult);
-        };
+                    dayToDate: function (day) {
+                        var dateTime = new Date(day.Date);
 
-        $scope.updateSlots = function() {
-            $scope.slotId = -1;
+                        return dateTime.toDateString();
+                    },
 
-            var dayId = parseInt($scope.dayId);
+                    convertDaysToAvailableDates: function (days) {
+                        var array = [];
 
-            if (dayId < 0) {
-                return;
-            }
+                        for (var i = 0; i < days.length; i++) {
+                            var day = days[i];
 
-            var day = lookupDay($scope.days, dayId);
-            var date = day.Date.substring(0, 10);
+                            var daysDate = this.dayToDate(day);
 
-            doctorSlotsService.search(
-                $scope.doctorId,
-                date,
-                "open",
-                handleSearchForSlotsResult);
-        };
+                            var myDateTime = {};
+                            myDateTime.Id = day.Id;
+                            myDateTime.Date = daysDate;
 
-        $scope.isBookDisabled = function() {
-            return $scope.slotId < 0;
-        };
-        $scope.book = function() {
-            alert("todo");
-        };
-        $scope.init = function() {
-            doctorsService.query(handleQueryResult);
-        };
+                            array.push(myDateTime);
+                        }
 
-        $scope.doctors = [loading];
-        $scope.doctor = loading;
-        $scope.doctorId = -1;
+                        return array;
+                    },
 
-        $scope.days = [loading];
-        $scope.day = loading;
-        $scope.dayId = -1;
+                    dateStringToHoursMinutes: function (dateTime) {
+                        var date = new Date(dateTime);
 
-        $scope.availableSlots = [loading];
-        $scope.slotId = -1;
+                        var hours = date.getHours();
+                        var minutes = date.getMinutes();
 
-        $scope.init();
+                        if (minutes < 10) {
+                            minutes = "0" + minutes;
+                        }
+
+                        return hours + ":" + minutes;
+                    },
+
+                    lookupDay: function (days,
+                                         dayId) {
+                        for (var i = 0; i < days.length; i++) {
+                            var current = days[i];
+
+                            if (current.Id === dayId) {
+                                return current;
+                            }
+                        }
+
+                        return {
+                            Id: -1
+                        };
+                    },
+
+                    getDate: function (days, dayId) {
+                        if (dayId < 0) {
+                            return '';
+                        }
+
+                        var day = this.lookupDay(days, dayId);
+
+                        if (typeof day === 'undefined' ||
+                            day == null ||
+                            day.Id < 0) {
+                            return '';
+                        }
+
+                        return day.Date.substring(0, 10);
+                    },
+
+                    updateDays: function () {
+                        this.availableSlots = [this.slotsLoading];
+                        this.slotId = -1;
+
+                        daysService.getByDoctorId(
+                            this.doctorId,
+                            this.scope.bookingController,
+                            this.handleGetByDoctorIdResult);
+                    },
+
+                    updateSlots: function () {
+                        this.slotId = -1;
+
+                        var date = this.getDate(this.days, parseInt(this.dayId));
+
+                        if (date.length === 0) {
+                            return;
+                        }
+
+                        this.doctorSlotsService.search(
+                            this.doctorId,
+                            date,
+                            "open",
+                            this.scope.bookingController,
+                            this.handleSearchForSlotsResult);
+                    },
+
+                    isBookDisabled: function () {
+                        return this.slotId < 0;
+                    },
+
+                    book: function () {
+                        this.notificationService.alert("todo");
+                    },
+
+                    refresh: function () {
+                        doctorsService.query(
+                            this.scope.bookingController,
+                            this.handleQueryResult);
+                    }
+                };
+
+                controller.init();
+
+                return controller;
+            };
+
+        $scope.bookingController =
+            createController(
+                {
+                    scope: $scope,
+                    doctorsService: doctorsService,
+                    doctorSlotsService: doctorSlotsService,
+                    notificationService: notificationService
+                });
+
+        $scope.bookingController.refresh();
     });

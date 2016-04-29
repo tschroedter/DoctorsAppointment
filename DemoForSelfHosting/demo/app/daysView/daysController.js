@@ -101,7 +101,8 @@ mainApp.controller('daysController',
 
                     setSelectedDay: function (day) {
                         if (typeof day === 'undefined' ||
-                            undefined == day.Id) {
+                            day === null ||
+                            typeof day.Id === 'undefined') {
                             return false;
                         }
 

@@ -115,7 +115,8 @@ mainApp.controller('slotsController',
 
                     setSelectedSlot: function (slot) {
                         if (typeof slot === 'undefined' ||
-                            undefined == slot.Id) {
+                            slot === null ||
+                            typeof slot.Id === 'undefined') {
                             return false;
                         }
 

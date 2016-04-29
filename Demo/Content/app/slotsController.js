@@ -1,89 +1,140 @@
-﻿mainApp.controller("slotsController",
-    function($scope,
-        slotsService) {
+﻿mainApp.controller('slotsController',
+    function ($scope,
+              slotsService,
+              notificationService) {
 
-        var loading = {
-            Id: -1,
-            DayId: -1,
-            EndDateTime: new Date("2000-01-01T00:00:00"),
-            StartDateTime: new Date("2000-01-01T00:00:00"),
-            Status: 0
-        };
+        var createController =
+            function (scope,
+                      slotsService,
+                      notificationService) {
 
-        $scope.setSelectedSlot = function(slot) {
-            if ($scope.slots === null) {
-                return false;
-            }
+                var controller = {
+                    scope: scope,
+                    slotsService: slotsService,
+                    notificationService: notificationService,
+                    slots: [],
+                    slot: {},
+                    slotId: {},
+                    toCreate: {},
+                    toUpdate: {},
+                    toDelete: {},
+                    searchByDayId: {},
+                    searchResult: [],
 
-            $scope.slot = slot;
-            $scope.slotId = slot.Id;
+                    init: function () {
+                        var loading = {
+                            Id: -1,
+                            DayId: -1,
+                            EndDateTime: new Date('2000-01-01T00:00:00'),
+                            StartDateTime: new Date('2000-01-01T00:00:00'),
+                            Status: 0
+                        };
 
-            return true;
-        };
+                        this.slots = [loading];
+                        this.slot = loading;
+                        this.slotId = 1;
+                        this.toCreate = {};
+                        this.toUpdate = {};
+                        this.toDelete = {};
+                        this.searchByDayId = 1;
+                        this.searchResult = [loading];
+                    },
 
-        /* BEGIN: Handlers */
+                    /* BEGIN: Handlers */
 
-        var handleQueryResult = function(data) {
-            $scope.slots = angular.fromJson(data);
-        };
+                    handleQueryResult: function (controller, data) {
+                        controller.slots = angular.fromJson(data);
+                    },
 
-        var handleGetResult = function(data) {
-            $scope.slot = data;
-        };
+                    handleGetResult: function (controller, data) {
+                        controller.slot = data;
+                    },
 
-        var handleSaveResult = function() {
-            alert("Created new slot!");
-        };
+                    handleSaveResult: function (controller) {
+                        controller.notificationService.alert('Created new slot!');
+                    },
 
-        var handleUpdateResult = function() {
-            alert("Updated slot!");;
-        };
+                    handleUpdateResult: function (controller) {
+                        controller.notificationService.alert('Updated slot!');
+                    },
 
-        var handleDeleteResult = function() {
-            alert("Updated slot!");;
-        };
+                    handleDeleteResult: function (controller) {
+                        controller.notificationService.alert('Updated slot!');
+                    },
 
-        var handleSearchResult = function (data) {
-            $scope.searchResult = angular.fromJson(data);
-            alert("Searched!");;
-        };
+                    handleSearchResult: function (controller, data) {
+                        controller.searchResult = angular.fromJson(data);
+                        controller.notificationService.alert('Searched!');
+                    },
 
-        /* END: Handlers */
+                    /* END: Handlers */
 
-        /* BEGIN: CRUD */
+                    /* BEGIN: CRUD */
 
-        $scope.query = function() {
-            slotsService.query(handleQueryResult);
-        };
+                    query: function () {
+                        slotsService.query(
+                            this.scope.slotsController,
+                            this.handleQueryResult);
+                    },
 
-        $scope.get = function() {
-            slotsService.get($scope.slotId, handleGetResult);
-        };
+                    get: function () {
+                        slotsService.get(
+                            this.slotId,
+                            this.scope.slotsController,
+                            this.handleGetResult);
+                    },
 
-        $scope.save = function() {
-            slotsService.save($scope.toCreate, handleSaveResult);
-        };
+                    save: function () {
+                        slotsService.save(
+                            this.toCreate,
+                            this.scope.slotsController,
+                            this.handleSaveResult);
+                    },
 
-        $scope.update = function() {
-            slotsService.update($scope.toUpdate, handleUpdateResult);
-        };
+                    update: function () {
+                        slotsService.update(
+                            this.toUpdate,
+                            this.scope.slotsController,
+                            this.handleUpdateResult);
+                    },
+                    delete: function () {
+                        slotsService.delete(
+                            this.toDelete,
+                            this.scope.slotsController,
+                            this.handleDeleteResult);
+                    },
 
-        $scope.delete = function() {
-            slotsService.delete($scope.toDelete, handleDeleteResult);
-        };
+                    search: function () {
+                        slotsService.search(
+                            this.searchByDayId,
+                            this.scope.slotsController,
+                            this.handleSearchResult);
+                    },
 
-        $scope.search = function () {
-            slotsService.search($scope.searchByDayId, handleSearchResult);
-        };
+                    /* END: CRUD */
 
-        /* END: CRUD */
+                    setSelectedSlot: function (slot) {
+                        if (typeof slot === 'undefined' ||
+                            slot === null ||
+                            typeof slot.Id === 'undefined') {
+                            return false;
+                        }
 
-        $scope.slots = [loading];
-        $scope.slot = loading;
-        $scope.slotId = 1;
-        $scope.toCreate = {};
-        $scope.toUpdate = {};
-        $scope.toDelete = {};
-        $scope.searchByDayId = 1;
-        $scope.searchResult = [loading];
+                        this.slot = slot;
+                        this.slotId = slot.Id;
+
+                        return true;
+                    }
+                };
+
+                controller.init();
+
+                return controller;
+            };
+
+        $scope.slotsController =
+            createController(
+                $scope,
+                slotsService,
+                notificationService);
     });

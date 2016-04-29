@@ -1,41 +1,65 @@
-﻿mainApp.controller("doctorSlotsController",
-    function($scope,
-        doctorSlotsService) {
+﻿mainApp.controller('doctorSlotsController',
+    function ($scope,
+              doctorSlotsService,
+              notificationService) {
 
-        var loading = {
-            FirstName: "Loading",
-            LastName: "...",
-            Id: -1
-        };
+        var createController =
+            function (scope,
+                      doctorSlotsService,
+                      notificationService) {
+                var controller = {
+                    scope: scope,
+                    doctorSlotsService: doctorSlotsService,
+                    notificationService: notificationService,
+                    searchResult: [],
+                    searchByDoctorId: {},
+                    searchByDate: {},
+                    searchByStatus: {},
 
-        $scope.init = function() {
-        };
+                    init: function () {
+                        var loading = {
+                            FirstName: 'Loading',
+                            LastName: '...',
+                            Id: -1
+                        };
 
-        /* BEGIN: Handlers */
+                        this.searchResult = [loading];
+                        this.searchByDoctorId = 1;
+                        this.searchByDate = '2015-06-30';
+                        this.searchByStatus = 'open';
+                    },
 
-        var handleSearchResult = function(data) {
-            $scope.searchResult = angular.fromJson(data);
-            alert("Searched!");;
-        };
+                    /* BEGIN: Handlers */
 
-        /* END: Handlers */
+                    handleSearchResult: function (controller, data) {
+                        controller.searchResult = angular.fromJson(data);
+                        controller.notificationService.alert('Searched!');
+                    },
 
-        /* BEGIN: CRUD */
+                    /* END: Handlers */
 
-        $scope.search = function() {
-            doctorSlotsService.search(
-                $scope.searchByDoctorId,
-                $scope.searchByDate,
-                $scope.searchByStatus,
-                handleSearchResult); // todo use object instead of list
-        };
+                    /* BEGIN: CRUD */
 
-        /* END: CRUD */
+                    search: function () {
+                        doctorSlotsService.search(
+                            this.searchByDoctorId,
+                            this.searchByDate,
+                            this.searchByStatus,
+                            this.scope.doctorSlotsController,
+                            this.handleSearchResult); // todo use object instead of list
+                    }
 
-        $scope.searchResult = [loading];
-        $scope.searchByDoctorId = 1;
-        $scope.searchByDate = "2015-06-30";
-        $scope.searchByStatus = "open";
+                    /* END: CRUD */
+                };
 
-        $scope.init();
+                controller.init();
+
+                return controller;
+            };
+
+        $scope.doctorSlotsController =
+            createController(
+                $scope,
+                doctorSlotsService,
+                notificationService);
     });

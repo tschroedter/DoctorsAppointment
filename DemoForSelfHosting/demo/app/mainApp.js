@@ -1,103 +1,91 @@
 'use strict';
-/* filename app.js
- // Declare app level module which depends on views, and components
- angular.module('myApp', [
- 'ngRoute',
- 'myApp.view1',
- 'myApp.view2',
- 'myApp.version'
- ]).
- config(['$routeProvider', function($routeProvider) {
- $routeProvider.otherwise({redirectTo: '/view1'});
- }]);
- */
 
-var nancyBaseUri = "http://localhost:63579/";
-var mainApp = angular.module("mainApp", ["ngResource"]);
+var nancyBaseUri = 'http://localhost:63579/';
+var mainApp = angular.module('mainApp', ['ngResource']);
 
-mainApp.factory("doctors", function ($resource) {
-    return $resource(nancyBaseUri + "doctors/:id", {id: "@_id"}, {
+mainApp.factory('doctors', function ($resource) {
+    return $resource(nancyBaseUri + 'doctors/:id', {id: '@_id'}, {
         update: {
-            method: "PUT"
+            method: 'PUT'
         }
     });
 });
 
-mainApp.factory("doctorsSearchByLastName", function ($resource) {
-    return $resource(nancyBaseUri + "doctors/byLastName/:query", {
-        query: "@query"
+mainApp.factory('doctorsSearchByLastName', function ($resource) {
+    return $resource(nancyBaseUri + 'doctors/byLastName/:query', {
+        query: '@query'
     }, {
         search: {
-            method: "GET",
+            method: 'GET',
             isArray: true,
             params: {
-                query: "@query"
+                query: '@query'
             }
         }
     });
 });
 
-mainApp.factory("slots", function ($resource) {
-    return $resource(nancyBaseUri + "slots/:id", {id: "@_id"}, {
+mainApp.factory('slots', function ($resource) {
+    return $resource(nancyBaseUri + 'slots/:id', {id: '@_id'}, {
         update: {
-            method: "PUT"
+            method: 'PUT'
         }
     });
 });
 
-mainApp.factory("days", function ($resource) {
-    return $resource(nancyBaseUri + "days/:id", {id: "@_id"}, {
+mainApp.factory('days', function ($resource) {
+    return $resource(nancyBaseUri + 'days/:id', {id: '@_id'}, {
         update: {
-            method: "PUT"
+            method: 'PUT'
         }
     });
 });
 
-mainApp.factory("daysSearchByDoctorId", function ($resource) {
-    return $resource(nancyBaseUri + "days/doctorId/:query", {
-        query: "@query"
+mainApp.factory('daysSearchByDoctorId', function ($resource) {
+    return $resource(nancyBaseUri + 'days/doctorId/:query', {
+        query: '@query'
     }, {
         search: {
-            method: "GET",
+            method: 'GET',
             isArray: true,
             params: {
-                query: "@query"
+                query: '@query'
             }
         }
     });
 });
 
-mainApp.factory("slotsSearchByDayId", function ($resource) {
-    return $resource(nancyBaseUri + "slots/dayId/:query", {
-        query: "@query"
+mainApp.factory('slotsSearchByDayId', function ($resource) {
+    return $resource(nancyBaseUri + 'slots/dayId/:query', {
+        query: '@query'
     }, {
         search: {
-            method: "GET",
+            method: 'GET',
             isArray: true,
             params: {
-                query: "@query"
+                query: '@query'
             }
         }
     });
 });
 
-mainApp.factory("doctorSlotsSearch", function ($resource) {
-    return $resource(nancyBaseUri + "doctors/:id/slots", {
-        query: "@query"
+mainApp.factory('doctorSlotsSearch', function ($resource) {
+    return $resource(nancyBaseUri + 'doctors/:id/slots', {
+        query: '@query'
     }, {
         search: {
-            method: "GET",
+            method: 'GET',
             isArray: true,
             params: {
-                id: "@id",
-                date: "@date",
-                status: "@status"
+                id: '@id',
+                date: '@date',
+                status: '@status'
             }
         }
     });
 });
 
-mainApp.factory("daysService", function (days, daysSearchByDoctorId) {
+mainApp.factory('daysService', function (days, daysSearchByDoctorId) {
     var instance = {};
 
     instance.days = days;
@@ -108,7 +96,7 @@ mainApp.factory("daysService", function (days, daysSearchByDoctorId) {
     instance.query = function (controller, doSomething) {
         instance.days.query(
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -118,7 +106,7 @@ mainApp.factory("daysService", function (days, daysSearchByDoctorId) {
                 id: id
             },
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -126,7 +114,7 @@ mainApp.factory("daysService", function (days, daysSearchByDoctorId) {
         instance.days.save(
             day,
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -134,7 +122,7 @@ mainApp.factory("daysService", function (days, daysSearchByDoctorId) {
         instance.days.update(
             day,
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -142,7 +130,7 @@ mainApp.factory("daysService", function (days, daysSearchByDoctorId) {
         instance.days.delete(
             day,
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -151,7 +139,7 @@ mainApp.factory("daysService", function (days, daysSearchByDoctorId) {
                 query: doctorId
             },
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -160,7 +148,7 @@ mainApp.factory("daysService", function (days, daysSearchByDoctorId) {
     return instance;
 });
 
-mainApp.factory("doctorsService", function (doctors, doctorsSearchByLastName) {
+mainApp.factory('doctorsService', function (doctors, doctorsSearchByLastName) {
     var instance = {};
 
     instance.doctors = doctors;
@@ -180,7 +168,7 @@ mainApp.factory("doctorsService", function (doctors, doctorsSearchByLastName) {
                                doSomething) {
         instance.doctors.query(
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -192,7 +180,7 @@ mainApp.factory("doctorsService", function (doctors, doctorsSearchByLastName) {
                 id: id
             },
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -202,7 +190,7 @@ mainApp.factory("doctorsService", function (doctors, doctorsSearchByLastName) {
         instance.doctors.save(
             doctor,
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -212,7 +200,7 @@ mainApp.factory("doctorsService", function (doctors, doctorsSearchByLastName) {
         instance.doctors.update(
             doctor,
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -222,7 +210,7 @@ mainApp.factory("doctorsService", function (doctors, doctorsSearchByLastName) {
         instance.doctors.delete(
             doctor,
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -234,7 +222,7 @@ mainApp.factory("doctorsService", function (doctors, doctorsSearchByLastName) {
                 query: searchByLastName
             },
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -243,7 +231,7 @@ mainApp.factory("doctorsService", function (doctors, doctorsSearchByLastName) {
     return instance;
 });
 
-mainApp.factory("slotsService", function (slots, slotsSearchByDayId) {
+mainApp.factory('slotsService', function (slots, slotsSearchByDayId) {
     var instance = {};
 
     instance.slots = slots;
@@ -255,7 +243,7 @@ mainApp.factory("slotsService", function (slots, slotsSearchByDayId) {
                                doSomething) {
         instance.slots.query(
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -268,7 +256,7 @@ mainApp.factory("slotsService", function (slots, slotsSearchByDayId) {
                 id: id
             },
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -278,7 +266,7 @@ mainApp.factory("slotsService", function (slots, slotsSearchByDayId) {
         instance.slots.save(
             slot,
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -288,7 +276,7 @@ mainApp.factory("slotsService", function (slots, slotsSearchByDayId) {
         instance.slots.update(
             slot,
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -298,7 +286,7 @@ mainApp.factory("slotsService", function (slots, slotsSearchByDayId) {
         instance.slots.delete(
             slot,
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -310,7 +298,7 @@ mainApp.factory("slotsService", function (slots, slotsSearchByDayId) {
                 query: searchByDayId
             },
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -319,7 +307,7 @@ mainApp.factory("slotsService", function (slots, slotsSearchByDayId) {
     return instance;
 });
 
-mainApp.factory("doctorSlotsService", function (doctorSlotsSearch) {
+mainApp.factory('doctorSlotsService', function (doctorSlotsSearch) {
     var instance = {};
 
     instance.doctorSlotsSearch = doctorSlotsSearch;
@@ -340,7 +328,7 @@ mainApp.factory("doctorSlotsService", function (doctorSlotsSearch) {
                 status: searchStatus
             },
             function (data) {
-                doSomething(controller, data)
+                doSomething(controller, data);
             });
     };
 
@@ -349,13 +337,13 @@ mainApp.factory("doctorSlotsService", function (doctorSlotsSearch) {
     return instance;
 });
 
-mainApp.filter("byDate", function () {
+mainApp.filter('byDate', function () {
 
     return function (input, byDate) {
 
         var stringStartsWidth = function (string, prefix) {
-            if (typeof string === "string" &&
-                typeof prefix === "string") {
+            if (typeof string === 'string' &&
+                typeof prefix === 'string') {
                 return string.slice(0, prefix.length) === prefix;
             }
 
@@ -363,8 +351,8 @@ mainApp.filter("byDate", function () {
         };
         var out = [];
 
-        if (input === "-1" ||
-            byDate === "") {
+        if (input === '-1' ||
+            byDate === '') {
             return out;
         }
 
@@ -379,7 +367,7 @@ mainApp.filter("byDate", function () {
     };
 });
 
-mainApp.factory("notificationService", function () {
+mainApp.factory('notificationService', function () {
     return {
         alert: function (message) {
             alert(message);

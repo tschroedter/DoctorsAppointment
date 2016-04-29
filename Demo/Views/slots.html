@@ -1,253 +1,255 @@
-﻿<!doctype html>
-<html>
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <title>slotsView</title>
     <script src="~/content/app/assets/libs/angularjs/angular.js"></script>
     <script src="~/content/app/assets/libs/angularjs/angular-resource.js"></script>
     <script src="~/content/app/mainApp.js"></script>
     <script src="~/content/app/slotsController.js"></script>
 </head>
 <body ng-app="mainApp">
-<div ng-controller="slotsController">
-    <table>
-        <tr>
-            <th>CRUD</th>
-            <th>TEST</th>
-        </tr>
-        <tr>
-            <td><b>C</b>reate</td>
-            <td>
-                <table>
-                    <tr>
-                        <td>Start Datetime:</td>
-                        <td>
-                            <input type="datetime" ng-model="toCreate.StartDateTime"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>End Datetime:</td>
-                        <td>
-                            <input type="datetime" ng-model="toCreate.EndDateTime"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Status:</td>
-                        <td>
-                            <input type="number" ng-model="toCreate.Status"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Day Id:</td>
-                        <td>
-                            <input type="number" ng-model="toCreate.DayId"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <button ng-click="save()">Create Slot</button>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <hr/>
-            </td>
-        </tr>
-        <tr>
-            <td><b>R</b>ead</td>
-            <td>
-                <table>
-                    <tr>
-                        <td>Id:</td>
-                        <td>
-                            <input type="number" ng-model="slotId"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <button ng-click="get()">Load Slot</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Start Datetime:</td>
-                        <td>{{slot.StartDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
-                    </tr>
-                    <tr>
-                        <td>End Datetime:</td>
-                        <td>{{slot.EndDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
-                    </tr>
-                    <tr>
-                        <td>Status:</td>
-                        <td>{{slot.Status}}</td>
-                    </tr>
-                    <tr>
-                        <td>Day Id:</td>
-                        <td>{{slot.DayId}}</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <hr/>
-            </td>
-        </tr>
-        <tr>
-            <td><b>U</b>pdate</td>
-            <td>
-                <table>
-                    <tr>
-                        <td>Id:</td>
-                        <td>
-                            <input type="number" ng-model="toUpdate.id"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Start Datetime:</td>
-                        <td>
-                            <input type="datetime" ng-model="toUpdate.StartDateTime"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>End Datetime:</td>
-                        <td>
-                            <input type="datetime" ng-model="toUpdate.EndDateTime"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Status:</td>
-                        <td>
-                            <input type="number" ng-model="toUpdate.Status"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Day Id:</td>
-                        <td>
-                            <input type="number" ng-model="toUpdate.DayId"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <button ng-click="update()">Update Slot</button>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <hr/>
-            </td>
-        </tr>
-        <tr>
-            <td><b>D</b>elete</td>
-            <td>
-                <table>
-                    <tr>
-                        <td>Id:</td>
-                        <td>
-                            <input type="number" ng-model="toDelete.id"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <button ng-click="delete()">Delete Slot</button>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <hr/>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <hr/>
-            </td>
-        </tr>
-        <tr>
-            <td>All</td>
-            <td>
-                <table>
-                    <tr>
-                        <td colspan="2">
-                            <button ng-click="query()">Get All</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <table>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>StartDateTime</th>
-                                    <th>EndDateTime</th>
-                                    <th>Status</th>
-                                    <th>DayId</th>
-                                </tr>
-                                <tr ng-repeat="slot in slots">
-                                    <td>{{ slot.Id }}</td>
-                                    <td>{{ slot.StartDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
-                                    <td>{{ slot.EndDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
-                                    <td>{{ slot.Status }}</td>
-                                    <td>{{ slot.DayId }}</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <hr />
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <hr />
-            </td>
-        </tr>
-        <tr>
-            <td>Search by DayId</td>
-            <td>
-                <table>
-                    <tr>
-                        <td colspan="2">
-                            <input type="number" ng-model="searchByDayId" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <button ng-click="search()">By DayId</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <table>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>StartDateTime</th>
-                                    <th>EndDateTime</th>
-                                    <th>Status</th>
-                                    <th>DayId</th>
-                                </tr>
-                                <tr ng-repeat="slot in searchResult">
-                                    <td>{{ slot.Id }}</td>
-                                    <td>{{ slot.StartDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
-                                    <td>{{ slot.EndDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
-                                    <td>{{ slot.Status }}</td>
-                                    <td>{{ slot.DayId }}</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-</div>
+    <div ng-controller="slotsController">
+        <table>
+            <tr>
+                <th>CRUD</th>
+                <th>TEST</th>
+            </tr>
+            <tr>
+                <td><b>C</b>reate</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>Start Datetime:</td>
+                            <td>
+                                <input type="datetime" ng-model="slotsController.toCreate.StartDateTime" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>End Datetime:</td>
+                            <td>
+                                <input type="datetime" ng-model="slotsController.toCreate.EndDateTime" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Status:</td>
+                            <td>
+                                <input type="number" ng-model="slotsController.toCreate.Status" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Day Id:</td>
+                            <td>
+                                <input type="number" ng-model="slotsController.toCreate.DayId" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button ng-click="slotsController.save()">Create Slot</button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <hr />
+                </td>
+            </tr>
+            <tr>
+                <td><b>R</b>ead</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>Id:</td>
+                            <td>
+                                <input type="number" ng-model="slotsController.slotId" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button ng-click="slotsController.get()">Load Slot</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Start Datetime:</td>
+                            <td>{{slotsController.slot.StartDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
+                        </tr>
+                        <tr>
+                            <td>End Datetime:</td>
+                            <td>{{slotsController.slot.EndDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
+                        </tr>
+                        <tr>
+                            <td>Status:</td>
+                            <td>{{slotsController.slot.Status}}</td>
+                        </tr>
+                        <tr>
+                            <td>Day Id:</td>
+                            <td>{{slotsController.slot.DayId}}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <hr />
+                </td>
+            </tr>
+            <tr>
+                <td><b>U</b>pdate</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>Id:</td>
+                            <td>
+                                <input type="number" ng-model="slotsController.toUpdate.id" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Start Datetime:</td>
+                            <td>
+                                <input type="datetime" ng-model="slotsController.toUpdate.StartDateTime" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>End Datetime:</td>
+                            <td>
+                                <input type="datetime" ng-model="slotsController.toUpdate.EndDateTime" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Status:</td>
+                            <td>
+                                <input type="number" ng-model="slotsController.toUpdate.Status" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Day Id:</td>
+                            <td>
+                                <input type="number" ng-model="slotsController.toUpdate.DayId" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button ng-click="slotsController.update()">Update Slot</button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <hr />
+                </td>
+            </tr>
+            <tr>
+                <td><b>D</b>elete</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>Id:</td>
+                            <td>
+                                <input type="number" ng-model="slotsController.toDelete.id" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button ng-click="slotsController.delete()">Delete Slot</button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <hr />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <hr />
+                </td>
+            </tr>
+            <tr>
+                <td>All</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td colspan="2">
+                                <button ng-click="slotsController.query()">Get All</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>StartDateTime</th>
+                                        <th>EndDateTime</th>
+                                        <th>Status</th>
+                                        <th>DayId</th>
+                                    </tr>
+                                    <tr ng-repeat="slot in slotsController.slots">
+                                        <td>{{ slot.Id }}</td>
+                                        <td>{{ slot.StartDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
+                                        <td>{{ slot.EndDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
+                                        <td>{{ slot.Status }}</td>
+                                        <td>{{ slot.DayId }}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <hr />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <hr />
+                </td>
+            </tr>
+            <tr>
+                <td>Search by DayId</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td colspan="2">
+                                <input type="number" ng-model="slotsController.searchByDayId" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button ng-click="slotsController.search()">By DayId</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>StartDateTime</th>
+                                        <th>EndDateTime</th>
+                                        <th>Status</th>
+                                        <th>DayId</th>
+                                    </tr>
+                                    <tr ng-repeat="slot in slotsController.searchResult">
+                                        <td>{{ slot.Id }}</td>
+                                        <td>{{ slot.StartDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
+                                        <td>{{ slot.EndDateTime | date:'dd MMM yyyy HH:mm:ss' }}</td>
+                                        <td>{{ slot.Status }}</td>
+                                        <td>{{ slot.DayId }}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>

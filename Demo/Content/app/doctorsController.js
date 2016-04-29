@@ -1,93 +1,131 @@
-﻿mainApp.controller("doctorsController",
-    function($scope,
-        doctorsService) {
+﻿mainApp.controller('doctorsController',
+    function ($scope,
+              doctorsService,
+              notificationService) {
 
-        var loading = {
-            FirstName: "Loading",
-            LastName: "...",
-            Id: -1
-        };
+        var createController =
+            function (scope,
+                      doctorsService,
+                      notificationService) {
+                var controller = {
+                    scope: scope,
+                    doctorsService: doctorsService,
+                    notificationService: notificationService,
+                    doctors: [],
+                    doctor: {},
+                    doctorId: {},
+                    toCreate: {},
+                    toUpdate: {},
+                    toDelete: {},
+                    searchResult: [],
+                    searchByLastName: {},
 
-        $scope.init = function() {
-            doctorsService.query();
-        };
+                    init: function () {
 
-        $scope.setSelectedSlot = function(doctor) {
-            if ($scope.doctors === null) {
-                return false;
-            }
+                        var loading = {
+                            FirstName: 'Loading',
+                            LastName: '...',
+                            Id: -1
+                        };
 
-            $scope.doctor = doctor;
-            $scope.doctorId = doctor.Id;
+                        this.doctors = [loading];
+                        this.doctor = loading;
+                        this.doctorId = 1;
+                        this.searchResult = [loading];
+                        this.searchByLastName = '';
+                    },
 
-            return true;
-        };
+                    setSelectedSlot: function (controller, doctor) {
+                        controller.doctor = doctor;
+                        controller.doctorId = doctor.Id;
+                    },
 
-        /* BEGIN: Handlers */
+                    refresh: function () {
+                        this.doctorsService.query();
+                    },
 
-        var handleQueryResult = function (data) {
-            $scope.doctors = angular.fromJson(data);
-        };
+                    /* BEGIN: Handlers */
 
-        var handleGetResult = function (data) {
-            $scope.doctor = data;
-        };
+                    handleQueryResult: function (controller, data) {
+                        controller.doctors = angular.fromJson(data);
+                    },
 
-        var handleSaveResult = function () {
-            alert("Created new doctor!");
-        };
+                    handleGetResult: function (controller, data) {
+                        controller.doctor = data;
+                    },
 
-        var handleUpdateResult = function () {
-            alert("Updated doctor!");
-        };
+                    handleSaveResult: function (controller) {
+                        controller.notificationService.alert('Created new doctor!');
+                    },
 
-        var handleDeleteResult = function () {
-            alert("Updated doctor!");
-        };
+                    handleUpdateResult: function (controller) {
+                        controller.notificationService.alert('Updated doctor!');
+                    },
 
-        var handleSearchResult = function (data) {
-            $scope.searchResult = angular.fromJson(data);
-            alert("Searched!");;
-        };
+                    handleDeleteResult: function (controller) {
+                        controller.notificationService.alert('Updated doctor!');
+                    },
 
-        /* END: Handlers */
+                    handleSearchResult: function (controller, data) {
+                        controller.searchResult = angular.fromJson(data);
+                        controller.notificationService.alert('Searched!');
+                    },
 
-        /* BEGIN: CRUD */
+                    /* END: Handlers */
 
-        $scope.query = function () {
-            doctorsService.query(handleQueryResult);
-        };
+                    /* BEGIN: CRUD */
+                    query: function () {
+                        doctorsService.query(
+                            this.scope.doctorsController,
+                            this.handleQueryResult);
+                    },
 
-        $scope.get = function() {
-            doctorsService.get($scope.doctorId, handleGetResult);
-        };
+                    get: function () {
+                        doctorsService.get(
+                            this.doctorId,
+                            this.scope.doctorsController,
+                            this.handleGetResult);
+                    },
 
-        $scope.save = function() {
-            doctorsService.save($scope.toCreate, handleSaveResult);
-        };
+                    save: function () {
+                        doctorsService.save(
+                            this.toCreate,
+                            this.scope.doctorsController,
+                            this.handleSaveResult);
+                    },
 
-        $scope.update = function() {
-            doctorsService.update($scope.toUpdate, handleUpdateResult);
-        };
+                    update: function () {
+                        doctorsService.update(
+                            this.toUpdate,
+                            this.scope.doctorsController,
+                            this.handleUpdateResult);
+                    },
 
-        $scope.delete = function() {
-            doctorsService.delete($scope.toDelete, handleDeleteResult);
-        };
+                    delete: function () {
+                        doctorsService.delete(
+                            this.toDelete,
+                            this.scope.doctorsController,
+                            this.handleDeleteResult);
+                    },
 
-        $scope.search = function() {
-            doctorsService.search($scope.searchByLastName, handleSearchResult);
-        };
+                    search: function () {
+                        doctorsService.search(
+                            this.searchByLastName,
+                            this.scope.doctorsController,
+                            this.handleSearchResult);
+                    }
 
-        /* END: CRUD */
+                    /* END: CRUD */
+                };
 
-        $scope.doctors = [loading];
-        $scope.doctor = loading;
-        $scope.doctorId = 1;
-        $scope.toCreate = {};
-        $scope.toUpdate = {};
-        $scope.toDelete = {};
-        $scope.searchResult = [loading];
-        $scope.searchByLastName = "";
+                controller.init();
 
-        $scope.init();
+                return controller;
+            };
+
+        $scope.doctorsController =
+            createController(
+                $scope,
+                doctorsService,
+                notificationService);
     });

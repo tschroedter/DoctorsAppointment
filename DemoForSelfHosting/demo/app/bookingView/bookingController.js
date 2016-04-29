@@ -24,7 +24,7 @@ mainApp.controller('bookingController',
                     doctorsLoading: {},
                     daysLoading: {},
                     slotsLoading: {},
-                    
+
                     init: function () {
                         this.daysLoading = {
                             Date: 'Loading...',
@@ -90,7 +90,8 @@ mainApp.controller('bookingController',
                         var days = angular.fromJson(data);
 
                         if (typeof days == 'undefined' ||
-                            days.length == 0) {
+                            days === null ||
+                            days.length === 0) {
                             return;
                         }
 
@@ -172,6 +173,7 @@ mainApp.controller('bookingController',
                         var day = this.lookupDay(days, dayId);
 
                         if (typeof day === 'undefined' ||
+                            day == null ||
                             day.Id < 0) {
                             return '';
                         }
@@ -194,7 +196,7 @@ mainApp.controller('bookingController',
 
                         var date = this.getDate(this.days, parseInt(this.dayId));
 
-                        if (date.length == 0) {
+                        if (date.length === 0) {
                             return;
                         }
 

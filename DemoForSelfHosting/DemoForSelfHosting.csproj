@@ -62,7 +62,7 @@
     <Content Include="demo\.idea\modules.xml" />
     <Content Include="demo\.idea\vcs.xml" />
     <Content Include="demo\.idea\workspace.xml" />
-    <Content Include="demo\app\app.css" />
+    <Content Include="demo\app\mainApp.css" />
     <Content Include="demo\app\bookingView\bookingController.js" />
     <Content Include="demo\app\bookingView\bookingController_tests.js" />
     <Content Include="demo\app\bookingView\bookingView.html" />

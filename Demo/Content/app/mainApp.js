@@ -1,7 +1,9 @@
-﻿var mainApp = angular.module("mainApp", ["ngResource"]);
-var nancyBaseUri = "/";   // todo adjust port number e.g. http://localhost:55881
+﻿'use strict';
 
-mainApp.factory("doctors", function($resource) {
+var nancyBaseUri = "/";
+var mainApp = angular.module("mainApp", ["ngResource"]);
+
+mainApp.factory("doctors", function ($resource) {
     return $resource(nancyBaseUri + "doctors/:id", { id: "@_id" }, {
         update: {
             method: "PUT"
@@ -9,7 +11,7 @@ mainApp.factory("doctors", function($resource) {
     });
 });
 
-mainApp.factory("doctorsSearchByLastName", function($resource) {
+mainApp.factory("doctorsSearchByLastName", function ($resource) {
     return $resource(nancyBaseUri + "doctors/byLastName/:query", {
         query: "@query"
     }, {
@@ -23,7 +25,7 @@ mainApp.factory("doctorsSearchByLastName", function($resource) {
     });
 });
 
-mainApp.factory("slots", function($resource) {
+mainApp.factory("slots", function ($resource) {
     return $resource(nancyBaseUri + "slots/:id", { id: "@_id" }, {
         update: {
             method: "PUT"
@@ -31,7 +33,7 @@ mainApp.factory("slots", function($resource) {
     });
 });
 
-mainApp.factory("days", function($resource) {
+mainApp.factory("days", function ($resource) {
     return $resource(nancyBaseUri + "days/:id", { id: "@_id" }, {
         update: {
             method: "PUT"
@@ -39,7 +41,7 @@ mainApp.factory("days", function($resource) {
     });
 });
 
-mainApp.factory("daysSearchByDoctorId", function($resource) {
+mainApp.factory("daysSearchByDoctorId", function ($resource) {
     return $resource(nancyBaseUri + "days/doctorId/:query", {
         query: "@query"
     }, {
@@ -53,7 +55,7 @@ mainApp.factory("daysSearchByDoctorId", function($resource) {
     });
 });
 
-mainApp.factory("slotsSearchByDayId", function($resource) {
+mainApp.factory("slotsSearchByDayId", function ($resource) {
     return $resource(nancyBaseUri + "slots/dayId/:query", {
         query: "@query"
     }, {
@@ -67,7 +69,7 @@ mainApp.factory("slotsSearchByDayId", function($resource) {
     });
 });
 
-mainApp.factory("doctorSlotsSearch", function($resource) {
+mainApp.factory("doctorSlotsSearch", function ($resource) {
     return $resource(nancyBaseUri + "doctors/:id/slots", {
         query: "@query"
     }, {
@@ -83,7 +85,7 @@ mainApp.factory("doctorSlotsSearch", function($resource) {
     });
 });
 
-mainApp.factory("daysService", function(days, daysSearchByDoctorId) {
+mainApp.factory("daysService", function (days, daysSearchByDoctorId) {
     var instance = {};
 
     instance.days = days;
@@ -91,30 +93,54 @@ mainApp.factory("daysService", function(days, daysSearchByDoctorId) {
 
     /* BEGIN: CRUD */
 
-    instance.query = function(doSomething) {
-        instance.days.query(doSomething);
+    instance.query = function (controller, doSomething) {
+        instance.days.query(
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
-    instance.get = function(id, doSomething) {
-        doSomething(instance.days.get({ id: id }));
+    instance.get = function (id, controller, doSomething) {
+        instance.days.get(
+            {
+                id: id
+            },
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
-    instance.save = function(day, doSomething) {
-        instance.days.save(day, doSomething);
+    instance.save = function (day, controller, doSomething) {
+        instance.days.save(
+            day,
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
-    instance.update = function(day, doSomething) {
-        instance.days.update(day, doSomething);
+    instance.update = function (day, controller, doSomething) {
+        instance.days.update(
+            day,
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
-    instance.delete = function(day, doSomething) {
-        instance.days.delete(day, doSomething);
+    instance.delete = function (day, controller, doSomething) {
+        instance.days.delete(
+            day,
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
-    instance.getByDoctorId = function(doctorId, doSomething) {
+    instance.getByDoctorId = function (doctorId, controller, doSomething) {
         instance.daysSearchByDoctorId.search({
             query: doctorId
-        }, doSomething);
+        },
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
     /* END: CRUD */
@@ -122,13 +148,13 @@ mainApp.factory("daysService", function(days, daysSearchByDoctorId) {
     return instance;
 });
 
-mainApp.factory("doctorsService", function(doctors, doctorsSearchByLastName) {
+mainApp.factory("doctorsService", function (doctors, doctorsSearchByLastName) {
     var instance = {};
 
     instance.doctors = doctors;
     instance.doctorsSearchByLastName = doctorsSearchByLastName;
 
-    instance.compareByLastName = function(a, b) {
+    instance.compareByLastName = function (a, b) {
         if (a.LastName < b.LastName)
             return -1;
         if (a.LastName > b.LastName)
@@ -138,30 +164,66 @@ mainApp.factory("doctorsService", function(doctors, doctorsSearchByLastName) {
 
     /* BEGIN: CRUD */
 
-    instance.query = function(doSomething) {
-        instance.doctors.query(doSomething);
+    instance.query = function (controller,
+                               doSomething) {
+        instance.doctors.query(
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
-    instance.get = function(id, doSomething) {
-        doSomething(instance.doctors.get({ id: id }));
+    instance.get = function (id,
+                             controller,
+                             doSomething) {
+        instance.doctors.get(
+            {
+                id: id
+            },
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
-    instance.save = function(doctor, doSomething) {
-        instance.doctors.save(doctor, doSomething);
+    instance.save = function (doctor,
+                              controller,
+                              doSomething) {
+        instance.doctors.save(
+            doctor,
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
-    instance.update = function(doctor, doSomething) {
-        instance.doctors.update(doctor, doSomething);
+    instance.update = function (doctor,
+                                controller,
+                                doSomething) {
+        instance.doctors.update(
+            doctor,
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
-    instance.delete = function(doctor, doSomething) {
-        instance.doctors.delete(doctor, doSomething);
+    instance.delete = function (doctor,
+                                controller,
+                                doSomething) {
+        instance.doctors.delete(
+            doctor,
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
-    instance.search = function(searchByLastName, doSomething) {
-        instance.doctorsSearchByLastName.search({
-            query: searchByLastName
-        }, doSomething);
+    instance.search = function (searchByLastName,
+                                controller,
+                                doSomething) {
+        instance.doctorsSearchByLastName.search(
+            {
+                query: searchByLastName
+            },
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
     /* END: CRUD */
@@ -169,8 +231,7 @@ mainApp.factory("doctorsService", function(doctors, doctorsSearchByLastName) {
     return instance;
 });
 
-// todo check, all services look simillar
-mainApp.factory("slotsService", function(slots, slotsSearchByDayId) {
+mainApp.factory("slotsService", function (slots, slotsSearchByDayId) {
     var instance = {};
 
     instance.slots = slots;
@@ -178,30 +239,67 @@ mainApp.factory("slotsService", function(slots, slotsSearchByDayId) {
 
     /* BEGIN: CRUD */
 
-    instance.query = function(doSomething) {
-        instance.slots.query(doSomething);
+    instance.query = function (controller,
+                               doSomething) {
+        instance.slots.query(
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
-    instance.get = function(id, doSomething) {
-        doSomething(instance.slots.get({ id: id }));
+    instance.get = function (id,
+                             controller,
+                             doSomething) {
+
+        instance.slots.get(
+            {
+                id: id
+            },
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
-    instance.save = function(slot, doSomething) {
-        instance.slots.save(slot, doSomething);
+    instance.save = function (slot,
+                              controller,
+                              doSomething) {
+        instance.slots.save(
+            slot,
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
-    instance.update = function(slot, doSomething) {
-        instance.slots.update(slot, doSomething);
+    instance.update = function (slot,
+                                controller,
+                                doSomething) {
+        instance.slots.update(
+            slot,
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
-    instance.delete = function(slot, doSomething) {
-        instance.slots.delete(slot, doSomething);
+    instance.delete = function (slot,
+                                controller,
+                                doSomething) {
+        instance.slots.delete(
+            slot,
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
-    instance.search = function(searchByDayId, doSomething) {
-        instance.slotsSearchByDayId.search({
-            query: searchByDayId
-        }, doSomething);
+    instance.search = function (searchByDayId,
+                                controller,
+                                doSomething) {
+        instance.slotsSearchByDayId.search(
+            {
+                query: searchByDayId
+            },
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
     /* END: CRUD */
@@ -209,8 +307,7 @@ mainApp.factory("slotsService", function(slots, slotsSearchByDayId) {
     return instance;
 });
 
-// todo check, all services look simillar
-mainApp.factory("doctorSlotsService", function(doctorSlotsSearch) {
+mainApp.factory("doctorSlotsService", function (doctorSlotsSearch) {
     var instance = {};
 
     instance.doctorSlotsSearch = doctorSlotsSearch;
@@ -218,16 +315,21 @@ mainApp.factory("doctorSlotsService", function(doctorSlotsSearch) {
     /* BEGIN: CRUD */
 
     // todo how to add searchByDate
-    instance.search = function(
-        searchByDoctorId,
-        searchByDate,
-        searchStatus,
-        doSomething) {
-        instance.doctorSlotsSearch.search({
-            id: searchByDoctorId,
-            date: searchByDate,
-            status: searchStatus
-        }, doSomething);
+    instance.search = function (searchByDoctorId,
+                                searchByDate,
+                                searchStatus,
+                                controller,
+                                doSomething) {
+
+        instance.doctorSlotsSearch.search(
+            {
+                id: searchByDoctorId,
+                date: searchByDate,
+                status: searchStatus
+            },
+            function (data) {
+                doSomething(controller, data);
+            });
     };
 
     /* END: CRUD */
@@ -235,11 +337,11 @@ mainApp.factory("doctorSlotsService", function(doctorSlotsSearch) {
     return instance;
 });
 
-mainApp.filter("byDate", function() {
+mainApp.filter("byDate", function () {
 
-    return function(input, byDate) {
+    return function (input, byDate) {
 
-        var stringStartsWidth = function(string, prefix) {
+        var stringStartsWidth = function (string, prefix) {
             if (typeof string === "string" &&
                 typeof prefix === "string") {
                 return string.slice(0, prefix.length) === prefix;
@@ -254,7 +356,7 @@ mainApp.filter("byDate", function() {
             return out;
         }
 
-        angular.forEach(input, function(dateTime) {
+        angular.forEach(input, function (dateTime) {
 
             if (stringStartsWidth(dateTime.Date, byDate)) {
                 out.push(dateTime);
@@ -262,5 +364,13 @@ mainApp.filter("byDate", function() {
         });
 
         return out;
+    };
+});
+
+mainApp.factory("notificationService", function () {
+    return {
+        alert: function (message) {
+            alert(message);
+        }
     };
 });
