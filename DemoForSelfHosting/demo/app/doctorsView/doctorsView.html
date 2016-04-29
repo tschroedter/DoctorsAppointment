@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>doctorsView</title>
+    <script src="/demo/node_modules/angular/angular.js"></script>
+    <script src="/demo/node_modules/angular-resource/angular-resource.js"></script>
+    <script src="/demo/app/mainApp.js"></script>
+    <script src="doctorsController.js"></script>
+</head>
+<body ng-app="mainApp">
+<div ng-controller="doctorsController">
+    <table>
+        <tr>
+            <th>CRUD</th>
+            <th>TEST</th>
+        </tr>
+        <tr>
+            <td><b>C</b>reate</td>
+            <td>
+                <table>
+                    <tr>
+                        <td>First Name:</td>
+                        <td>
+                            <input type="text" ng-model="doctorsController.toCreate.firstName"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Last Name:</td>
+                        <td>
+                            <input type="text" ng-model="doctorsController.toCreate.lastName"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button ng-click="doctorsController.save()">Create Doctor</button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr/>
+            </td>
+        </tr>
+        <tr>
+            <td><b>R</b>ead</td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Id:</td>
+                        <td>
+                            <input type="number" ng-model="doctorsController.doctorId"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button ng-click="doctorsController.get()">Load Doctor</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>First Name:</td>
+                        <td>{{doctorsController.doctor.FirstName}}</td>
+                    </tr>
+                    <tr>
+                        <td>Last Name:</td>
+                        <td>{{doctorsController.doctor.LastName}}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr/>
+            </td>
+        </tr>
+        <tr>
+            <td><b>U</b>pdate</td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Id:</td>
+                        <td>
+                            <input type="number" ng-model="doctorsController.toUpdate.id"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>First Name:</td>
+                        <td>
+                            <input type="text" ng-model="doctorsController.toUpdate.firstName"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Last Name:</td>
+                        <td>
+                            <input type="text" ng-model="doctorsController.toUpdate.lastName"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button ng-click="doctorsController.update()">Update Doctor</button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr/>
+            </td>
+        </tr>
+        <tr>
+            <td><b>D</b>elete</td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Id:</td>
+                        <td>
+                            <input type="number" ng-model="doctorsController.toDelete.id"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button ng-click="doctorsController.delete()">Delete Doctor</button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr/>
+            </td>
+        </tr>
+        <tr>
+            <td>All</td>
+            <td>
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <button ng-click="doctorsController.query()">Get All</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                </tr>
+                                <tr ng-repeat="doctor in doctorsController.doctors">
+                                    <td>{{ doctor.Id }}</td>
+                                    <td>{{ doctor.FirstName }}</td>
+                                    <td>{{ doctor.LastName }}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr/>
+            </td>
+        </tr>
+        <tr>
+            <td>Search</td>
+            <td>
+                <table>
+                    <tr>
+                        <td>By Last Name:</td>
+                        <td>
+                            <input type="text" ng-model="doctorsController.searchByLastName"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button ng-click="doctorsController.search()">Search</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                </tr>
+                                <tr ng-repeat="doctor in doctorsController.searchResult">
+                                    <td>{{ doctor.Id }}</td>
+                                    <td>{{ doctor.FirstName }}</td>
+                                    <td>{{ doctor.LastName }}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

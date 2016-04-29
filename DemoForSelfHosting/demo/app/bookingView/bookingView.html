@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>bookingView</title>
+    <script src="/demo/node_modules/angular/angular.js"></script>
+    <script src="/demo/node_modules/angular-resource/angular-resource.js"></script>
+    <script src="/demo/app/mainApp.js"></script>
+    <script src="bookingController.js"></script>
+</head>
+<body ng-app="mainApp">
+<div ng-controller="bookingController">
+    <table>
+        <tr>
+            <td>Select a doctor</td>
+            <td>
+                <select ng-model="bookingController.doctorId"
+                        ng-change="bookingController.updateDays()">
+                    <option ng-repeat="doctor in bookingController.doctors" value="{{doctor.Id}}">{{doctor.FirstName + ' ' + doctor.LastName}}</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>Select a day</td>
+            <td>
+                <select ng-model="bookingController.dayId"
+                        ng-change="bookingController.updateSlots()">
+                    <option ng-repeat="day in bookingController.availableDates" value="{{day.Id}}">{{day.Date}}</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>Select a time slot</td>
+            <td>
+                <select ng-model="slotId">
+                    <option ng-repeat="slot in bookingController.availableSlots" value="{{slot.Id}}">{{slot.StartTime + " - " + slot.EndTime}}</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <button ng-click="book()" ng-disabled="bookingController.isBookDisabled()">
+        Book
+    </button>
+</div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>doctorSlotsView</title>
+    <meta charset="UTF-8">
+    <script src="/demo/node_modules/angular/angular.js"></script>
+    <script src="/demo/node_modules/angular-resource/angular-resource.js"></script>
+    <script src="/demo/app/mainApp.js"></script>
+    <script src="doctorSlotsController.js"></script>
+</head>
+<body ng-app="mainApp">
+<div ng-controller="doctorSlotsController">
+    <table>
+        <tr>
+            <th>CRUD</th>
+            <th>TEST</th>
+        </tr>
+        <tr>
+            <td colspan="2">None</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr/>
+            </td>
+        </tr>
+        <tr>
+            <td>Search</td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Doctor:</td>
+                        <td>
+                            <input type="number" ng-model="doctorSlotsController.searchByDoctorId"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Date:</td>
+                        <td>
+                            <input type="text" ng-model="doctorSlotsController.searchByDate"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Status:</td>
+                        <td>
+                            <input type="text" ng-model="doctorSlotsController.searchByStatus"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button ng-click="doctorSlotsController.search()">Search</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>DayId</th>
+                                    <th>EndDateTime</th>
+                                    <th>StartDateTime</th>
+                                    <th>Status</th>
+                                </tr>
+                                <tr ng-repeat="slot in doctorSlotsController.searchResult">
+                                    <td>{{ slot.Id }}</td>
+                                    <td>{{ slot.DayId }}</td>
+                                    <td>{{ slot.EndDateTime }}</td>
+                                    <td>{{ slot.StartDateTime }}</td>
+                                    <td>{{ slot.Status }}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
