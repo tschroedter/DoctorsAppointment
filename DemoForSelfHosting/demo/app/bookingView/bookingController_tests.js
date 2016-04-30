@@ -343,7 +343,7 @@ describe('bookingController', function () {
             expect(actual).toEqual(0);
         }));
 
-        it('handleGetByDoctorIdResult should set days', inject(function ($controller) {
+        it('handleGetByDoctorIdResult should set days', inject(function($controller) {
             // Arrange
             createSut($controller);
 
@@ -356,7 +356,7 @@ describe('bookingController', function () {
             var actual = mockScope.bookingController.days.length;
 
             expect(actual).toEqual(2);
-        }))
+        }));
 
         it('handleGetByDoctorIdResult should set availableDates', inject(function ($controller) {
             // Arrange
