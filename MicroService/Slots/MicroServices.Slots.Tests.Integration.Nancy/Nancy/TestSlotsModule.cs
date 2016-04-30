@@ -284,7 +284,7 @@ namespace MicroServices.Slots.Tests.Integration.Nancy.Nancy
             }
         }
 
-        private object GetSlotWithId(List <dynamic> list,
+        private object GetSlotWithId(IEnumerable <dynamic> list,
                                      int id)
         {
             return list.FirstOrDefault(slot => id == ( int ) slot [ "Id" ].Value);
@@ -292,16 +292,16 @@ namespace MicroServices.Slots.Tests.Integration.Nancy.Nancy
 
         private dynamic CreatedExpectedJsonStringForList()
         {
-            string json = "[" +
-                          "{\"Id\":1,\"DayId\":1,\"EndDateTime\":\"2015-06-30T09:15:00\",\"StartDateTime\":\"2015-06-30T09:00:00\",\"Status\":1}," +
-                          "{\"Id\":2,\"DayId\":2,\"EndDateTime\":\"2015-07-01T09:15:00\",\"StartDateTime\":\"2015-07-01T09:00:00\",\"Status\":1}," +
-                          "{\"Id\":3,\"DayId\":3,\"EndDateTime\":\"2015-07-30T14:15:00\",\"StartDateTime\":\"2015-07-30T14:00:00\",\"Status\":0}," +
-                          "{\"Id\":4,\"DayId\":3,\"EndDateTime\":\"2015-07-30T14:30:00\",\"StartDateTime\":\"2015-07-30T14:15:00\",\"Status\":1}," +
-                          "{\"Id\":5,\"DayId\":3,\"EndDateTime\":\"2015-07-30T14:45:00\",\"StartDateTime\":\"2015-07-30T14:30:00\",\"Status\":2}," +
-                          "{\"Id\":6,\"DayId\":4,\"EndDateTime\":\"2015-06-30T09:15:00\",\"StartDateTime\":\"2015-06-30T09:00:00\",\"Status\":1}," +
-                          "{\"Id\":7,\"DayId\":5,\"EndDateTime\":\"2015-08-03T09:15:00\",\"StartDateTime\":\"2015-08-03T09:00:00\",\"Status\":1}," +
-                          "{\"Id\":8,\"DayId\":5,\"EndDateTime\":\"2015-08-03T09:30:00\",\"StartDateTime\":\"2015-08-03T09:15:00\",\"Status\":1}" +
-                          "]";
+            const string json = "[" +
+                                "{\"Id\":1,\"DayId\":1,\"EndDateTime\":\"2015-06-30T09:15:00\",\"StartDateTime\":\"2015-06-30T09:00:00\",\"Status\":1}," +
+                                "{\"Id\":2,\"DayId\":2,\"EndDateTime\":\"2015-07-01T09:15:00\",\"StartDateTime\":\"2015-07-01T09:00:00\",\"Status\":1}," +
+                                "{\"Id\":3,\"DayId\":3,\"EndDateTime\":\"2015-07-30T14:15:00\",\"StartDateTime\":\"2015-07-30T14:00:00\",\"Status\":0}," +
+                                "{\"Id\":4,\"DayId\":3,\"EndDateTime\":\"2015-07-30T14:30:00\",\"StartDateTime\":\"2015-07-30T14:15:00\",\"Status\":1}," +
+                                "{\"Id\":5,\"DayId\":3,\"EndDateTime\":\"2015-07-30T14:45:00\",\"StartDateTime\":\"2015-07-30T14:30:00\",\"Status\":2}," +
+                                "{\"Id\":6,\"DayId\":4,\"EndDateTime\":\"2015-06-30T09:15:00\",\"StartDateTime\":\"2015-06-30T09:00:00\",\"Status\":1}," +
+                                "{\"Id\":7,\"DayId\":5,\"EndDateTime\":\"2015-08-03T09:15:00\",\"StartDateTime\":\"2015-08-03T09:00:00\",\"Status\":1}," +
+                                "{\"Id\":8,\"DayId\":5,\"EndDateTime\":\"2015-08-03T09:30:00\",\"StartDateTime\":\"2015-08-03T09:15:00\",\"Status\":1}" +
+                                "]";
 
             return ToDynamic(json);
         }
@@ -315,13 +315,13 @@ namespace MicroServices.Slots.Tests.Integration.Nancy.Nancy
 
         private static dynamic CreateExpectedJsonStringForSlotOne()
         {
-            string json = "{" +
-                          "\"Id\":1," +
-                          "\"DayId\":1," +
-                          "\"EndDateTime\":\"2015-06-30T09:15:00\"," +
-                          "\"StartDateTime\":\"2015-06-30T09:00:00\"," +
-                          "\"Status\":1" +
-                          "}";
+            const string json = "{" +
+                                "\"Id\":1," +
+                                "\"DayId\":1," +
+                                "\"EndDateTime\":\"2015-06-30T09:15:00\"," +
+                                "\"StartDateTime\":\"2015-06-30T09:00:00\"," +
+                                "\"Status\":1" +
+                                "}";
 
             return ToDynamic(json);
         }

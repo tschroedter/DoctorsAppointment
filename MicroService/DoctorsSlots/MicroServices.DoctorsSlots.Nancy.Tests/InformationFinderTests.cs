@@ -155,7 +155,7 @@ namespace MicroServices.DoctorsSlots.Nancy.Tests
         public void List_ReturnsSlots_ForMultipleForDates()
         {
             // Arrange
-            var date = "2001-01-01";
+            const string date = "2001-01-01";
             IEnumerable <ISlot> list = CreateListWithSameDate(date);
             var repository = Substitute.For <IDoctorsSlotsRepository>();
             repository.FindSlotsForDoctorByDoctorId(Arg.Any <int>()).Returns(list);

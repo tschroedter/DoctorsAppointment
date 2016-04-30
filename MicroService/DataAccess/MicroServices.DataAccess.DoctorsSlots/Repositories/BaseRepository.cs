@@ -1,4 +1,3 @@
-using System;
 using System.Data.Entity;
 using System.Linq;
 using JetBrains.Annotations;
@@ -33,24 +32,18 @@ namespace MicroServices.DataAccess.DoctorsSlots.Repositories
 
         public void Save(TType instance)
         {
-            try
+            // todo make catch exception everywhere and nice
+            if ( instance.Id == default ( int ) )
             {
-                if ( instance.Id == default ( int ) )
-                {
-                    Context.Add(instance);
-                }
-                else
-                {
-                    Context.SetStateForSlot(instance,
-                                            EntityState.Modified);
-                }
+                Context.Add(instance);
+            }
+            else
+            {
+                Context.SetStateForSlot(instance,
+                                        EntityState.Modified);
+            }
 
-                Context.SaveChanges(); // todo testing
-            }
-            catch ( Exception exception )
-            {
-                throw exception; // todo make catch everywhere and nice
-            }
+            Context.SaveChanges(); // todo testing
         }
 
         public void Remove(TType instance)

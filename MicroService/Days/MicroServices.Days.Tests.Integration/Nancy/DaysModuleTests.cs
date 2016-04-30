@@ -376,40 +376,40 @@ namespace MicroServices.Days.Tests.Integration.Nancy
             }
         }
 
-        private object GetDayWithId(List <dynamic> list,
-                                    int id)
+        private static object GetDayWithId(IEnumerable <dynamic> list,
+                                           int id)
         {
             return list.FirstOrDefault(slot => id == ( int ) slot [ "Id" ].Value);
         }
 
         private dynamic CreatedExpectedJsonStringForListForDayAndDoctor()
         {
-            string json = "[" +
-                          "{\"Date\":\"2015-06-30T00:00:00\",\"DoctorId\":1,\"Id\":1}" +
-                          "]";
+            const string json = "[" +
+                                "{\"Date\":\"2015-06-30T00:00:00\",\"DoctorId\":1,\"Id\":1}" +
+                                "]";
 
             return ToDynamic(json);
         }
 
         private dynamic CreatedExpectedJsonStringForList()
         {
-            string json = "[" +
-                          "{\"Date\":\"2015-06-30T00:00:00\",\"DoctorId\":1,\"Id\":1}," +
-                          "{\"Date\":\"2015-07-01T00:00:00\",\"DoctorId\":1,\"Id\":2}," +
-                          "{\"Date\":\"2015-07-30T00:00:00\",\"DoctorId\":2,\"Id\":3}," +
-                          "{\"Date\":\"2015-06-30T00:00:00\",\"DoctorId\":2,\"Id\":4}," +
-                          "{\"Date\":\"2015-08-03T00:00:00\",\"DoctorId\":3,\"Id\":5}" +
-                          "]";
+            const string json = "[" +
+                                "{\"Date\":\"2015-06-30T00:00:00\",\"DoctorId\":1,\"Id\":1}," +
+                                "{\"Date\":\"2015-07-01T00:00:00\",\"DoctorId\":1,\"Id\":2}," +
+                                "{\"Date\":\"2015-07-30T00:00:00\",\"DoctorId\":2,\"Id\":3}," +
+                                "{\"Date\":\"2015-06-30T00:00:00\",\"DoctorId\":2,\"Id\":4}," +
+                                "{\"Date\":\"2015-08-03T00:00:00\",\"DoctorId\":3,\"Id\":5}" +
+                                "]";
 
             return ToDynamic(json);
         }
 
         private dynamic CreatedExpectedJsonStringForListForDay()
         {
-            string json = "[" +
-                          "{\"Date\": \"2015-06-30T00:00:00\", \"DoctorId\": 1, \"Id\": 1}," +
-                          "{\"Date\": \"2015-06-30T00:00:00\", \"DoctorId\": 2, \"Id\": 4}" +
-                          "]";
+            const string json = "[" +
+                                "{\"Date\": \"2015-06-30T00:00:00\", \"DoctorId\": 1, \"Id\": 1}," +
+                                "{\"Date\": \"2015-06-30T00:00:00\", \"DoctorId\": 2, \"Id\": 4}" +
+                                "]";
 
             return ToDynamic(json);
         }
@@ -423,7 +423,7 @@ namespace MicroServices.Days.Tests.Integration.Nancy
 
         private static dynamic CreateExpectedJsonStringForDayOne()
         {
-            var json = "{\"Date\":\"2015-06-30T00:00:00\",\"DoctorId\":1,\"Id\":1}";
+            const string json = "{\"Date\":\"2015-06-30T00:00:00\",\"DoctorId\":1,\"Id\":1}";
 
             return ToDynamic(json);
         }

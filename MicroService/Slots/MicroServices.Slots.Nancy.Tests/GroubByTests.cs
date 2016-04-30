@@ -65,7 +65,7 @@ namespace MicroServices.Slots.Nancy.Tests
                          actual.Count);
         }
 
-        private static IEnumerable <dynamic> GroupAndCount(Item[] items)
+        private static IEnumerable <dynamic> GroupAndCount(IEnumerable <Item> items)
         {
             return from item in items
                    group item by item.Id

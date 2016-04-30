@@ -352,35 +352,35 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
 
         private static dynamic CreateExpectedResponseForMiller()
         {
-            var json = "{\"LastName\":\"Miller\",\"FirstName\":\"Mary\",\"Id\":1}";
+            const string json = "{\"LastName\":\"Miller\",\"FirstName\":\"Mary\",\"Id\":1}";
 
             return XUnitDoctorsHelper.ToDynamic(json);
         }
 
         private dynamic CreateExpectedJsonStringForList()
         {
-            string json = "[" +
-                          "{\"LastName\":\"Miller\",\"FirstName\":\"Mary\",\"Id\":1}," +
-                          "{\"LastName\":\"Smith\",\"FirstName\":\"Will\",\"Id\":2}," +
-                          "{\"LastName\":\"Smith\",\"FirstName\":\"Jane\",\"Id\":3}" +
-                          "]";
+            const string json = "[" +
+                                "{\"LastName\":\"Miller\",\"FirstName\":\"Mary\",\"Id\":1}," +
+                                "{\"LastName\":\"Smith\",\"FirstName\":\"Will\",\"Id\":2}," +
+                                "{\"LastName\":\"Smith\",\"FirstName\":\"Jane\",\"Id\":3}" +
+                                "]";
 
             return XUnitDoctorsHelper.ToDynamic(json);
         }
 
         private dynamic CreateExpectedJsonStringForSearchForSmith()
         {
-            string json = "[" +
-                          "{\"LastName\":\"Smith\",\"FirstName\":\"Will\",\"Id\":2}," +
-                          "{\"LastName\":\"Smith\",\"FirstName\":\"Jane\",\"Id\":3}" +
-                          "]";
+            const string json = "[" +
+                                "{\"LastName\":\"Smith\",\"FirstName\":\"Will\",\"Id\":2}," +
+                                "{\"LastName\":\"Smith\",\"FirstName\":\"Jane\",\"Id\":3}" +
+                                "]";
 
             return XUnitDoctorsHelper.ToDynamic(json);
         }
 
         private dynamic CreateExpectedResponseForCreate()
         {
-            var json = "{\"LastName\":\"LastName\",\"FirstName\":\"FirstName\",\"Id\":3}";
+            const string json = "{\"LastName\":\"LastName\",\"FirstName\":\"FirstName\",\"Id\":3}";
 
             return XUnitDoctorsHelper.ToDynamic(json);
         }
@@ -411,11 +411,11 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
 
         private dynamic CreateExpectedResponseForPutTest()
         {
-            string json = "{" +
-                          "\"FirstName\":\"Create\"," +
-                          "\"LastName\":\"Test\"," +
-                          "\"Id\":-1" +
-                          "}";
+            const string json = "{" +
+                                "\"FirstName\":\"Create\"," +
+                                "\"LastName\":\"Test\"," +
+                                "\"Id\":-1" +
+                                "}";
 
             return XUnitDoctorsHelper.ToDynamic(json);
         }

@@ -102,13 +102,14 @@ namespace MicroServices.Days.Nancy
             return new DayForResponse(toBeUpdated);
         }
 
-        private IDay ToDay(IDayForResponse dayResponse)
+        private static IDay ToDay(IDayForResponse dayResponse)
         {
-            var day = new Day();
-
-            day.Id = dayResponse.Id;
-            day.Date = dayResponse.Date;
-            day.DoctorId = dayResponse.DoctorId;
+            var day = new Day
+                      {
+                          Id = dayResponse.Id,
+                          Date = dayResponse.Date,
+                          DoctorId = dayResponse.DoctorId
+                      };
 
             return day;
         }

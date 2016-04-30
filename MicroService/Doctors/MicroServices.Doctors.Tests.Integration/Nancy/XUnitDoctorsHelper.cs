@@ -74,7 +74,7 @@ namespace MicroServices.Doctors.Tests.Integration.Nancy
             return data;
         }
 
-        private static object GetDoctorWithId(List <dynamic> list,
+        private static object GetDoctorWithId(IEnumerable <dynamic> list,
                                               int id)
         {
             return list.FirstOrDefault(slot => id == ( int ) slot [ "Id" ].Value);
